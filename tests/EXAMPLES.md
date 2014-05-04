@@ -1,7 +1,3 @@
-# classtools [![Build Status](https://travis-ci.org/hanneskod/classtools.svg)](https://travis-ci.org/hanneskod/classtools) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/hanneskod/classtools/badges/quality-score.png?s=d9484dda5b07eafdb183746efc126488583e0532)](https://scrutinizer-ci.com/g/hanneskod/classtools/)
-
-Iterate over classes found in filesystem
-
 ## Iterator examples
 
 ### Iterate over classes in project
@@ -76,20 +72,3 @@ print_r(
 );
 ```
 
-
-Installation using [composer](http://getcomposer.org/)
-------------------------------------------------------
-To your `composer.json` add
-
-    "require": {
-        "hanneskod/classtools": "dev-master@dev",
-    }
-
-
-Testing using [phpunit](http://phpunit.de/)
--------------------------------------------
-The unis tests requires that dependencies are installed using composer.
-
-    $ curl -sS https://getcomposer.org/installer | php
-    $ php composer.phar install --dev
-    $ vendor/bin/phpunit

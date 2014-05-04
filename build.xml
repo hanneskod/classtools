@@ -84,7 +84,7 @@
 
     <target name="exemplify" depends="test">
         <exec
-            command="vendor/bin/exemplify --headerWeight=2 > EXAMPLES.md"
+            command="vendor/bin/exemplify --headerWeight=2 > tests/EXAMPLES.md"
             dir="${APP_ROOT}"
             />
     </target>

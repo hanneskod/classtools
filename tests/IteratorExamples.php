@@ -72,7 +72,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
     }
 
     /**
-     * Negete filters
+     * Negate filters
      *
      * @expectOutputRegex /^Array/
      */
