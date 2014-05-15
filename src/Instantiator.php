@@ -39,7 +39,7 @@ class Instantiator
      * Get loaded reflection class
      *
      * @return ReflectionClass
-     * @throws LogicException If reflected class is not loaded
+     * @throws LogicException  If reflected class is not loaded
      */
     public function getReflectionClass()
     {
@@ -85,17 +85,15 @@ class Instantiator
     /**
      * Create instance
      *
-     * @param  array $args Optional constructor arguments
-     * @return mixed Instance of reflected class
+     * @param  array          $args Optional constructor arguments
+     * @return mixed          Instance of reflected class
      * @throws LogicException If reflected class is not instantiable
      */
-    public function instantiate(array $args = null)
+    public function instantiate(array $args = array())
     {
         if (!$this->isInstantiable()) {
             throw new LogicException("Reflected class is not instantiable");
         }
-
-        $args = $args ?: [];
 
         if (count($args) < $this->countConstructorArgs()) {
             throw new LogicException("Unable to instantiate, too few constructor arguments");
