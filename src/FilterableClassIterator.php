@@ -9,7 +9,6 @@
 
 namespace hanneskod\classtools;
 
-use IteratorAggregate;
 use ReflectionClass;
 use hanneskod\classtools\Filter\FilterInterface;
 use hanneskod\classtools\Filter\CacheFilter;
@@ -25,7 +24,7 @@ use hanneskod\classtools\Filter\WhereFilter;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class FilterableClassIterator implements IteratorAggregate
+class FilterableClassIterator implements FilterableInterface
 {
     private $classIterator;
 
@@ -53,7 +52,7 @@ class FilterableClassIterator implements IteratorAggregate
      * Bind filter to iterator
      *
      * @param  FilterInterface $filter
-     * @return FilterableClassIterator The bound filter
+     * @return FilterInterface The bound filter
      */
     public function filter(FilterInterface $filter)
     {
@@ -65,7 +64,7 @@ class FilterableClassIterator implements IteratorAggregate
      * Create a new iterator where classes are filtered based on type
      *
      * @param  string $typename
-     * @return FilterableClassIterator
+     * @return FilterableInterface
      */
     public function filterType($typename)
     {
@@ -76,7 +75,7 @@ class FilterableClassIterator implements IteratorAggregate
      * Create a new iterator where classes are filtered based on name
      *
      * @param  string $pattern Regular expression used when filtering
-     * @return FilterableClassIterator
+     * @return FilterableInterface
      */
     public function filterName($pattern)
     {
@@ -86,9 +85,9 @@ class FilterableClassIterator implements IteratorAggregate
     /**
      * Create iterator where classes are filtered based on method return value
      *
-     * @param  string  $methodName  Name of ReflectionClass method
-     * @param  mixed   $returnValue
-     * @return FilterableClassIterator
+     * @param  string  $methodName  Name of method
+     * @param  mixed   $returnValue Expected return value
+     * @return FilterableInterface
      */
     public function where($methodName, $returnValue = true)
     {
@@ -99,7 +98,7 @@ class FilterableClassIterator implements IteratorAggregate
      * Negate a filter
      *
      * @param  FilterInterface $filter
-     * @return FilterableClassIterator
+     * @return FilterInterface
      */
     public function not(FilterInterface $filter)
     {
@@ -109,7 +108,7 @@ class FilterableClassIterator implements IteratorAggregate
     /**
      * Cache iterator
      *
-     * @return FilterableClassIterator
+     * @return FilterableInterface
      */
     public function cache()
     {

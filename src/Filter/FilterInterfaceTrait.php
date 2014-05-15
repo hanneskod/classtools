@@ -9,7 +9,7 @@
 
 namespace hanneskod\classtools\Filter;
 
-use hanneskod\classtools\FilterableClassIterator;
+use hanneskod\classtools\FilterableInterface;
 use hanneskod\classtools\Exception\LogicException;
 
 /**
@@ -24,9 +24,9 @@ trait FilterInterfaceTrait
     /**
      * Bind filter to iterator
      *
-     * @param FilterableClassIterator $iterator
+     * @param FilterableInterface $iterator
      */
-    public function bindTo(FilterableClassIterator $iterator)
+    public function bindTo(FilterableInterface $iterator)
     {
         $this->iterator = $iterator;
     }
@@ -34,7 +34,7 @@ trait FilterInterfaceTrait
     /**
      * Get iterator bound to filter
      *
-     * @return FilterableClassIterator
+     * @return FilterableInterface
      * @throws LogicException If no bound iterator exists
      */
     public function getBoundIterator()
