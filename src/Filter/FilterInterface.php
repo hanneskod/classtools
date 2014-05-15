@@ -22,7 +22,8 @@ interface FilterInterface extends FilterableInterface
     /**
      * Bind filter to iterator
      *
-     * @param FilterableInterface $iterator
+     * @param  FilterableInterface $iterator
+     * @return void
      */
     public function bindTo(FilterableInterface $iterator);
 

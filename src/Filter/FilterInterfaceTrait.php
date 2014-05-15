@@ -13,7 +13,7 @@ use hanneskod\classtools\FilterableInterface;
 use hanneskod\classtools\Exception\LogicException;
 
 /**
- * Basic implementation of FilterInterface
+ * Implementation of FilterInterface
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
@@ -24,7 +24,8 @@ trait FilterInterfaceTrait
     /**
      * Bind filter to iterator
      *
-     * @param FilterableInterface $iterator
+     * @param  FilterableInterface $iterator
+     * @return void
      */
     public function bindTo(FilterableInterface $iterator)
     {
