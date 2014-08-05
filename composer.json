@@ -17,7 +17,8 @@
         }
     },
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "nikic/php-parser": "1.0.0-beta1"
     },
     "require-dev": {
         "hanneskod/exemplify": "dev-master@dev",
