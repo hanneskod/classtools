@@ -28,25 +28,20 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
      */
     public function exampleFilterType()
     {
-        $filterableIterator = new FilterableClassIterator(
+        $it = new FilterableClassIterator(
             new ClassIterator(PATH_TO_CLASSTOOLS)
         );
 
         // prints all FilterInterface types (including the interface itself)
-        print_r(
-            iterator_to_array(
-                $filterableIterator->filterType('hanneskod\classtools\Iterator\Filter\FilterInterface')
-            )
-        );
+        print_r(iterator_to_array(
+            $it->filterType('hanneskod\classtools\Iterator\Filter\FilterInterface')
+        ));
 
         // prints instantiable classes that implement FilterInterface
-        print_r(
-            iterator_to_array(
-                $filterableIterator
-                    ->filterType('hanneskod\classtools\Iterator\Filter\FilterInterface')
-                    ->where('isInstantiable')
-            )
-        );
+        print_r(iterator_to_array(
+            $it->filterType('hanneskod\classtools\Iterator\Filter\FilterInterface')
+               ->where('isInstantiable')
+        ));
     }
 
     /**
@@ -56,17 +51,14 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
      */
     public function exampleFilterName()
     {
-        $filterableIterator = new FilterableClassIterator(
+        $it = new FilterableClassIterator(
             new ClassIterator(PATH_TO_CLASSTOOLS)
         );
 
         // prints classes and interfaces in the Filter namespace
-        print_r(
-            iterator_to_array(
-                $filterableIterator
-                    ->filterName('/^hanneskod\\\classtools\\\Iterator\\\Filter\\\/')
-            )
-        );
+        print_r(iterator_to_array(
+            $it->filterName('/^hanneskod\\\classtools\\\Iterator\\\Filter\\\/')
+        ));
     }
 
     /**
@@ -76,18 +68,15 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
      */
     public function exampleFilterNot()
     {
-        $filterableIterator = new FilterableClassIterator(
+        $it = new FilterableClassIterator(
             new ClassIterator(PATH_TO_CLASSTOOLS)
         );
 
         // prints all classes and interfaces NOT in the Filter namespace
-        print_r(
-            iterator_to_array(
-                $filterableIterator
-                    ->not(
-                        $filterableIterator->filterName('/^hanneskod\\\classtools\\\Iterator\\\Filter\\\/')
-                    )
+        print_r(iterator_to_array(
+            $it->not(
+                $it->filterName('/^hanneskod\\\classtools\\\Iterator\\\Filter\\\/')
             )
-        );
+        ));
     }
 }
