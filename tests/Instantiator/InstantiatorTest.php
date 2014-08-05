@@ -1,5 +1,5 @@
 <?php
-namespace hanneskod\classtools;
+namespace hanneskod\classtools\Instantiator;
 
 class InstantiatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +37,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testInstantiate()
     {
         $in = new Instantiator;
-        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Instantiator'));
-        $this->assertInstanceOf('hanneskod\classtools\Instantiator', $in->instantiate());
+        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Instantiator\Instantiator'));
+        $this->assertInstanceOf('hanneskod\classtools\Instantiator\Instantiator', $in->instantiate());
     }
 }

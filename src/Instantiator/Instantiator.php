@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools;
+namespace hanneskod\classtools\Instantiator;
 
 use ReflectionClass;
 use hanneskod\classtools\Exception\LogicException;
