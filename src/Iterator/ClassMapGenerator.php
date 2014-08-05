@@ -10,7 +10,7 @@
  * @license MIT
  */
 
-namespace hanneskod\classtools;
+namespace hanneskod\classtools\Iterator;
 
 /**
  * ClassMapGenerator

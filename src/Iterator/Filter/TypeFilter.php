@@ -7,9 +7,9 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Filter;
+namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\FilterableClassIterator;
+use hanneskod\classtools\Iterator\FilterableClassIterator;
 use ReflectionException;
 
 /**

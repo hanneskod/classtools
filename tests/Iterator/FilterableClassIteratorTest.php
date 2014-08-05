@@ -1,5 +1,5 @@
 <?php
-namespace hanneskod\classtools;
+namespace hanneskod\classtools\Iterator;
 
 class FilterableClassIteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class FilterableClassIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterType()
     {
-        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../src'));
+        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../../src'));
 
         $result = iterator_to_array(
             $it->filterType('IteratorAggregate')
@@ -29,22 +29,22 @@ class FilterableClassIteratorTest extends \PHPUnit_Framework_TestCase
             'ClassMinimizer does not implement IteratorAggregate'
         );
         $this->assertArrayHasKey(
-            'hanneskod\classtools\ClassIterator',
+            'hanneskod\classtools\Iterator\ClassIterator',
             $result,
             'ClassIterator does implement IteratorAggregate'
         );
 
         $result = iterator_to_array(
-            $it->filterType('IteratorAggregate')->filterType('hanneskod\classtools\FilterableClassIterator')
+            $it->filterType('IteratorAggregate')->filterType('hanneskod\classtools\Iterator\FilterableClassIterator')
         );
 
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\ClassIterator',
+            'hanneskod\classtools\Iterator\ClassIterator',
             $result,
             'ClassIterator does not extend FilterableClassIterator'
         );
         $this->assertArrayHasKey(
-            'hanneskod\classtools\FilterableClassIterator',
+            'hanneskod\classtools\Iterator\FilterableClassIterator',
             $result,
             'FilterableClassIterator is FilterableClassIterator'
         );
@@ -52,14 +52,14 @@ class FilterableClassIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterName()
     {
-        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../src'));
+        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../../src'));
 
         $result = iterator_to_array(
             $it->filterName('/Class/')
         );
 
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Filter\NameFilter',
+            'hanneskod\classtools\Iterator\Filter\NameFilter',
             $result
         );
         $this->assertArrayHasKey(
@@ -76,26 +76,26 @@ class FilterableClassIteratorTest extends \PHPUnit_Framework_TestCase
             $result
         );
         $this->assertArrayHasKey(
-            'hanneskod\classtools\ClassIterator',
+            'hanneskod\classtools\Iterator\ClassIterator',
             $result
         );
     }
 
     public function testWhereFilter()
     {
-        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../src'));
+        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../../src'));
 
         $result = iterator_to_array(
             $it->where('isInterface')
         );
 
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Filter\NameFilter',
+            'hanneskod\classtools\Iterator\Filter\NameFilter',
             $result,
             'NameFilter is not an interface'
         );
         $this->assertArrayHasKey(
-            'hanneskod\classtools\Filter\FilterInterface',
+            'hanneskod\classtools\Iterator\Filter\FilterInterface',
             $result,
             'FilterInterface is an interface'
         );
@@ -103,17 +103,17 @@ class FilterableClassIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testNotFilter()
     {
-        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../src'));
+        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../../src'));
 
         $result = iterator_to_array($it->not($it->where('isInterface')));
 
         $this->assertArrayHasKey(
-            'hanneskod\classtools\Filter\NameFilter',
+            'hanneskod\classtools\Iterator\Filter\NameFilter',
             $result,
             'NameFilter is not an interface (and thus included using the not filter)'
         );
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Filter\FilterInterface',
+            'hanneskod\classtools\Iterator\Filter\FilterInterface',
             $result,
             'FilterInterface is an interface (and thus not included using the not filter)'
         );
@@ -121,7 +121,7 @@ class FilterableClassIteratorTest extends \PHPUnit_Framework_TestCase
 
     public function testCacheFilter()
     {
-        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../src'));
+        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../../src'));
 
         $this->assertNotSame(
             $it->getIterator(),

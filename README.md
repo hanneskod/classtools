@@ -7,26 +7,23 @@ Iterate over classes found in filesystem
 ### Iterate over classes in project
 
 ```php
-$pathToClasstools = __DIR__.'/../src';
-$classIterator = new ClassIterator($pathToClasstools);
+$classes = iterator_to_array(new ClassIterator(PATH_TO_CLASSTOOLS));
 
-$arrayOfClassesInProject = iterator_to_array($classIterator);
-
-// prints path to hanneskod\classtools\ClassIterator
-echo $arrayOfClassesInProject['hanneskod\classtools\ClassIterator'];
+// prints path to hanneskod\classtools\Iterator\ClassIterator
+echo $classes['hanneskod\classtools\Iterator\ClassIterator'];
 ```
 
 ### Find classes based on type
 
 ```php
-$pathToClasstools = __DIR__.'/../src';
-$classIterator = new ClassIterator($pathToClasstools);
-$filterableIterator = new FilterableClassIterator($classIterator);
+$filterableIterator = new FilterableClassIterator(
+    new ClassIterator(PATH_TO_CLASSTOOLS)
+);
 
 // prints all FilterInterface types (including the interface itself)
 print_r(
     iterator_to_array(
-        $filterableIterator->filterType('hanneskod\classtools\Filter\FilterInterface')
+        $filterableIterator->filterType('hanneskod\classtools\Iterator\Filter\FilterInterface')
     )
 );
 
@@ -34,7 +31,7 @@ print_r(
 print_r(
     iterator_to_array(
         $filterableIterator
-            ->filterType('hanneskod\classtools\Filter\FilterInterface')
+            ->filterType('hanneskod\classtools\Iterator\Filter\FilterInterface')
             ->where('isInstantiable')
     )
 );
@@ -43,16 +40,15 @@ print_r(
 ### Find classes based on name
 
 ```php
-$pathToClasstools = __DIR__.'/../src';
-$classIterator = new ClassIterator($pathToClasstools);
-$filterableIterator = new FilterableClassIterator($classIterator);
+$filterableIterator = new FilterableClassIterator(
+    new ClassIterator(PATH_TO_CLASSTOOLS)
+);
 
-// prints all classes in the Filter namespace
+// prints classes and interfaces in the Filter namespace
 print_r(
     iterator_to_array(
         $filterableIterator
-            ->filterName('/^hanneskod\\\classtools\\\Filter\\\/')
-            ->where('isInstantiable')
+            ->filterName('/^hanneskod\\\classtools\\\Iterator\\\Filter\\\/')
     )
 );
 ```
@@ -60,22 +56,20 @@ print_r(
 ### Negate filters
 
 ```php
-$pathToClasstools = __DIR__.'/../src';
-$classIterator = new ClassIterator($pathToClasstools);
-$filterableIterator = new FilterableClassIterator($classIterator);
+$filterableIterator = new FilterableClassIterator(
+    new ClassIterator(PATH_TO_CLASSTOOLS)
+);
 
-// prints all classes NOT in the Filter namespace
+// prints all classes and interfaces NOT in the Filter namespace
 print_r(
     iterator_to_array(
         $filterableIterator
             ->not(
-                $filterableIterator->filterName('/^hanneskod\\\classtools\\\Filter\\\/')
+                $filterableIterator->filterName('/^hanneskod\\\classtools\\\Iterator\\\Filter\\\/')
             )
-            ->where('isInstantiable')
     )
 );
 ```
-
 
 Installation using [composer](http://getcomposer.org/)
 ------------------------------------------------------

@@ -7,15 +7,15 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools;
+namespace hanneskod\classtools\Iterator;
 
 use ReflectionClass;
-use hanneskod\classtools\Filter\FilterInterface;
-use hanneskod\classtools\Filter\CacheFilter;
-use hanneskod\classtools\Filter\NameFilter;
-use hanneskod\classtools\Filter\NotFilter;
-use hanneskod\classtools\Filter\TypeFilter;
-use hanneskod\classtools\Filter\WhereFilter;
+use hanneskod\classtools\Iterator\Filter\FilterInterface;
+use hanneskod\classtools\Iterator\Filter\CacheFilter;
+use hanneskod\classtools\Iterator\Filter\NameFilter;
+use hanneskod\classtools\Iterator\Filter\NotFilter;
+use hanneskod\classtools\Iterator\Filter\TypeFilter;
+use hanneskod\classtools\Iterator\Filter\WhereFilter;
 
 /**
  * Iterate over classes found in filesystem and get ReflectionClass objects

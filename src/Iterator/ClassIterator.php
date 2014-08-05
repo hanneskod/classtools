@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools;
+namespace hanneskod\classtools\Iterator;
 
 use hanneskod\classtools\Exception\RuntimeException;
 use IteratorAggregate;

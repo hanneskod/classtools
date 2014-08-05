@@ -7,30 +7,32 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Filter;
+namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\FilterableClassIterator;
+use hanneskod\classtools\Iterator\FilterableClassIterator;
 
 /**
- * Filter classes based on name
+ * Filter classes based ReflectionClass method
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class NameFilter extends FilterableClassIterator implements FilterInterface
+class WhereFilter extends FilterableClassIterator implements FilterInterface
 {
     use FilterInterfaceTrait;
 
-    private $pattern;
+    private $methodName, $returnValue;
 
-    public function __construct($pattern)
+    public function __construct($methodName, $returnValue = true)
     {
-        $this->pattern = $pattern;
+        $this->methodName = $methodName;
+        $this->returnValue = $returnValue;
     }
 
     public function getIterator()
     {
+        $methodName = $this->methodName;
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {
-            if (preg_match($this->pattern, $className)) {
+            if ($reflectedClass->$methodName() == $this->returnValue) {
                 yield $className => $reflectedClass;
             }
         }

@@ -7,10 +7,10 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools;
+namespace hanneskod\classtools\Iterator;
 
 use IteratorAggregate;
-use hanneskod\classtools\Filter\FilterInterface;
+use hanneskod\classtools\Iterator\Filter\FilterInterface;
 
 /**
  * Defines a filterable iterator

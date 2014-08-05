@@ -7,9 +7,9 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Filter;
+namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\FilterableInterface;
+use hanneskod\classtools\Iterator\FilterableInterface;
 use hanneskod\classtools\Exception\LogicException;
 
 /**

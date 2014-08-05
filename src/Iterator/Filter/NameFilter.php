@@ -7,31 +7,30 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Filter;
+namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\FilterableClassIterator;
+use hanneskod\classtools\Iterator\FilterableClassIterator;
 
 /**
- * Negate a filter
+ * Filter classes based on name
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class NotFilter extends FilterableClassIterator implements FilterInterface
+class NameFilter extends FilterableClassIterator implements FilterInterface
 {
     use FilterInterfaceTrait;
 
-    private $filter;
+    private $pattern;
 
-    public function __construct(FilterInterface $filter)
+    public function __construct($pattern)
     {
-        $this->filter = $filter;
+        $this->pattern = $pattern;
     }
 
     public function getIterator()
     {
-        $filtered = iterator_to_array($this->filter->getIterator());
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {
-            if (!isset($filtered[$className])) {
+            if (preg_match($this->pattern, $className)) {
                 yield $className => $reflectedClass;
             }
         }

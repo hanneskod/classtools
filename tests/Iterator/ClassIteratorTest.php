@@ -1,5 +1,5 @@
 <?php
-namespace hanneskod\classtools;
+namespace hanneskod\classtools\Iterator;
 
 class ClassIteratorTest extends \PHPUnit_Framework_TestCase
 {

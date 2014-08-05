@@ -1,5 +1,5 @@
 <?php
-namespace hanneskod\classtools\Filter;
+namespace hanneskod\classtools\Iterator\Filter;
 
 class FilterInterfaceTraitTest extends \PHPUnit_Framework_TestCase
 {
