@@ -44,7 +44,7 @@ class NamespaceCrawler extends NodeVisitorAbstract
      * {inheritdoc}
      *
      * @param  Node $node
-     * @return Node
+     * @return FullyQualified|null
      * @throws RuntimeException If name can not be resolved
      */
     public function leaveNode(Node $node) {

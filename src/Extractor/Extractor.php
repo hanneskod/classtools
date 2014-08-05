@@ -53,7 +53,7 @@ class Extractor
     private function parseDefinitions(array $stmts, Namespace_ $namespace = null)
     {
         // Save the global statments
-        $this->storeDefinition(0, $stmts);
+        $this->storeDefinition('0', $stmts);
 
         foreach ($stmts as $stmt) {
             if ($stmt instanceof Namespace_) {
@@ -131,6 +131,6 @@ class Extractor
      */
     public function extractGlobal()
     {
-        return $this->extract(0);
+        return $this->extract('0');
     }
 }

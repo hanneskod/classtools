@@ -37,8 +37,8 @@ class NodeStripper extends NodeVisitorAbstract
     /**
      * Perform action
      *
-     * @param  Node      $node
-     * @return void|bool Void if node should remain, false if not
+     * @param  Node       $node
+     * @return false|null Null if node should remain, false if not
      */
     public function leaveNode(Node $node)
     {

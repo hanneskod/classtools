@@ -39,7 +39,7 @@ class NamespaceWrapper extends NodeVisitorAbstract
      * {inheritdoc}
      *
      * @param  array $nodes
-     * @return array
+     * @return Namespace_[]
      */
     public function beforeTraverse(array $nodes)
     {

@@ -33,7 +33,7 @@ class CodeObject
     private $traverser;
 
     /**
-     * @var Printer Printer used for printing traversed code
+     * @var PrettyPrinterAbstract Printer used for printing traversed code
      */
     private $printer;
 
@@ -42,7 +42,6 @@ class CodeObject
      *
      * @param array         $statements
      * @param NodeTraverser $traverser
-     * @param Printer       $printer
      */
     public function __construct(array $statements, NodeTraverser $traverser = null)
     {
