@@ -25,7 +25,7 @@ use hanneskod\classtools\Exception\RuntimeException;
 class Extractor
 {
     /**
-     * @var Definition[] Collection of definitions in snippet
+     * @var array Collection of definitions in snippet
      */
     private $defs = array();
 
