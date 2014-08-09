@@ -24,7 +24,8 @@ class BracketingPrinter extends Standard
      * @param  array  $nodes
      * @return void
      */
-    protected function preprocessNodes(array $nodes) {
+    protected function preprocessNodes(array $nodes)
+    {
         parent::preprocessNodes($nodes);
         $this->canUseSemicolonNamespaces = false;
     }

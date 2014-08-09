@@ -30,6 +30,16 @@ class Extractor
     private $defs = array();
 
     /**
+     * @var string[] Case sensitive definition names
+     */
+    private $names = array();
+
+    /**
+     * @var array The global statement object
+     */
+    private $global;
+
+    /**
      * Optionally inject parser
      *
      * @param string $snippet
@@ -53,7 +63,7 @@ class Extractor
     private function parseDefinitions(array $stmts, Namespace_ $namespace = null)
     {
         // Save the global statments
-        $this->storeDefinition('0', $stmts);
+        $this->global = $stmts;
 
         foreach ($stmts as $stmt) {
             if ($stmt instanceof Namespace_) {
@@ -62,11 +72,11 @@ class Extractor
                     $stmt
                 );
             } elseif ($stmt instanceof Class_ or $stmt instanceof Interface_ or $stmt instanceof Trait_) {
-                if (!$namespace) {
-                    $this->storeDefinition($stmt->name, $stmt);
+                if (!$namespace || !$namespace->name) {
+                    $this->storeDefinition("\\" . $stmt->name, $stmt);
                 } else {
                     $namespace->stmts = array($stmt);
-                    $this->storeDefinition($namespace->name . "\\" . $stmt->name, $namespace);
+                    $this->storeDefinition("\\" . $namespace->name . "\\" . $stmt->name, $namespace);
                 }
             }
         }
@@ -84,7 +94,9 @@ class Extractor
         if (!is_array($def)) {
             $def = array($def);
         }
-        $this->defs[strtolower($name)] = $def;
+        $key = strtolower($name);
+        $this->defs[$key] = $def;
+        $this->names[$key] = $name;
     }
 
     /**
@@ -94,7 +106,7 @@ class Extractor
      */
     public function getDefinitionNames()
     {
-        return array_keys($this->defs);
+        return array_values($this->names);
     }
 
     /**
@@ -129,8 +141,8 @@ class Extractor
      *
      * @return CodeObject
      */
-    public function extractGlobal()
+    public function extractAll()
     {
-        return $this->extract('0');
+        return new CodeObject($this->global);
     }
 }

@@ -11,16 +11,18 @@ class BracketingPrinterTest extends \PHPUnit_Framework_TestCase
         $parser = new Parser(new Lexer);
         $printer = new BracketingPrinter;
 
-        $stmts = $parser->parse(<<<EOF
+        $stmts = $parser->parse(
+<<<EOF
 <?php
 namespace foo;
 class Bar
 {
 }
 EOF
-);
+        );
 
-        $expected = <<<EOF
+        $expected =
+<<<EOF
 namespace foo {
     class Bar
     {

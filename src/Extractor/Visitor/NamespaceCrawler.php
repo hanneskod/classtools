@@ -47,7 +47,8 @@ class NamespaceCrawler extends NodeVisitorAbstract
      * @return FullyQualified|null
      * @throws RuntimeException If name can not be resolved
      */
-    public function leaveNode(Node $node) {
+    public function leaveNode(Node $node)
+    {
         if ($node instanceof FullyQualified) {
             $className = $node->toString();
 
