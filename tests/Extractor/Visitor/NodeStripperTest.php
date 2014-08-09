@@ -32,7 +32,7 @@ class ClassName
 }
 EOF;
 
-        $codeObj = $extractor->extract('\ClassName');
+        $codeObj = $extractor->extract('ClassName');
         $codeObj->registerVisitor(new NodeStripper('PhpParser\Node\Expr\Include_'));
         $this->assertEquals(
             $expected,

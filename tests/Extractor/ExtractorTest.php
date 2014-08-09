@@ -11,17 +11,17 @@ class ExtractorTest extends \PHPUnit_Framework_TestCase
 namespace foo;
 class ClassName {}
 interface InterfaceName {}
-trait TratiName {}
+trait TratName {}
 EOF
         );
 
         $expected = array(
-            '\foo\ClassName',
-            '\foo\InterfaceName',
-            '\foo\TratiName'
+            'foo\ClassName',
+            'foo\InterfaceName',
+            'foo\TratName'
         );
 
-        $this->assertTrue($extractor->hasDefinition('\foo\ClassName'));
+        $this->assertTrue($extractor->hasDefinition('foo\ClassName'));
         $this->assertEquals($expected, $extractor->getDefinitionNames());
     }
 
@@ -37,15 +37,15 @@ namespace bar {
     interface InterfaceName {}
 }
 namespace {
-    trait TratiName {}
+    trait TratName {}
 }
 EOF
         );
 
         $expected = array(
-            '\foo\ClassName',
-            '\bar\InterfaceName',
-            '\TratiName'
+            'foo\ClassName',
+            'bar\InterfaceName',
+            'TratName'
         );
 
         $this->assertEquals($expected, $extractor->getDefinitionNames());
@@ -62,8 +62,8 @@ EOF
         );
 
         $expected = array(
-            '\ClassName',
-            '\InterfaceName'
+            'ClassName',
+            'InterfaceName'
         );
 
         $this->assertEquals($expected, $extractor->getDefinitionNames());
@@ -73,7 +73,7 @@ EOF
     {
         $extractor = new Extractor('');
         $this->setExpectedException('\hanneskod\classtools\Exception\RuntimeException');
-        $extractor->extract('\UndefinedClass');
+        $extractor->extract('UndefinedClass');
     }
 
     public function testExtract()
@@ -81,7 +81,7 @@ EOF
         $extractor = new Extractor('<?php class FooBar {}');
         $this->assertInstanceOf(
             '\hanneskod\classtools\Extractor\CodeObject',
-            $extractor->extract('\FooBar')
+            $extractor->extract('FooBar')
         );
     }
 

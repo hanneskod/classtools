@@ -12,6 +12,8 @@ namespace hanneskod\classtools\Extractor;
 use PhpParser\Parser;
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
@@ -48,8 +50,16 @@ class Extractor
     public function __construct($snippet, Parser $parser = null)
     {
         $parser = $parser ?: new Parser(new Lexer);
+
+        // Save the global statments
+        $this->global = $parser->parse($snippet);
+
         $this->parseDefinitions(
-            $parser->parse($snippet)
+            $this->global,
+            new Namespace_(
+                new Name(''),
+                array()
+            )
         );
     }
 
@@ -60,10 +70,9 @@ class Extractor
      * @param  Namespace_ $namespace
      * @return void
      */
-    private function parseDefinitions(array $stmts, Namespace_ $namespace = null)
+    private function parseDefinitions(array $stmts, Namespace_ $namespace)
     {
-        // Save the global statments
-        $this->global = $stmts;
+        $useStmts = array();
 
         foreach ($stmts as $stmt) {
             if ($stmt instanceof Namespace_) {
@@ -71,12 +80,14 @@ class Extractor
                     $stmt->stmts,
                     $stmt
                 );
+            } elseif ($stmt instanceof Use_) {
+                $useStmts[] = $stmt;
             } elseif ($stmt instanceof Class_ or $stmt instanceof Interface_ or $stmt instanceof Trait_) {
-                if (!$namespace || !$namespace->name) {
-                    $this->storeDefinition("\\" . $stmt->name, $stmt);
+                $namespace->stmts = array_merge($useStmts, array($stmt));
+                if ((string)$namespace->name == '') {
+                    $this->storeDefinition($stmt->name, $namespace->stmts);
                 } else {
-                    $namespace->stmts = array($stmt);
-                    $this->storeDefinition("\\" . $namespace->name . "\\" . $stmt->name, $namespace);
+                    $this->storeDefinition($namespace->name . "\\" . $stmt->name, $namespace);
                 }
             }
         }

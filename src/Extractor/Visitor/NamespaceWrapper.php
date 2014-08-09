@@ -30,7 +30,7 @@ class NamespaceWrapper extends NodeVisitorAbstract
      *
      * @param string $namespace Name of namespace
      */
-    public function __construct($namespace)
+    public function __construct($namespace = '')
     {
         $this->namespace = $namespace;
     }
@@ -43,6 +43,15 @@ class NamespaceWrapper extends NodeVisitorAbstract
      */
     public function beforeTraverse(array $nodes)
     {
+        // Prepend namespace if code is namespaced
+        if ($nodes[0] instanceof Namespace_) {
+            if ($this->namespace) {
+                $nodes[0]->name->prepend($this->namespace);
+            }
+            return $nodes;
+        }
+
+        // Else create new node
         return array(
             new Namespace_(
                 new Name($this->namespace),

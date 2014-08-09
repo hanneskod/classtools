@@ -52,7 +52,7 @@ class ClassName
 }
 EOF;
 
-        $codeObj = $extractor->extract('\ClassName');
+        $codeObj = $extractor->extract('ClassName');
         $codeObj->registerVisitor(new CommentStripper);
         $this->assertEquals(
             $expected,

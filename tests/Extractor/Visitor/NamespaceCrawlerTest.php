@@ -33,7 +33,7 @@ class ClassName
 }
 EOF;
 
-        $codeObj = $extractor->extract('\ClassName');
+        $codeObj = $extractor->extract('ClassName');
         $codeObj->registerVisitor(new \PhpParser\NodeVisitor\NameResolver);
         $codeObj->registerVisitor(new NamespaceCrawler(array('hanneskod\classtools\Extractor\Visitor')));
         $this->assertEquals(
@@ -57,7 +57,7 @@ class ClassName
 EOF
         );
 
-        $codeObj = $extractor->extract('\ClassName');
+        $codeObj = $extractor->extract('ClassName');
         $codeObj->registerVisitor(new \PhpParser\NodeVisitor\NameResolver);
         $codeObj->registerVisitor(new NamespaceCrawler(array('')));
 
