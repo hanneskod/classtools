@@ -31,4 +31,13 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
             iterator_to_array(new ClassIterator(array(__DIR__)))
         );
     }
+
+    public function testGetClassmap()
+    {
+        $iter = new ClassIterator(__FILE__);
+        $this->assertArrayHasKey(
+            __CLASS__,
+            iterator_to_array($iter->getClassMap())
+        );
+    }
 }

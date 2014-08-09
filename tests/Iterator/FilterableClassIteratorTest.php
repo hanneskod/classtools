@@ -135,4 +135,20 @@ class FilterableClassIteratorTest extends \PHPUnit_Framework_TestCase
             $it->getIterator()
         );
     }
+
+    public function testGetClassMap()
+    {
+        $it = new FilterableClassIterator(new ClassIterator(__DIR__.'/../../src'));
+
+        $resultFilter = iterator_to_array(
+            $it->where('isInterface')->getClassMap()
+        );
+
+        $resultNoFilter = iterator_to_array(
+            $it->getClassMap()
+        );
+
+        $this->assertTrue(is_string($resultFilter['hanneskod\classtools\Iterator\ClassMapInterface']));
+        $this->assertTrue(is_string($resultNoFilter['hanneskod\classtools\Iterator\ClassMapInterface']));
+    }
 }

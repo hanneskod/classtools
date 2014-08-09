@@ -18,7 +18,7 @@ use ArrayIterator;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class ClassIterator implements IteratorAggregate
+class ClassIterator implements IteratorAggregate, ClassMapInterface
 {
     private $classes = array();
 
@@ -42,6 +42,16 @@ class ClassIterator implements IteratorAggregate
     public function getIterator()
     {
         return new ArrayIterator($this->classes);
+    }
+
+    /**
+     * Get iterator that yields classnames as keys and filesystem paths as values
+     *
+     * @return \Iterator
+     */
+    public function getClassMap()
+    {
+        return $this->getIterator();
     }
 
     /**

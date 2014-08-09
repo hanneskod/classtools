@@ -45,4 +45,16 @@ trait FilterInterfaceTrait
         }
         return $this->iterator;
     }
+
+    /**
+     * Get iterator that yields classnames as keys and filesystem paths as values
+     *
+     * @return \Iterator
+     */
+    public function getClassMap()
+    {
+        foreach ($this->getIterator() as $className => $reflectedClass) {
+            yield $className => $reflectedClass->getFileName();
+        }
+    }
 }

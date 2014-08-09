@@ -24,7 +24,7 @@ use hanneskod\classtools\Iterator\Filter\WhereFilter;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class FilterableClassIterator implements FilterableInterface
+class FilterableClassIterator implements FilterableInterface, ClassMapInterface
 {
     private $classIterator;
 
@@ -46,6 +46,16 @@ class FilterableClassIterator implements FilterableInterface
         foreach ($this->classIterator as $className => $path) {
             yield $className => new ReflectionClass($className);
         }
+    }
+
+    /**
+     * Get iterator that yields classnames as keys and filesystem paths as values
+     *
+     * @return \Iterator
+     */
+    public function getClassMap()
+    {
+        return $this->classIterator->getClassMap();
     }
 
     /**

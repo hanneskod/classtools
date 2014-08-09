@@ -10,6 +10,7 @@
 namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\FilterableInterface;
+use hanneskod\classtools\Iterator\ClassMapInterface;
 use hanneskod\classtools\Exception\LogicException;
 
 /**
@@ -17,7 +18,7 @@ use hanneskod\classtools\Exception\LogicException;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-interface FilterInterface extends FilterableInterface
+interface FilterInterface extends FilterableInterface, ClassMapInterface
 {
     /**
      * Bind filter to iterator
