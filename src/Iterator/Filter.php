@@ -9,17 +9,28 @@
 
 namespace hanneskod\classtools\Iterator;
 
+use hanneskod\classtools\Exception\LogicException;
+
 /**
- * Defines a map of class definitions to filesystem paths
+ * Definition of a ClassIterator filter
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-interface ClassMapInterface
+interface Filter
 {
     /**
-     * Get iterator that yields classnames as keys and filesystem paths as values
+     * Bind filter to iterator
      *
-     * @return \Iterator
+     * @param  ClassIterator $iterator
+     * @return void
      */
-    public function getClassMap();
+    public function bindTo(ClassIterator $iterator);
+
+    /**
+     * Get iterator bound to filter
+     *
+     * @return ClassIterator
+     * @throws LogicException If no bound iterator exists
+     */
+    public function getBoundIterator();
 }

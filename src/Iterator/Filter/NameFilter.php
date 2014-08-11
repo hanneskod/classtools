@@ -9,16 +9,17 @@
 
 namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\Iterator\FilterableClassIterator;
+use hanneskod\classtools\Iterator\ClassIterator;
+use hanneskod\classtools\Iterator\Filter;
 
 /**
  * Filter classes based on name
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class NameFilter extends FilterableClassIterator implements FilterInterface
+class NameFilter extends ClassIterator implements Filter
 {
-    use FilterInterfaceTrait;
+    use FilterTrait;
 
     private $pattern;
 

@@ -13,7 +13,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testIsInstantiable()
     {
         $in = new Instantiator;
-        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Iterator\FilterableClassIterator'));
+        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Translator\Writer'));
         $this->assertTrue($in->isInstantiable());
         $this->assertFalse($in->isInstantiableWithoutArgs());
     }
@@ -29,7 +29,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionWhenInstantiatingWithToFewArgs()
     {
         $in = new Instantiator;
-        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Iterator\FilterableClassIterator'));
+        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Translator\Writer'));
         $this->setExpectedException('hanneskod\classtools\Exception\LogicException');
         $in->instantiate();
     }

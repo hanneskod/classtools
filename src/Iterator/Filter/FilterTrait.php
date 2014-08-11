@@ -9,41 +9,41 @@
 
 namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\Iterator\FilterableInterface;
+use hanneskod\classtools\Iterator\ClassIterator;
 use hanneskod\classtools\Exception\LogicException;
 
 /**
- * Implementation of FilterInterface
+ * Implementation of Filter
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-trait FilterInterfaceTrait
+trait FilterTrait
 {
-    private $iterator;
+    private $boundIterator;
 
     /**
      * Bind filter to iterator
      *
-     * @param  FilterableInterface $iterator
+     * @param  ClassIterator $iterator
      * @return void
      */
-    public function bindTo(FilterableInterface $iterator)
+    public function bindTo(ClassIterator $iterator)
     {
-        $this->iterator = $iterator;
+        $this->boundIterator = $iterator;
     }
 
     /**
      * Get iterator bound to filter
      *
-     * @return FilterableInterface
+     * @return ClassIterator
      * @throws LogicException If no bound iterator exists
      */
     public function getBoundIterator()
     {
-        if (!isset($this->iterator)) {
+        if (!isset($this->boundIterator)) {
             throw new LogicException("Filter not bound to iterator.");
         }
-        return $this->iterator;
+        return $this->boundIterator;
     }
 
     /**

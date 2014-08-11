@@ -9,7 +9,8 @@
 
 namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\Iterator\FilterableClassIterator;
+use hanneskod\classtools\Iterator\ClassIterator;
+use hanneskod\classtools\Iterator\Filter;
 use ReflectionException;
 
 /**
@@ -17,9 +18,9 @@ use ReflectionException;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class TypeFilter extends FilterableClassIterator implements FilterInterface
+class TypeFilter extends ClassIterator implements Filter
 {
-    use FilterInterfaceTrait;
+    use FilterTrait;
 
     private $typename;
 

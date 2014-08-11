@@ -9,16 +9,17 @@
 
 namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\Iterator\FilterableClassIterator;
+use hanneskod\classtools\Iterator\ClassIterator;
+use hanneskod\classtools\Iterator\Filter;
 
 /**
  * Filter classes based ReflectionClass method
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class WhereFilter extends FilterableClassIterator implements FilterInterface
+class WhereFilter extends ClassIterator implements Filter
 {
-    use FilterInterfaceTrait;
+    use FilterTrait;
 
     private $methodName, $returnValue;
 

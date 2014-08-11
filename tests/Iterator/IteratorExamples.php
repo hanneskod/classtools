@@ -9,16 +9,16 @@ define('PATH_TO_CLASSTOOLS', __DIR__.'/../../src');
 class IteratorExamples extends \hanneskod\exemplify\TestCase
 {
     /**
-     * Iterate over classes in project
+     * Read classes in project
      *
      * @expectOutputRegex #classtools/src/Iterator/ClassIterator.php$#
      */
     public function exampleClassIterator()
     {
-        $classes = iterator_to_array(new ClassIterator(PATH_TO_CLASSTOOLS));
+        $iter = new ClassIterator(PATH_TO_CLASSTOOLS);
 
         // prints path to hanneskod\classtools\Iterator\ClassIterator
-        echo $classes['hanneskod\classtools\Iterator\ClassIterator'];
+        echo $iter->getClassMap()['hanneskod\classtools\Iterator\ClassIterator'];
     }
 
     /**
@@ -28,18 +28,16 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
      */
     public function exampleFilterType()
     {
-        $it = new FilterableClassIterator(
-            new ClassIterator(PATH_TO_CLASSTOOLS)
-        );
+        $it = new ClassIterator(PATH_TO_CLASSTOOLS);
 
-        // prints all FilterInterface types (including the interface itself)
+        // prints all Filter types (including the interface itself)
         print_r(iterator_to_array(
-            $it->filterType('hanneskod\classtools\Iterator\Filter\FilterInterface')
+            $it->filterType('hanneskod\classtools\Iterator\Filter')
         ));
 
-        // prints instantiable classes that implement FilterInterface
+        // prints classes that implement the Filter interface
         print_r(iterator_to_array(
-            $it->filterType('hanneskod\classtools\Iterator\Filter\FilterInterface')
+            $it->filterType('hanneskod\classtools\Iterator\Filter')
                ->where('isInstantiable')
         ));
     }
@@ -51,9 +49,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
      */
     public function exampleFilterName()
     {
-        $it = new FilterableClassIterator(
-            new ClassIterator(PATH_TO_CLASSTOOLS)
-        );
+        $it = new ClassIterator(PATH_TO_CLASSTOOLS);
 
         // prints classes and interfaces in the Filter namespace
         print_r(iterator_to_array(
@@ -68,9 +64,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
      */
     public function exampleFilterNot()
     {
-        $it = new FilterableClassIterator(
-            new ClassIterator(PATH_TO_CLASSTOOLS)
-        );
+        $it = new ClassIterator(PATH_TO_CLASSTOOLS);
 
         // prints all classes and interfaces NOT in the Filter namespace
         print_r(iterator_to_array(

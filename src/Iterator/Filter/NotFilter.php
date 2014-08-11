@@ -9,20 +9,21 @@
 
 namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\Iterator\FilterableClassIterator;
+use hanneskod\classtools\Iterator\ClassIterator;
+use hanneskod\classtools\Iterator\Filter;
 
 /**
  * Negate a filter
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class NotFilter extends FilterableClassIterator implements FilterInterface
+class NotFilter extends ClassIterator implements Filter
 {
-    use FilterInterfaceTrait;
+    use FilterTrait;
 
     private $filter;
 
-    public function __construct(FilterInterface $filter)
+    public function __construct(Filter $filter)
     {
         $this->filter = $filter;
     }

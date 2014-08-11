@@ -9,7 +9,8 @@
 
 namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\Iterator\FilterableClassIterator;
+use hanneskod\classtools\Iterator\ClassIterator;
+use hanneskod\classtools\Iterator\Filter;
 use ArrayIterator;
 
 /**
@@ -17,9 +18,9 @@ use ArrayIterator;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class CacheFilter extends FilterableClassIterator implements FilterInterface
+class CacheFilter extends ClassIterator implements Filter
 {
-    use FilterInterfaceTrait;
+    use FilterTrait;
 
     private $cache;
 
