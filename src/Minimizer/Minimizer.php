@@ -10,10 +10,10 @@
 namespace hanneskod\classtools\Minimizer;
 
 use hanneskod\classtools\Iterator\ClassMapInterface;
-use hanneskod\classtools\Extractor\Extractor;
-use hanneskod\classtools\Extractor\Visitor\CommentStripper;
-use hanneskod\classtools\Extractor\Visitor\NodeStripper;
-use hanneskod\classtools\Extractor\Visitor\NamespaceWrapper;
+use hanneskod\classtools\Translator\Reader;
+use hanneskod\classtools\Translator\Action\CommentStripper;
+use hanneskod\classtools\Translator\Action\NodeStripper;
+use hanneskod\classtools\Translator\Action\NamespaceWrapper;
 use PhpParser\NodeVisitor\NameResolver;
 
 /**
@@ -23,7 +23,7 @@ use PhpParser\NodeVisitor\NameResolver;
  */
 class Minimizer
 {
-    private $classMap, $extractors = array();
+    private $classMap;
 
     /**
      * @param ClassMapInterface $classMap
@@ -31,14 +31,6 @@ class Minimizer
     public function __construct(ClassMapInterface $classMap)
     {
         $this->classMap = $classMap;
-    }
-
-    /**
-     * @return string
-     */
-    public function __tostring()
-    {
-        return $this->minimize();
     }
 
     /**
@@ -52,21 +44,20 @@ class Minimizer
         $code = '';
 
         foreach ($this->classMap->getClassMap() as $classname => $path) {
-            $code .= $this->getExtractorFor($path)
-                ->extract($classname)
-                ->registerVisitor(new CommentStripper)
-                ->registerVisitor(new NameResolver)
-                ->registerVisitor(new NodeStripper('PhpParser\Node\Stmt\Use_'))
-                ->registerVisitor(new NamespaceWrapper)
-                ->getCode() . "\n";
+            $code .= $this->getReaderFor($path)
+                ->read($classname)
+                ->apply(new CommentStripper)
+                ->apply(new NameResolver)
+                ->apply(new NodeStripper('PhpParser\Node\Stmt\Use_'))
+                ->write() . "\n";
         }
 
         return "<?php $code";
     }
 
-    private function getExtractorFor($path)
+    private function getReaderFor($path)
     {
         // TODO cache
-        return new Extractor(file_get_contents($path));
+        return new Reader(file_get_contents($path));
     }
 }

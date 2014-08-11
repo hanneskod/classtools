@@ -5,9 +5,10 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
 {
     public function testNoConstructArgs()
     {
-        foreach (new ClassIterator as $class) {
-            $this->assertTrue(false, 'This line should never happen');
-        }
+        $this->assertEmpty(
+            iterator_to_array(new ClassIterator),
+            'No arguments to constructor should yield no found classes'
+        );
     }
 
     public function testInvalidConstructorArgs()

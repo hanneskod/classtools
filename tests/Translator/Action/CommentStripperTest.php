@@ -1,13 +1,13 @@
 <?php
-namespace hanneskod\classtools\Extractor\Visitor;
+namespace hanneskod\classtools\Translator\Action;
 
-use hanneskod\classtools\Extractor\Extractor;
+use hanneskod\classtools\Translator\Reader;
 
 class CommentStripperTest extends \PHPUnit_Framework_TestCase
 {
     public function testStripComments()
     {
-        $extractor = new Extractor(
+        $reader = new Reader(
 <<<EOF
 <?php
 /**
@@ -42,21 +42,23 @@ EOF
 
         $expected =
 <<<EOF
-class ClassName
-{
-    private \$var;
-    public function test()
+namespace  {
+    class ClassName
     {
-        return true;
+        private \$var;
+        public function test()
+        {
+            return true;
+        }
     }
 }
 EOF;
 
-        $codeObj = $extractor->extract('ClassName');
-        $codeObj->registerVisitor(new CommentStripper);
+        $writer = $reader->read('ClassName');
+        $writer->apply(new CommentStripper);
         $this->assertEquals(
             $expected,
-            $codeObj->getCode()
+            $writer->write()
         );
     }
 }

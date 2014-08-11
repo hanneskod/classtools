@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Extractor\Visitor;
+namespace hanneskod\classtools\Translator\Action;
 
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node\Stmt\Namespace_;
@@ -23,16 +23,16 @@ class NamespaceWrapper extends NodeVisitorAbstract
     /**
      * @var string Name of namespace
      */
-    private $namespace;
+    private $namespaceName;
 
     /**
      * Wrap code in namespace
      *
-     * @param string $namespace Name of namespace
+     * @param string $namespaceName Name of namespace
      */
-    public function __construct($namespace = '')
+    public function __construct($namespaceName)
     {
-        $this->namespace = $namespace;
+        $this->namespaceName = $namespaceName;
     }
 
     /**
@@ -43,20 +43,24 @@ class NamespaceWrapper extends NodeVisitorAbstract
      */
     public function beforeTraverse(array $nodes)
     {
-        // Prepend namespace if code is namespaced
-        if ($nodes[0] instanceof Namespace_) {
-            if ($this->namespace) {
-                $nodes[0]->name->prepend($this->namespace);
+        // Merge if code is namespaced
+        if (isset($nodes[0]) && $nodes[0] instanceof Namespace_) {
+            if ($this->namespaceName) {
+                if ((string)$nodes[0]->name == '') {
+                    $nodes[0]->name->set($this->namespaceName);
+                } else {
+                    $nodes[0]->name->prepend($this->namespaceName);
+                }
             }
             return $nodes;
         }
 
         // Else create new node
-        return array(
+        return [
             new Namespace_(
-                new Name($this->namespace),
+                new Name($this->namespaceName),
                 $nodes
             )
-        );
+        ];
     }
 }

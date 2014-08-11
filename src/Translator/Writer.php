@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Extractor;
+namespace hanneskod\classtools\Translator;
 
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
@@ -16,11 +16,11 @@ use PhpParser\Error as PhpParserException;
 use hanneskod\classtools\Exception\RuntimeException;
 
 /**
- * Wrapper for parsed code snippets
+ * Translate and print parsed code snippets
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class CodeObject
+class Writer
 {
     /**
      * @var array Parsed code
@@ -50,14 +50,14 @@ class CodeObject
     }
 
     /**
-     * Register visitor to alter code
+     * Apply translation to alter code
      *
-     * @param  NodeVisitor $visitor
-     * @return CodeObject  Instance for chaining
+     * @param  NodeVisitor $translation
+     * @return Writer      Instance for chaining
      */
-    public function registerVisitor(NodeVisitor $visitor)
+    public function apply(NodeVisitor $translation)
     {
-        $this->traverser->addVisitor($visitor);
+        $this->traverser->addVisitor($translation);
         return $this;
     }
 
@@ -65,7 +65,7 @@ class CodeObject
      * Set statement printer
      *
      * @param  PrettyPrinterAbstract $printer
-     * @return CodeObject  Instance for chaining
+     * @return Writer Instance for chaining
      */
     public function setPrinter(PrettyPrinterAbstract $printer)
     {
@@ -89,7 +89,7 @@ class CodeObject
      * @return string
      * @throws RuntimeException If code generation failes
      */
-    public function getCode()
+    public function write()
     {
         try {
             return $this->getPrinter()->prettyPrint(

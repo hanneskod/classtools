@@ -20,7 +20,7 @@ use ArrayIterator;
  */
 class ClassIterator implements IteratorAggregate, ClassMapInterface
 {
-    private $classes = array();
+    private $classes = [];
 
     /**
      * Add one or more paths for scanning

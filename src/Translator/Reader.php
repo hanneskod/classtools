@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Extractor;
+namespace hanneskod\classtools\Translator;
 
 use PhpParser\Parser;
 use PhpParser\Lexer;
@@ -20,21 +20,21 @@ use PhpParser\Node\Stmt\Trait_;
 use hanneskod\classtools\Exception\RuntimeException;
 
 /**
- * Extract classes, interfaces and traits from php snippets
+ * Read classes, interfaces and traits from php snippets
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class Extractor
+class Reader
 {
     /**
      * @var array Collection of definitions in snippet
      */
-    private $defs = array();
+    private $defs = [];
 
     /**
      * @var string[] Case sensitive definition names
      */
-    private $names = array();
+    private $names = [];
 
     /**
      * @var array The global statement object
@@ -54,12 +54,9 @@ class Extractor
         // Save the global statments
         $this->global = $parser->parse($snippet);
 
-        $this->parseDefinitions(
+        $this->findDefinitions(
             $this->global,
-            new Namespace_(
-                new Name(''),
-                array()
-            )
+            new Namespace_(new Name(''), [])
         );
     }
 
@@ -70,44 +67,51 @@ class Extractor
      * @param  Namespace_ $namespace
      * @return void
      */
-    private function parseDefinitions(array $stmts, Namespace_ $namespace)
+    private function findDefinitions(array $stmts, Namespace_ $namespace)
     {
-        $useStmts = array();
-
         foreach ($stmts as $stmt) {
+            // Restart if namespace declaration is found
             if ($stmt instanceof Namespace_) {
-                $this->parseDefinitions(
+                $this->findDefinitions(
                     $stmt->stmts,
-                    $stmt
+                    new Namespace_($stmt->name, [])
                 );
+
+            // Save use declaration to namespace
             } elseif ($stmt instanceof Use_) {
-                $useStmts[] = $stmt;
+                $namespace->stmts[] = $stmt;
+
+            // Save classes, interfaces and traits
             } elseif ($stmt instanceof Class_ or $stmt instanceof Interface_ or $stmt instanceof Trait_) {
-                $namespace->stmts = array_merge($useStmts, array($stmt));
-                if ((string)$namespace->name == '') {
-                    $this->storeDefinition($stmt->name, $namespace->stmts);
-                } else {
-                    $this->storeDefinition($namespace->name . "\\" . $stmt->name, $namespace);
-                }
+                $namespace->stmts[] = $stmt;
+                $name = self::normalizeName($namespace->name . "\\" . $stmt->name);
+                $key = self::getKey($name);
+                $this->defs[$key] = [clone $namespace];
+                $this->names[$key] = $name;
             }
         }
     }
 
     /**
-     * Store found definition
+     * Normalize definition name
      *
-     * @param  string       $name
-     * @param  array|object $def
-     * @return void
+     * @param  string $name
+     * @return string
      */
-    private function storeDefinition($name, $def)
+    private static function normalizeName($name)
     {
-        if (!is_array($def)) {
-            $def = array($def);
-        }
-        $key = strtolower($name);
-        $this->defs[$key] = $def;
-        $this->names[$key] = $name;
+        return preg_replace('/^\\\*/', '', $name);
+    }
+
+    /**
+     * Get key for definition name
+     *
+     * @param  string $name
+     * @return string
+     */
+    private static function getKey($name)
+    {
+        return strtolower(self::normalizeName($name));
     }
 
     /**
@@ -128,32 +132,32 @@ class Extractor
      */
     public function hasDefinition($name)
     {
-        return isset($this->defs[strtolower($name)]);
+        return isset($this->defs[self::getKey($name)]);
     }
 
     /**
-     * Get code for class/interface/trait
+     * Get writer for class/interface/trait
      *
      * @param  string $name Name of class/interface/trait
-     * @return CodeObject
+     * @return Writer
      * @throws RuntimeException If $name does not exist
      */
-    public function extract($name)
+    public function read($name)
     {
         if (!$this->hasDefinition($name)) {
-            throw new RuntimeException("Unable to extract <$name>, not found.");
+            throw new RuntimeException("Unable to read <$name>, not found.");
         }
 
-        return new CodeObject($this->defs[strtolower($name)]);
+        return new Writer($this->defs[self::getKey($name)]);
     }
 
     /**
-     * Get global code
+     * Get writer for the complete snippet
      *
-     * @return CodeObject
+     * @return Writer
      */
-    public function extractAll()
+    public function readAll()
     {
-        return new CodeObject($this->global);
+        return new Writer($this->global);
     }
 }

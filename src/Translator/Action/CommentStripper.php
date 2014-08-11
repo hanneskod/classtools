@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Extractor\Visitor;
+namespace hanneskod\classtools\Translator\Action;
 
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;
@@ -27,6 +27,6 @@ class CommentStripper extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        $node->setAttribute('comments', array());
+        $node->setAttribute('comments', []);
     }
 }

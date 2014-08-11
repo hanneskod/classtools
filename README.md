@@ -1,6 +1,7 @@
-# classtools [![Build Status](https://travis-ci.org/hanneskod/classtools.svg)](https://travis-ci.org/hanneskod/classtools) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/hanneskod/classtools/badges/quality-score.png?s=d9484dda5b07eafdb183746efc126488583e0532)](https://scrutinizer-ci.com/g/hanneskod/classtools/)
+# classtools [![Build Status](https://travis-ci.org/hanneskod/classtools.svg)](https://travis-ci.org/hanneskod/classtools) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/hanneskod/classtools/badges/quality-score.png?s=d9484dda5b07eafdb183746efc126488583e0532)](https://scrutinizer-ci.com/g/hanneskod/classtools/) [![Dependency Status](https://gemnasium.com/hanneskod/classtools.svg)](https://gemnasium.com/hanneskod/classtools)
 
-Iterate over classes found in filesystem
+Find, extract and process classes from file system
+
 
 ## Iterator examples
 
@@ -60,19 +61,26 @@ print_r(iterator_to_array(
 ));
 ```
 
-Installation using [composer](http://getcomposer.org/)
-------------------------------------------------------
-To your `composer.json` add
+## Translator examples
 
-    "require": {
-        "hanneskod/classtools": "dev-master@dev",
-    }
+### Wrap code in namespace
 
+```php
+$reader = new Reader("<?php class Bar {}");
 
-Testing using [phpunit](http://phpunit.de/)
--------------------------------------------
-The unis tests requires that dependencies are installed using composer.
+// Outputs class Bar wrapped in namespace Foo
+echo $reader->read('Bar')
+    ->apply(new Action\NamespaceWrapper('Foo'))
+    ->write();
+```
 
-    $ curl -sS https://getcomposer.org/installer | php
-    $ php composer.phar install --dev
-    $ vendor/bin/phpunit
+### Strip statements
+
+```php
+$reader = new Reader("<?php require 'Foo.php'; echo 'bar';");
+
+// Outputs the echo statement
+echo $reader->readAll()
+    ->apply(new Action\NodeStripper('PhpParser\Node\Expr\Include_'))
+    ->write();
+```
