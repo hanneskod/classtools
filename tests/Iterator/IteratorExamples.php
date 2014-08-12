@@ -1,29 +1,8 @@
 <?php
-namespace hanneskod\classtools\Iterator\Examples;
+namespace hanneskod\classtools\Iterator;
 
-use Symfony\Component\Finder\Tests\Iterator\MockSplFileInfo;
-use hanneskod\classtools\Iterator\ClassIterator;
-
-class Finder extends \Symfony\Component\Finder\Finder
-{
-    public function getIterator()
-    {
-        return new \ArrayIterator([
-            new MockSplFileInfo([
-                'name' => 'A.php',
-                'contents' => '<?php namespace Iterator; interface Filter {}'
-            ]),
-            new MockSplFileInfo([
-                'name' => 'B.php',
-                'contents' => '<?php namespace Iterator; class NotFilter implements Filter {}'
-            ]),
-            new MockSplFileInfo([
-                'name' => 'C.php',
-                'contents' => '<?php namespace Iterator; class ClassIterator {}'
-            ])
-        ]);
-    }
-}
+use hanneskod\classtools\Tests\MockSplFileInfo;
+use hanneskod\classtools\Tests\MockFinder as Finder;
 
 /**
  * Iterator
@@ -34,6 +13,17 @@ class Finder extends \Symfony\Component\Finder\Finder
  */
 class IteratorExamples extends \hanneskod\exemplify\TestCase
 {
+    public static function setupBeforeClass()
+    {
+        Finder::setIterator(
+            new \ArrayIterator([
+                new MockSplFileInfo('<?php namespace Iterator; interface Filter {}'),
+                new MockSplFileInfo('<?php namespace Iterator; class NotFilter implements Filter {}'),
+                new MockSplFileInfo('<?php namespace Iterator; class ClassIterator {}')
+            ])
+        );
+    }
+
     /**
      * Access the class map
      *
@@ -41,7 +31,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
      * [SplFileInfo](http://api.symfony.com/2.5/Symfony/Component/Finder/SplFileInfo.html)
      * objects. 
      *
-     * @expectOutputString A.phpB.phpC.php
+     * @expectOutputRegex /php$/
      */
     public function exampleGetClassMap()
     {
@@ -50,7 +40,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
 
         // Print the file names of classes, interfaces and traits in 'src'
         foreach ($iter->getClassMap() as $name => $splFileInfo) {
-            echo $splFileInfo->getFilename();
+            echo $splFileInfo->getRealPath();
         }
     }
 

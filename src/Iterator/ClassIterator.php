@@ -28,9 +28,14 @@ use hanneskod\classtools\Iterator\Filter\WhereFilter;
 class ClassIterator implements IteratorAggregate
 {
     /**
-     * @var SplFileInfo[] Maps names to filesystem paths
+     * @var SplFileInfo[] Maps names to SplFileInfo objects
      */
     private $classMap = [];
+
+    /**
+     * @var ClassLoader ClassMap autoloader
+     */
+    private $loader;
 
     /**
      * Scan filesystem for classes, interfaces and traits
@@ -46,6 +51,10 @@ class ClassIterator implements IteratorAggregate
                 $this->classMap[$name] = $fileinfo;
             }
         }
+
+        // Register classloader
+        $this->loader = new ClassLoader($this->getClassMap());
+        $this->loader->register();
     }
 
     /**
@@ -67,11 +76,6 @@ class ClassIterator implements IteratorAggregate
     {
         /** @var SplFileInfo $fileinfo */
         foreach ($this->getClassMap() as $name => $fileinfo) {
-            if (!class_exists($name) && !interface_exists($name) && !trait_exists($name)) {
-                // TODO fix needed!
-                //include $fileinfo->getRealPath();
-                eval(str_replace("<?php", "", $fileinfo->getContents()));
-            }
             yield $name => new ReflectionClass($name);
         }
     }

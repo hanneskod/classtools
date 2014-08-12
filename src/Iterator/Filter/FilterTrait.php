@@ -36,7 +36,7 @@ trait FilterTrait
     /**
      * Get iterator bound to filter
      *
-     * @return \Traversable
+     * @return ClassIterator
      * @throws LogicException If no bound iterator exists
      */
     public function getBoundIterator()
@@ -63,4 +63,11 @@ trait FilterTrait
 
         return $map;
     }
+
+    /**
+     * Get current iterator
+     *
+     * @return \Traversable
+     */
+    abstract public function getIterator();
 }

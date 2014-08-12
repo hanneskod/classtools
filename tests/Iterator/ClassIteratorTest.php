@@ -1,7 +1,7 @@
 <?php
 namespace hanneskod\classtools\Iterator;
 
-use Symfony\Component\Finder\Tests\Iterator\MockSplFileInfo;
+use hanneskod\classtools\Tests\MockSplFileInfo;
 
 class ClassIteratorTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,22 +11,10 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
     {
         if (!isset($this->sut)) {
             $fileInfoObjects = [
-                new MockSplFileInfo([
-                    'name' => 'A.php',
-                    'contents' => '<?php class A {}'
-                ]),
-                new MockSplFileInfo([
-                    'name' => 'TestInterface.php',
-                    'contents' => '<?php interface TestInterface {}'
-                ]),
-                new MockSplFileInfo([
-                    'name' => 'B.php',
-                    'contents' => '<?php class B implements TestInterface {}'
-                ]),
-                new MockSplFileInfo([
-                    'name' => 'C.php',
-                    'contents' => '<?php class C extends A implements TestInterface {}'
-                ])
+                new MockSplFileInfo('<?php class A {}'),
+                new MockSplFileInfo('<?php interface TestInterface {}'),
+                new MockSplFileInfo('<?php class B implements TestInterface {}'),
+                new MockSplFileInfo('<?php class C extends A implements TestInterface {}')
             ];
 
             $finder = $this->getMockBuilder('Symfony\Component\Finder\Finder')
