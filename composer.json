@@ -18,7 +18,8 @@
     },
     "require": {
         "php": ">=5.5.0",
-        "nikic/php-parser": "1.0.0-beta1"
+        "nikic/php-parser": "1.0.0-beta1",
+        "symfony/finder": "~2.3"
     },
     "require-dev": {
         "hanneskod/exemplify": "dev-master@dev",

@@ -1,76 +1,124 @@
 <?php
-namespace hanneskod\classtools\Iterator;
+namespace hanneskod\classtools\Iterator\Examples;
 
-define('PATH_TO_CLASSTOOLS', __DIR__.'/../../src');
+use Symfony\Component\Finder\Tests\Iterator\MockSplFileInfo;
+use hanneskod\classtools\Iterator\ClassIterator;
+
+class Finder extends \Symfony\Component\Finder\Finder
+{
+    public function getIterator()
+    {
+        return new \ArrayIterator([
+            new MockSplFileInfo([
+                'name' => 'A.php',
+                'contents' => '<?php namespace Iterator; interface Filter {}'
+            ]),
+            new MockSplFileInfo([
+                'name' => 'B.php',
+                'contents' => '<?php namespace Iterator; class NotFilter implements Filter {}'
+            ]),
+            new MockSplFileInfo([
+                'name' => 'C.php',
+                'contents' => '<?php namespace Iterator; class ClassIterator {}'
+            ])
+        ]);
+    }
+}
 
 /**
- * Iterator examples
+ * Iterator
+ *
+ * [ClassIterator](src/Iterator/ClassIterator.php) consumes a
+ * [symfony finder](http://symfony.com/doc/current/components/finder.html)
+ * and scans files for php classes, interfaces and traits.
  */
 class IteratorExamples extends \hanneskod\exemplify\TestCase
 {
     /**
-     * Read classes in project
+     * Access the class map
      *
-     * @expectOutputRegex #classtools/src/Iterator/ClassIterator.php$#
+     * `getClassMap()` returns a map of class names to
+     * [SplFileInfo](http://api.symfony.com/2.5/Symfony/Component/Finder/SplFileInfo.html)
+     * objects. 
+     *
+     * @expectOutputString A.phpB.phpC.php
      */
-    public function exampleClassIterator()
+    public function exampleGetClassMap()
     {
-        $iter = new ClassIterator(PATH_TO_CLASSTOOLS);
+        $finder = new Finder;
+        $iter = new ClassIterator($finder->in('src'));
 
-        // prints path to hanneskod\classtools\Iterator\ClassIterator
-        echo $iter->getClassMap()['hanneskod\classtools\Iterator\ClassIterator'];
+        // Print the file names of classes, interfaces and traits in 'src'
+        foreach ($iter->getClassMap() as $name => $splFileInfo) {
+            echo $splFileInfo->getFilename();
+        }
     }
 
     /**
-     * Find classes based on type
+     * Iterate over ReflectionClass objects
      *
-     * @expectOutputRegex /^Array/
+     * [ClassIterator](src/Iterator/ClassIterator.php) is also a
+     * [Traversable](http://php.net/manual/en/class.traversable.php, that on
+     * iterator yields class names as keys and
+     * [ReflectionClass](http://php.net/manual/en/class.reflectionclass.php)
+     * objects as values.
+     *
+     * @expectOutputString Iterator\FilterIterator\NotFilterIterator\ClassIterator
      */
-    public function exampleFilterType()
+    public function exampleIterator()
     {
-        $it = new ClassIterator(PATH_TO_CLASSTOOLS);
+        $finder = new Finder();
+        $iter = new ClassIterator($finder->in('src'));
 
-        // prints all Filter types (including the interface itself)
-        print_r(iterator_to_array(
-            $it->filterType('hanneskod\classtools\Iterator\Filter')
-        ));
-
-        // prints classes that implement the Filter interface
-        print_r(iterator_to_array(
-            $it->filterType('hanneskod\classtools\Iterator\Filter')
-               ->where('isInstantiable')
-        ));
+        // Prints all classes, interfaces and traits in 'src'
+        foreach ($iter as $name => $reflectionClass) {
+            echo $name;
+        }
     }
 
     /**
-     * Find classes based on name
+     * Filter based on class properties
      *
-     * @expectOutputRegex /^Array/
+     * [ClassIterator](src/Iterator/ClassIterator.php) is filterable and filters
+     * are chainable.
+     *
+     * @expectOutputString Iterator\FilterIterator\NotFilterIterator\FilterIterator\NotFilterIterator\ClassIteratorIterator\NotFilter
      */
-    public function exampleFilterName()
+    public function exampleFilter()
     {
-        $it = new ClassIterator(PATH_TO_CLASSTOOLS);
+        $finder = new Finder();
+        $iter = new ClassIterator($finder->in('src'));
 
-        // prints classes and interfaces in the Filter namespace
-        print_r(iterator_to_array(
-            $it->filterName('/^hanneskod\\\classtools\\\Iterator\\\Filter\\\/')
-        ));
+        // Prints all Filter types (including the interface itself)
+        foreach ($iter->type('Iterator\Filter') as $name => $reflectionClass) {
+            echo $name;
+        }
+
+        // Prints classes, interfaces and traits in the Iterator namespace
+        foreach ($iter->name('/Iterator\\\/') as $name => $reflectionClass) {
+            echo $name;
+        }
+
+        // Prints implementations of the Filter interface
+        $iter = $iter->type('Iterator\Filter')->where('isInstantiable');
+        foreach ($iter as $name => $reflectionClass) {
+            echo $name;
+        }
     }
 
     /**
      * Negate filters
      *
-     * @expectOutputRegex /^Array/
+     * @expectOutputString Iterator\Filter
      */
-    public function exampleFilterNot()
+    public function exampleNegateFilters()
     {
-        $it = new ClassIterator(PATH_TO_CLASSTOOLS);
+        $finder = new Finder();
+        $iter = new ClassIterator($finder->in('src'));
 
-        // prints all classes and interfaces NOT in the Filter namespace
-        print_r(iterator_to_array(
-            $it->not(
-                $it->filterName('/^hanneskod\\\classtools\\\Iterator\\\Filter\\\/')
-            )
-        ));
+        // Prints all classes, interfaces and traits NOT instantiable
+        foreach ($iter->not($iter->where('isInstantiable')) as $name => $reflectionClass) {
+            echo $name;
+        }
     }
 }

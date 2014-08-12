@@ -11,6 +11,7 @@ namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
 use hanneskod\classtools\Exception\LogicException;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Implementation of Filter
@@ -47,14 +48,19 @@ trait FilterTrait
     }
 
     /**
-     * Get iterator that yields classnames as keys and filesystem paths as values
+     * Get map of classnames to SplFileInfo objects
      *
-     * @return \Iterator
+     * @return SplFileInfo[]
      */
     public function getClassMap()
     {
-        foreach ($this->getIterator() as $className => $reflectedClass) {
-            yield $className => $reflectedClass->getFileName();
+        $parentMap = $this->getBoundIterator()->getClassMap();
+        $map = iterator_to_array($this->getIterator());
+
+        foreach ($map as $name => &$fileinfo) {
+            $fileinfo = $parentMap[$name];
         }
+
+        return $map;
     }
 }

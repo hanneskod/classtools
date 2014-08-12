@@ -11,7 +11,9 @@ namespace hanneskod\classtools\Iterator;
 
 use IteratorAggregate;
 use ReflectionClass;
-use hanneskod\classtools\Exception\RuntimeException;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
+use hanneskod\classtools\Translator\Reader;
 use hanneskod\classtools\Iterator\Filter\CacheFilter;
 use hanneskod\classtools\Iterator\Filter\NameFilter;
 use hanneskod\classtools\Iterator\Filter\NotFilter;
@@ -25,76 +27,35 @@ use hanneskod\classtools\Iterator\Filter\WhereFilter;
  */
 class ClassIterator implements IteratorAggregate
 {
-    private $classes = [];
+    /**
+     * @var SplFileInfo[] Maps names to filesystem paths
+     */
+    private $classMap = [];
 
     /**
-     * Add one or more paths for scanning
+     * Scan filesystem for classes, interfaces and traits
      *
-     * @param array|string $paths
+     * @param Finder $finder
      */
-    public function __construct($paths = null)
+    public function __construct(Finder $finder)
     {
-        foreach ((array)$paths as $path) {
-            $this->addPath($path);
+        /** @var SplFileInfo $fileinfo */
+        foreach ($finder as $fileinfo) {
+            $reader = new Reader($fileinfo->getContents());
+            foreach ($reader->getDefinitionNames() as $name) {
+                $this->classMap[$name] = $fileinfo;
+            }
         }
     }
 
     /**
-     * Add a path for scanning
+     * Get map of classnames to SplFileInfo objects
      *
-     * @param  string $path
-     * @throws RuntimeException If $path is not a valid path
-     */
-    public function addPath($path)
-    {
-        if (is_dir($path)) {
-            $this->addDir($path);
-        } elseif (is_file($path)) {
-            $this->addFile($path);
-        } else {
-            throw new RuntimeException("<$path> is not a valid filesystem path.");
-        }
-    }
-
-    /**
-     * @param string $dirname
-     */
-    private function addDir($dirname)
-    {
-        foreach (ClassMapGenerator::createMap($dirname) as $classname => $path) {
-            $this->addClass($classname, $path);
-        }
-    }
-
-    /**
-     * @param string $filename
-     */
-    private function addFile($filename)
-    {
-        foreach (ClassMapGenerator::findClasses($filename) as $classname) {
-            $this->addClass($classname, $filename);
-        }
-    }
-
-    /**
-     * Add class to iterator
-     *
-     * @param string $classname
-     * @param mixed  $content
-     */
-    private function addClass($classname, $content = '')
-    {
-        $this->classes[$classname] = $content;
-    }
-
-    /**
-     * Get map of classnames to filesystem paths
-     *
-     * @return array
+     * @return SplFileInfo[]
      */
     public function getClassMap()
     {
-        return $this->classes;
+        return $this->classMap;
     }
 
     /**
@@ -104,8 +65,14 @@ class ClassIterator implements IteratorAggregate
      */
     public function getIterator()
     {
-        foreach ($this->getClassMap() as $className => $path) {
-            yield $className => new ReflectionClass($className);
+        /** @var SplFileInfo $fileinfo */
+        foreach ($this->getClassMap() as $name => $fileinfo) {
+            if (!class_exists($name) && !interface_exists($name) && !trait_exists($name)) {
+                // TODO fix needed!
+                //include $fileinfo->getRealPath();
+                eval(str_replace("<?php", "", $fileinfo->getContents()));
+            }
+            yield $name => new ReflectionClass($name);
         }
     }
 
@@ -127,7 +94,7 @@ class ClassIterator implements IteratorAggregate
      * @param  string $typename
      * @return ClassIterator
      */
-    public function filterType($typename)
+    public function type($typename)
     {
         return $this->filter(new TypeFilter($typename));
     }
@@ -138,7 +105,7 @@ class ClassIterator implements IteratorAggregate
      * @param  string $pattern Regular expression used when filtering
      * @return ClassIterator
      */
-    public function filterName($pattern)
+    public function name($pattern)
     {
         return $this->filter(new NameFilter($pattern));
     }

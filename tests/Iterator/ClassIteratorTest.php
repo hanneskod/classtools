@@ -1,193 +1,221 @@
 <?php
 namespace hanneskod\classtools\Iterator;
 
+use Symfony\Component\Finder\Tests\Iterator\MockSplFileInfo;
+
 class ClassIteratorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testNoConstructArgs()
-    {
-        $this->assertEmpty(
-            iterator_to_array(new ClassIterator),
-            'No arguments to constructor should yield no found classes'
-        );
-    }
+    private $sut;
 
-    public function testInvalidConstructorArgs()
+    public function getSystemUnderTest()
     {
-        $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');
-        new ClassIterator(array('not-a-file-or-dir'));
-    }
+        if (!isset($this->sut)) {
+            $fileInfoObjects = [
+                new MockSplFileInfo([
+                    'name' => 'A.php',
+                    'contents' => '<?php class A {}'
+                ]),
+                new MockSplFileInfo([
+                    'name' => 'TestInterface.php',
+                    'contents' => '<?php interface TestInterface {}'
+                ]),
+                new MockSplFileInfo([
+                    'name' => 'B.php',
+                    'contents' => '<?php class B implements TestInterface {}'
+                ]),
+                new MockSplFileInfo([
+                    'name' => 'C.php',
+                    'contents' => '<?php class C extends A implements TestInterface {}'
+                ])
+            ];
 
-    public function testScanFile()
-    {
-        $this->assertArrayHasKey(
-            __CLASS__,
-            iterator_to_array(new ClassIterator(__FILE__))
-        );
-    }
+            $finder = $this->getMockBuilder('Symfony\Component\Finder\Finder')
+                ->disableOriginalConstructor()
+                ->getMock();
 
-    public function testScanDir()
-    {
-        $this->assertArrayHasKey(
-            __CLASS__,
-            iterator_to_array(new ClassIterator(array(__DIR__)))
-        );
+            $finder->expects($this->any())
+                ->method('getIterator')
+                ->will($this->returnValue(new \ArrayIterator($fileInfoObjects)));
+
+            $this->sut = new ClassIterator($finder);
+        }
+
+        return $this->sut;
     }
 
     public function testGetClassmap()
     {
-        $iter = new ClassIterator(__FILE__);
         $this->assertArrayHasKey(
-            __CLASS__,
-            $iter->getClassMap()
+            'A',
+            $this->getSystemUnderTest()->getClassMap()
+        );
+
+        $this->assertInstanceOf(
+            '\SplFileInfo',
+            $this->getSystemUnderTest()->getClassMap()['A'],
+            'getClassMap should map classnames to SplFileInfo objects'
+        );
+    }
+
+    public function testGetIterator()
+    {
+        $this->assertArrayHasKey(
+            'A',
+            iterator_to_array($this->getSystemUnderTest())
+        );
+
+        $this->assertInstanceOf(
+            '\ReflectionClass',
+            iterator_to_array($this->getSystemUnderTest())['A'],
+            'getIterator should map classnames to ReflectionClass objects'
         );
     }
 
     public function testFilteredClassMap()
     {
-        $it = new ClassIterator(__DIR__.'/../../src');
+        $classIterator = $this->getSystemUnderTest();
 
-        $resultFilter = iterator_to_array(
-            $it->where('isInterface')->getClassMap()
+        $this->assertArrayHasKey(
+            'A',
+            $classIterator->getClassMap(),
+            'A is definied and should be present'
         );
 
-        $resultNoFilter = $it->getClassMap();
-
-        $this->assertTrue(is_string($resultFilter['hanneskod\classtools\Iterator\Filter']));
-        $this->assertTrue(is_string($resultNoFilter['hanneskod\classtools\Iterator\Filter']));
-    }
-
-    public function testIteratorReturnsReflectionclass()
-    {
-        $result = iterator_to_array(new ClassIterator(__FILE__));
-
-        $this->assertEquals(
-            new \ReflectionClass(__CLASS__),
-            $result[__CLASS__]
+        $this->assertArrayNotHasKey(
+            'A',
+            $classIterator->where('isInterface')->getClassMap(),
+            'A is not an interface and should be filtered'
         );
     }
 
     public function testTypeFilter()
     {
-        $it = new ClassIterator(__DIR__.'/../../src');
+        $classIterator = $this->getSystemUnderTest();
 
         $result = iterator_to_array(
-            $it->filterType('IteratorAggregate')
+            $classIterator->type('TestInterface')
         );
 
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Iterator\Filter',
+            'A',
             $result,
-            'Filter does not implement IteratorAggregate'
+            'A does not implement TestInterface'
         );
 
         $this->assertArrayHasKey(
-            'hanneskod\classtools\Iterator\ClassIterator',
+            'B',
             $result,
-            'ClassIterator does implement IteratorAggregate'
+            'B does implement TestInterface'
         );
 
         $result = iterator_to_array(
-            $it
-                ->filterType('hanneskod\classtools\Iterator\ClassIterator')
-                ->filterType('hanneskod\classtools\Iterator\Filter')
+            $classIterator
+                ->type('TestInterface')
+                ->type('A')
         );
 
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Iterator\Filter',
+            'B',
             $result,
-            'Filter does not extend ClassIterator'
+            'B does not extend A'
         );
 
         $this->assertArrayHasKey(
-            'hanneskod\classtools\Iterator\Filter\CacheFilter',
+            'C',
             $result,
-            'CacheFilter extends all'
+            'C extends all'
         );
     }
 
     public function testNameFilter()
     {
-        $it = new ClassIterator(__DIR__.'/../../src');
+        $classIterator = $this->getSystemUnderTest();
 
         $result = iterator_to_array(
-            $it->filterName('/Class/')
+            $classIterator->name('/A/')
         );
 
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Iterator\Filter\NameFilter',
+            'TestInterface',
             $result
         );
+
         $this->assertArrayHasKey(
-            'hanneskod\classtools\Minimizer\ClassMinimizer',
+            'A',
             $result
         );
 
         $result = iterator_to_array(
-            $it->filterName('/Class/')->filterName('/Iterator/')
+            $classIterator->name('/Test/')->name('/Interface/')
         );
 
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Minimizer\ClassMinimizer',
+            'A',
             $result
         );
+
         $this->assertArrayHasKey(
-            'hanneskod\classtools\Iterator\ClassIterator',
+            'TestInterface',
             $result
         );
     }
 
     public function testWhereFilter()
     {
-        $it = new ClassIterator(__DIR__.'/../../src');
+        $classIterator = $this->getSystemUnderTest();
 
         $result = iterator_to_array(
-            $it->where('isInterface')
+            $classIterator->where('isInterface')
         );
 
         $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Iterator\Filter\NameFilter',
+            'A',
             $result,
-            'NameFilter is not an interface'
+            'A is not an interface'
         );
+
         $this->assertArrayHasKey(
-            'hanneskod\classtools\Iterator\Filter',
+            'TestInterface',
             $result,
-            'Filter is an interface'
+            'TestInterface is an interface'
         );
     }
 
     public function testNotFilter()
     {
-        $it = new ClassIterator(__DIR__.'/../../src');
+        $classIterator = $this->getSystemUnderTest();
 
-        $result = iterator_to_array($it->not($it->where('isInterface')));
+        $result = iterator_to_array(
+            $classIterator->not($classIterator->where('isInterface'))
+        );
+
+        $this->assertArrayNotHasKey(
+            'TestInterface',
+            $result,
+            'TestInterface is an interface (and thus not included using the not filter)'
+        );
 
         $this->assertArrayHasKey(
-            'hanneskod\classtools\Iterator\Filter\NameFilter',
+            'A',
             $result,
-            'NameFilter is not an interface (and thus included using the not filter)'
-        );
-        $this->assertArrayNotHasKey(
-            'hanneskod\classtools\Iterator\Filter',
-            $result,
-            'Filter is an interface (and thus not included using the not filter)'
+            'A is not an interface (and thus included using the not filter)'
         );
     }
 
     public function testCacheFilter()
     {
-        $it = new ClassIterator(__DIR__.'/../../src');
+        $classIterator = $this->getSystemUnderTest();
 
         $this->assertNotSame(
-            $it->getIterator(),
-            $it->getIterator()
+            $classIterator->getIterator(),
+            $classIterator->getIterator()
         );
 
-        $it = $it->cache();
+        $classIterator = $classIterator->cache();
 
         $this->assertSame(
-            $it->getIterator(),
-            $it->getIterator()
+            $classIterator->getIterator(),
+            $classIterator->getIterator()
         );
     }
 }
