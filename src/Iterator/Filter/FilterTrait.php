@@ -36,7 +36,7 @@ trait FilterTrait
     /**
      * Get iterator bound to filter
      *
-     * @return ClassIterator
+     * @return \Traversable
      * @throws LogicException If no bound iterator exists
      */
     public function getBoundIterator()

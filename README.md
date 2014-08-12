@@ -26,8 +26,8 @@ foreach ($iter->getClassMap() as $name => $splFileInfo) {
 
 ### Iterate over ReflectionClass objects
 
-[ClassIterator](src/Iterator/ClassIterator.php) is also a
-[Traversable](http://php.net/manual/en/class.traversable.php, that on iterator
+ClassIterator is also a
+[Traversable](http://php.net/manual/en/class.traversable.php), that on iteration
 yields class names as keys and
 [ReflectionClass](http://php.net/manual/en/class.reflectionclass.php) objects as
 values.
@@ -69,6 +69,8 @@ foreach ($iter as $name => $reflectionClass) {
 ```
 
 ### Negate filters
+
+Filters can also be negated by wrapping them in `not()` method calls.
 
 ```php
 $finder = new Finder();

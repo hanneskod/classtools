@@ -61,7 +61,7 @@ class ClassIterator implements IteratorAggregate
     /**
      * Iterator yields classnames as keys and ReflectionClass objects as values
      *
-     * @return \Iterator
+     * @return \Traversable
      */
     public function getIterator()
     {

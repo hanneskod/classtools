@@ -9,6 +9,7 @@
 
 namespace hanneskod\classtools\Iterator;
 
+use IteratorAggregate;
 use hanneskod\classtools\Exception\LogicException;
 
 /**
@@ -16,7 +17,7 @@ use hanneskod\classtools\Exception\LogicException;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-interface Filter
+interface Filter extends IteratorAggregate
 {
     /**
      * Bind filter to iterator
