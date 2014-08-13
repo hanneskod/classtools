@@ -13,7 +13,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testIsInstantiable()
     {
         $class = $this->getMockBuilder('\ReflectionClass')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(['\Exception'])
             ->getMock();
 
         $class->expects($this->atLeastOnce())
@@ -21,7 +21,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $constructor = $this->getMockBuilder('\ReflectionMethod')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(['\Exception', '__construct'])
             ->getMock();
 
         $constructor->expects($this->atLeastOnce())
@@ -45,7 +45,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
     public function testExceptionWhenInstantiatingNotInstatiable()
     {
         $class = $this->getMockBuilder('\ReflectionClass')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs(['\Exception'])
             ->getMock();
 
         $class->expects($this->atLeastOnce())
