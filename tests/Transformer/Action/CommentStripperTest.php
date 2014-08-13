@@ -1,7 +1,8 @@
 <?php
-namespace hanneskod\classtools\Translator\Action;
+namespace hanneskod\classtools\Transformer\Action;
 
-use hanneskod\classtools\Translator\Reader;
+use hanneskod\classtools\Transformer\Reader;
+use hanneskod\classtools\Transformer\Writer;
 
 class CommentStripperTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,11 +55,11 @@ namespace  {
 }
 EOF;
 
-        $writer = $reader->read('ClassName');
+        $writer = new Writer;
         $writer->apply(new CommentStripper);
         $this->assertEquals(
             $expected,
-            $writer->write()
+            $writer->write($reader->read('ClassName'))
         );
     }
 }

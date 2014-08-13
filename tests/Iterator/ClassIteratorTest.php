@@ -2,33 +2,29 @@
 namespace hanneskod\classtools\Iterator;
 
 use hanneskod\classtools\Tests\MockSplFileInfo;
+use hanneskod\classtools\Tests\MockFinder;
 
 class ClassIteratorTest extends \PHPUnit_Framework_TestCase
 {
-    private $sut;
+    private static $sut;
 
-    public function getSystemUnderTest()
+    public static function setupBeforeClass()
     {
-        if (!isset($this->sut)) {
-            $fileInfoObjects = [
+        MockFinder::setIterator(
+            new \ArrayIterator([
                 new MockSplFileInfo('<?php class A {}'),
                 new MockSplFileInfo('<?php interface TestInterface {}'),
                 new MockSplFileInfo('<?php class B implements TestInterface {}'),
                 new MockSplFileInfo('<?php class C extends A implements TestInterface {}')
-            ];
+            ])
+        );
 
-            $finder = $this->getMockBuilder('Symfony\Component\Finder\Finder')
-                ->disableOriginalConstructor()
-                ->getMock();
+        self::$sut = new ClassIterator(new MockFinder);
+    }
 
-            $finder->expects($this->any())
-                ->method('getIterator')
-                ->will($this->returnValue(new \ArrayIterator($fileInfoObjects)));
-
-            $this->sut = new ClassIterator($finder);
-        }
-
-        return $this->sut;
+    public function getSystemUnderTest()
+    {
+        return self::$sut;
     }
 
     public function testGetClassmap()
@@ -204,6 +200,37 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             $classIterator->getIterator(),
             $classIterator->getIterator()
+        );
+    }
+
+    public function testMinimize()
+    {
+        $expected = <<<EOL
+<?php namespace  {
+    class A
+    {
+    }
+}
+namespace  {
+    interface TestInterface
+    {
+    }
+}
+namespace  {
+    class B implements \\\\TestInterface
+    {
+    }
+}
+namespace  {
+    class C extends \\\\A implements \\\\TestInterface
+    {
+    }
+}
+
+EOL;
+        $this->assertEquals(
+            $expected,
+            $this->getSystemUnderTest()->minimize()
         );
     }
 }

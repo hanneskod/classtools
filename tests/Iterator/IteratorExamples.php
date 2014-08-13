@@ -3,6 +3,7 @@ namespace hanneskod\classtools\Iterator;
 
 use hanneskod\classtools\Tests\MockSplFileInfo;
 use hanneskod\classtools\Tests\MockFinder as Finder;
+use hanneskod\classtools\Transformer\MinimizingWriter;
 
 /**
  * Iterator
@@ -111,5 +112,25 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
         foreach ($iter->not($iter->where('isInstantiable')) as $name => $reflectionClass) {
             echo $name;
         }
+    }
+
+    /**
+     * Transforming classes
+     *
+     * Found class, interface and trait definitions can be transformed and
+     * written to a single file.
+     *
+     * @expectOutputRegex /^\<\?php/
+     */
+    public function exampleMinimize()
+    {
+        $finder = new Finder();
+        $iter = new ClassIterator($finder->in('src'));
+
+        // Prints all found definitions in one snippet
+        echo $iter->minimize();
+
+        // The same can be done using
+        echo $iter->transform(new MinimizingWriter);
     }
 }

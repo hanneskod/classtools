@@ -12,8 +12,9 @@ namespace hanneskod\classtools\Iterator;
 use IteratorAggregate;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Finder\SplFileInfo;
-use hanneskod\classtools\Translator\Reader;
+use hanneskod\classtools\Transformer\Reader;
+use hanneskod\classtools\Transformer\Writer;
+use hanneskod\classtools\Transformer\MinimizingWriter;
 use hanneskod\classtools\Iterator\Filter\CacheFilter;
 use hanneskod\classtools\Iterator\Filter\NameFilter;
 use hanneskod\classtools\Iterator\Filter\NotFilter;
@@ -44,11 +45,11 @@ class ClassIterator implements IteratorAggregate
      */
     public function __construct(Finder $finder)
     {
-        /** @var SplFileInfo $fileinfo */
-        foreach ($finder as $fileinfo) {
-            $reader = new Reader($fileinfo->getContents());
-            foreach ($reader->getDefinitionNames() as $name) {
-                $this->classMap[$name] = $fileinfo;
+        /** @var \Symfony\Component\Finder\SplFileInfo $fileInfo */
+        foreach ($finder as $fileInfo) {
+            $fileInfo = new SplFileInfo($fileInfo);
+            foreach ($fileInfo->getReader()->getDefinitionNames() as $name) {
+                $this->classMap[$name] = $fileInfo;
             }
         }
 
@@ -74,8 +75,8 @@ class ClassIterator implements IteratorAggregate
      */
     public function getIterator()
     {
-        /** @var SplFileInfo $fileinfo */
-        foreach ($this->getClassMap() as $name => $fileinfo) {
+        /** @var SplFileInfo $fileInfo */
+        foreach ($this->getClassMap() as $name => $fileInfo) {
             yield $name => new ReflectionClass($name);
         }
     }
@@ -145,5 +146,33 @@ class ClassIterator implements IteratorAggregate
     public function cache()
     {
         return $this->filter(new CacheFilter);
+    }
+
+    /**
+     * Transform found classes
+     *
+     * @param  Writer $writer
+     * @return string
+     */
+    public function transform(Writer $writer)
+    {
+        $code = '';
+
+        /** @var SplFileInfo $fileInfo */
+        foreach ($this->getClassMap() as $name => $fileInfo) {
+            $code .= $writer->write($fileInfo->getReader()->read($name)) . "\n";
+        }
+
+        return "<?php $code";
+    }
+
+    /**
+     * Minimize found classes
+     *
+     * @return string
+     */
+    public function minimize()
+    {
+        return $this->transform(new MinimizingWriter);
     }
 }

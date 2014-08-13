@@ -12,24 +12,50 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
 
     public function testIsInstantiable()
     {
+        $class = $this->getMockBuilder('\ReflectionClass')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $class->expects($this->atLeastOnce())
+            ->method('isInstantiable')
+            ->will($this->returnValue(true));
+
+        $constructor = $this->getMockBuilder('\ReflectionMethod')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $constructor->expects($this->atLeastOnce())
+            ->method('getNumberOfRequiredParameters')
+            ->will($this->returnValue(1));
+
+        $class->expects($this->atLeastOnce())
+            ->method('getConstructor')
+            ->will($this->returnValue($constructor));
+
         $in = new Instantiator;
-        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Translator\Writer'));
+        $in->setReflectionClass($class);
+
         $this->assertTrue($in->isInstantiable());
         $this->assertFalse($in->isInstantiableWithoutArgs());
-    }
 
-    public function testExceptionWhenInstantiatingNotInstatiable()
-    {
-        $in = new Instantiator;
-        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Exception'));
         $this->setExpectedException('hanneskod\classtools\Exception\LogicException');
         $in->instantiate();
     }
 
-    public function testExceptionWhenInstantiatingWithToFewArgs()
+    public function testExceptionWhenInstantiatingNotInstatiable()
     {
+        $class = $this->getMockBuilder('\ReflectionClass')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $class->expects($this->atLeastOnce())
+            ->method('isInstantiable')
+            ->will($this->returnValue(false));
+
         $in = new Instantiator;
-        $in->setReflectionClass(new \ReflectionClass('hanneskod\classtools\Translator\Writer'));
+        $in->setReflectionClass($class);
+
+        $this->assertFalse($in->isInstantiable());
         $this->setExpectedException('hanneskod\classtools\Exception\LogicException');
         $in->instantiate();
     }

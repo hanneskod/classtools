@@ -11,7 +11,7 @@ namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
 use hanneskod\classtools\Exception\LogicException;
-use Symfony\Component\Finder\SplFileInfo;
+use hanneskod\classtools\Iterator\SplFileInfo;
 
 /**
  * Implementation of Filter

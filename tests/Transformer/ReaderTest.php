@@ -1,5 +1,5 @@
 <?php
-namespace hanneskod\classtools\Translator;
+namespace hanneskod\classtools\Transformer;
 
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -95,18 +95,20 @@ EOF
     public function testRead()
     {
         $reader = new Reader('<?php class FooBar {}');
-        $this->assertInstanceOf(
-            '\hanneskod\classtools\Translator\Writer',
-            $reader->read('FooBar')
+        $this->assertTrue(
+            is_array(
+                $reader->read('FooBar')
+            )
         );
     }
 
     public function testReadAll()
     {
         $reader = new Reader('');
-        $this->assertInstanceOf(
-            '\hanneskod\classtools\Translator\Writer',
-            $reader->readAll()
+        $this->assertTrue(
+            is_array(
+                $reader->readAll()
+            )
         );
     }
 }

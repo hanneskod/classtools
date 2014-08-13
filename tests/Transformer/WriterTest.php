@@ -1,14 +1,14 @@
 <?php
-namespace hanneskod\classtools\Translator;
+namespace hanneskod\classtools\Transformer;
 
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetAndGetPrinter()
     {
-        $writer = new Writer([]);
+        $writer = new Writer();
 
         $this->assertInstanceOf(
-            'hanneskod\classtools\Translator\BracketingPrinter',
+            'hanneskod\classtools\Transformer\BracketingPrinter',
             $writer->getPrinter()
         );
 
@@ -26,14 +26,14 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->method('addVisitor')
             ->with($translation);
 
-        $writer = new Writer([], $traverser);
+        $writer = new Writer($traverser);
         $writer->apply($translation);
     }
 
     public function testWrite()
     {
-        $writer = new Writer([]);
-        $this->assertEquals('', $writer->write());
+        $writer = new Writer();
+        $this->assertEquals('', $writer->write([]));
     }
 
     public function testPhpParserException()
@@ -43,9 +43,9 @@ class WriterTest extends \PHPUnit_Framework_TestCase
             ->method('traverse')
             ->will($this->throwException(new \PhpParser\Error('error')));
 
-        $writer = new Writer([], $traverser);
+        $writer = new Writer($traverser);
 
         $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');
-        $writer->write();
+        $writer->write([]);
     }
 }

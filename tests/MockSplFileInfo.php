@@ -1,7 +1,7 @@
 <?php
 namespace hanneskod\classtools\Tests;
 
-class MockSplFileInfo extends \Symfony\Component\Finder\SplFileInfo
+class MockSplFileInfo extends \hanneskod\classtools\Iterator\SplFileInfo
 {
     public function __construct($contents)
     {

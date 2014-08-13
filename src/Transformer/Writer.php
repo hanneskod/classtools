@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Translator;
+namespace hanneskod\classtools\Transformer;
 
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
@@ -23,11 +23,6 @@ use hanneskod\classtools\Exception\RuntimeException;
 class Writer
 {
     /**
-     * @var array Parsed code
-     */
-    private $statements;
-
-    /**
      * @var NodeTraverser Traverser used for altering parsed code
      */
     private $traverser;
@@ -38,14 +33,12 @@ class Writer
     private $printer;
 
     /**
-     * Optionally inject dependencies
+     * Optionally inject NodeTraverser
      *
-     * @param array         $statements
      * @param NodeTraverser $traverser
      */
-    public function __construct(array $statements, NodeTraverser $traverser = null)
+    public function __construct(NodeTraverser $traverser = null)
     {
-        $this->statements = $statements;
         $this->traverser = $traverser ?: new NodeTraverser;
     }
 
@@ -86,15 +79,16 @@ class Writer
     /**
      * Generate new code snippet
      *
+     * @param  array  $statements
      * @return string
      * @throws RuntimeException If code generation failes
      */
-    public function write()
+    public function write($statements)
     {
         try {
             return $this->getPrinter()->prettyPrint(
                 $this->traverser->traverse(
-                    $this->statements
+                    $statements
                 )
             );
         } catch (PhpParserException $e) {

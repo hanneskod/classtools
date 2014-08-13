@@ -1,10 +1,10 @@
 <?php
-namespace hanneskod\classtools\Translator;
+namespace hanneskod\classtools\Transformer;
 
 /**
- * Translator examples
+ * Transformer examples
  */
-class TranslatorExamples extends \hanneskod\exemplify\TestCase
+class TransformerExamples extends \hanneskod\exemplify\TestCase
 {
     /**
      * Wrap code in namespace
@@ -14,11 +14,11 @@ class TranslatorExamples extends \hanneskod\exemplify\TestCase
     public function exampleWrapInNamespace()
     {
         $reader = new Reader("<?php class Bar {}");
+        $writer = new Writer;
+        $writer->apply(new Action\NamespaceWrapper('Foo'));
 
         // Outputs class Bar wrapped in namespace Foo
-        echo $reader->read('Bar')
-            ->apply(new Action\NamespaceWrapper('Foo'))
-            ->write();
+        echo $writer->write($reader->read('Bar'));
     }
 
     /**
@@ -29,10 +29,10 @@ class TranslatorExamples extends \hanneskod\exemplify\TestCase
     public function exampleStripNodes()
     {
         $reader = new Reader("<?php require 'Foo.php'; echo 'bar';");
+        $writer = new Writer;
+        $writer->apply(new Action\NodeStripper('PhpParser\Node\Expr\Include_'));
 
         // Outputs the echo statement
-        echo $reader->readAll()
-            ->apply(new Action\NodeStripper('PhpParser\Node\Expr\Include_'))
-            ->write();
+        echo $writer->write($reader->readAll());
     }
 }

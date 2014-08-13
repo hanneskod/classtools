@@ -1,5 +1,5 @@
 <?php
-namespace hanneskod\classtools\Translator;
+namespace hanneskod\classtools\Transformer;
 
 use PhpParser\Parser;
 use PhpParser\Lexer;

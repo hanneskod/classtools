@@ -1,5 +1,5 @@
 <?php
-namespace hanneskod\classtools\Translator;
+namespace hanneskod\classtools\Transformer;
 
 class UseStmtTranslationTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,9 +27,11 @@ namespace foo {
 }
 EOF;
 
+        $writer = new Writer;
+
         $this->assertEquals(
             $expected,
-            $reader->read('foo\ClassName')->write()
+            $writer->write($reader->read('foo\ClassName'))
         );
     }
 
@@ -55,9 +57,11 @@ namespace  {
 }
 EOF;
 
+        $writer = new Writer;
+
         $this->assertEquals(
             $expected,
-            $reader->read('ClassName')->write()
+            $writer->write($reader->read('ClassName'))
         );
     }
 }

@@ -20,7 +20,7 @@ $iter = new ClassIterator($finder->in('src'));
 
 // Print the file names of classes, interfaces and traits in 'src'
 foreach ($iter->getClassMap() as $name => $splFileInfo) {
-    echo $splFileInfo->getFilename();
+    echo $splFileInfo->getRealPath();
 }
 ```
 
@@ -82,26 +82,42 @@ foreach ($iter->not($iter->where('isInstantiable')) as $name => $reflectionClass
 }
 ```
 
+### Transforming classes
+
+Found class, interface and trait definitions can be transformed and written to a
+single file.
+
+```php
+$finder = new Finder();
+$iter = new ClassIterator($finder->in('src'));
+
+// Prints all found definitions in one snippet
+echo $iter->minimize();
+
+// The same can be done using
+echo $iter->transform(new MinimizingWriter);
+```
+
 ## Translator examples
 
 ### Wrap code in namespace
 
 ```php
 $reader = new Reader("<?php class Bar {}");
+$writer = new Writer;
+$writer->apply(new Action\NamespaceWrapper('Foo'));
 
 // Outputs class Bar wrapped in namespace Foo
-echo $reader->read('Bar')
-    ->apply(new Action\NamespaceWrapper('Foo'))
-    ->write();
+echo $writer->write($reader->read('Bar'));
 ```
 
 ### Strip statements
 
 ```php
 $reader = new Reader("<?php require 'Foo.php'; echo 'bar';");
+$writer = new Writer;
+$writer->apply(new Action\NodeStripper('PhpParser\Node\Expr\Include_'));
 
 // Outputs the echo statement
-echo $reader->readAll()
-    ->apply(new Action\NodeStripper('PhpParser\Node\Expr\Include_'))
-    ->write();
+echo $writer->write($reader->readAll());
 ```

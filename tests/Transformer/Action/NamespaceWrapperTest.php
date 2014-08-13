@@ -1,7 +1,8 @@
 <?php
-namespace hanneskod\classtools\Translator\Action;
+namespace hanneskod\classtools\Transformer\Action;
 
-use hanneskod\classtools\Translator\Reader;
+use hanneskod\classtools\Transformer\Reader;
+use hanneskod\classtools\Transformer\Writer;
 
 class NamespaceWrapperTest extends \PHPUnit_Framework_TestCase
 {
@@ -25,11 +26,11 @@ namespace NamespaceName {
 }
 EOF;
 
-        $writer = $reader->read('ClassName');
+        $writer = new Writer;
         $writer->apply(new NamespaceWrapper('NamespaceName'));
         $this->assertEquals(
             $expected,
-            $writer->write()
+            $writer->write($reader->read('ClassName'))
         );
     }
 
@@ -55,11 +56,11 @@ namespace extended\NamespaceName {
 }
 EOF;
 
-        $writer = $reader->read('NamespaceName\ClassName');
+        $writer = new Writer;
         $writer->apply(new NamespaceWrapper('extended'));
         $this->assertEquals(
             $expected,
-            $writer->write()
+            $writer->write($reader->read('NamespaceName\ClassName'))
         );
     }
 
@@ -85,12 +86,12 @@ namespace foobar {
 }
 EOF;
 
-        $writer = $reader->read('foobar\ClassName');
+        $writer = new Writer;
         // Assert that a empty second wrapper makes no difference
         $writer->apply(new NamespaceWrapper(''));
         $this->assertEquals(
             $expected,
-            $writer->write()
+            $writer->write($reader->read('foobar\ClassName'))
         );
     }
 

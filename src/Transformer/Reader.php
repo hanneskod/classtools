@@ -7,10 +7,10 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Translator;
+namespace hanneskod\classtools\Transformer;
 
 use PhpParser\Parser;
-use PhpParser\Lexer;
+use PhpParser\Lexer\Emulative;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
@@ -49,7 +49,7 @@ class Reader
      */
     public function __construct($snippet, Parser $parser = null)
     {
-        $parser = $parser ?: new Parser(new Lexer);
+        $parser = $parser ?: new Parser(new Emulative);
 
         // Save the global statments
         $this->global = $parser->parse($snippet);
@@ -136,10 +136,10 @@ class Reader
     }
 
     /**
-     * Get writer for class/interface/trait
+     * Get pare tree for class/interface/trait
      *
      * @param  string $name Name of class/interface/trait
-     * @return Writer
+     * @return array
      * @throws RuntimeException If $name does not exist
      */
     public function read($name)
@@ -148,16 +148,16 @@ class Reader
             throw new RuntimeException("Unable to read <$name>, not found.");
         }
 
-        return new Writer($this->defs[self::getKey($name)]);
+        return $this->defs[self::getKey($name)];
     }
 
     /**
-     * Get writer for the complete snippet
+     * Get parse tree for the complete snippet
      *
-     * @return Writer
+     * @return array
      */
     public function readAll()
     {
-        return new Writer($this->global);
+        return $this->global;
     }
 }

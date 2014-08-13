@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Translator;
+namespace hanneskod\classtools\Transformer;
 
 use PhpParser\PrettyPrinter\Standard;
 

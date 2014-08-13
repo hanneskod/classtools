@@ -1,7 +1,8 @@
 <?php
-namespace hanneskod\classtools\Translator\Action;
+namespace hanneskod\classtools\Transformer\Action;
 
-use hanneskod\classtools\Translator\Reader;
+use hanneskod\classtools\Transformer\Reader;
+use hanneskod\classtools\Transformer\Writer;
 
 class NamespaceCrawlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +17,7 @@ namespace {
         public function foobar()
         {
             new NamespaceCrawlerTest();
-            new \hanneskod\classtools\Translator\Action\NamespaceCrawlerTest();
+            new \hanneskod\classtools\Transformer\Action\NamespaceCrawlerTest();
         }
     }
 }
@@ -30,19 +31,19 @@ namespace {
     {
         public function foobar()
         {
-            new \hanneskod\classtools\Translator\Action\NamespaceCrawlerTest();
-            new \hanneskod\classtools\Translator\Action\NamespaceCrawlerTest();
+            new \hanneskod\classtools\Transformer\Action\NamespaceCrawlerTest();
+            new \hanneskod\classtools\Transformer\Action\NamespaceCrawlerTest();
         }
     }
 }
 EOF;
 
-        $writer = $reader->read('ClassName');
+        $writer = new Writer;
         $writer->apply(new \PhpParser\NodeVisitor\NameResolver);
-        $writer->apply(new NamespaceCrawler(array('hanneskod\classtools\Translator\Action')));
+        $writer->apply(new NamespaceCrawler(array('hanneskod\classtools\Transformer\Action')));
         $this->assertEquals(
             $expected,
-            $writer->write()
+            $writer->write($reader->read('ClassName'))
         );
     }
 
@@ -61,11 +62,11 @@ class ClassName
 EOF
         );
 
-        $writer = $reader->read('ClassName');
+        $writer = new Writer;
         $writer->apply(new \PhpParser\NodeVisitor\NameResolver);
         $writer->apply(new NamespaceCrawler(['']));
 
         $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');
-        $writer->write();
+        $writer->write($reader->read('ClassName'));
     }
 }

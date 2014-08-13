@@ -7,7 +7,7 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Translator\Action;
+namespace hanneskod\classtools\Transformer\Action;
 
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node\Stmt\Namespace_;
