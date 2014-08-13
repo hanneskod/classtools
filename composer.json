@@ -1,7 +1,7 @@
 {
     "name": "hanneskod/classtools",
-    "description": "Iterate over classes found in filesystem",
-    "keywords": ["class iterator", "class minimizer"],
+    "description": "Find, extract and process classes from file system",
+    "keywords": ["class iterator", "metaprogramming", "minimize", "transform", "instantiate"],
     "homepage": "https://github.com/hanneskod/classtools",
     "type": "library",
     "license": "WTFPL",
