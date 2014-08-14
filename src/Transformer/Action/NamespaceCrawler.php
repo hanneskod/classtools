@@ -15,7 +15,7 @@ use PhpParser\Node\Name\FullyQualified;
 use hanneskod\classtools\Exception\RuntimeException;
 
 /**
- * Search multiple namespaces for definied classes
+ * Search namespaces for definied classes
  *
  * Crawl namespaces for classes that were wrongly put in namespace by NameResolver
  * (if code is moved to the namespace before parsing takes place).
@@ -30,13 +30,20 @@ class NamespaceCrawler extends NodeVisitorAbstract
     private $namespaces;
 
     /**
-     * Search multiple namespaces for definied classes
-     *
-     * @param string[] $namespaces
+     * @var boolean Whether exceptions should be thrown when a name can not be resolved
      */
-    public function __construct(array $namespaces)
+    private $throw;
+
+    /**
+     * Search namespaces for definied classes
+     *
+     * @param string[] $namespaces List of namespaces to crawl
+     * @param boolean  $throw      Flag if exceptions should be thrown when a name can not be resolved
+     */
+    public function __construct(array $namespaces, $throw = true)
     {
         $this->namespaces = $namespaces;
+        $this->throw = $throw;
     }
 
     /**
@@ -58,7 +65,9 @@ class NamespaceCrawler extends NodeVisitorAbstract
                         return $newName;
                     }
                 }
-                throw new RuntimeException("Unable to resolve class <$className>.");
+                if ($this->throw) {
+                    throw new RuntimeException("Unable to resolve class <$className>.");
+                }
             }
         }
     }

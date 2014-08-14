@@ -47,7 +47,7 @@ EOF;
         );
     }
 
-    public function testCrawlUnableToResolveNamespace()
+    public function testCrawlUnableToResolveNamespaceException()
     {
         $reader = new Reader(
 <<<EOF
@@ -66,7 +66,31 @@ EOF
         $writer->apply(new NameResolver);
         $writer->apply(new NamespaceCrawler(['']));
 
+        // NamespaceCrawlerTest does not resolve
         $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');
         $writer->write($reader->read('ClassName'));
+    }
+
+    public function testCrawlUnableToResolveNamespace()
+    {
+        $reader = new Reader(
+<<<EOF
+<?php
+class ClassName
+{
+    public function foobar()
+    {
+        new NamespaceCrawlerTest();
+    }
+}
+EOF
+        );
+
+        $writer = new Writer;
+        $writer->apply(new NameResolver);
+        $writer->apply(new NamespaceCrawler([''], false));
+
+        // NamespaceCrawlerTest does not resolve, but no exception is thrown
+        $this->assertTrue(is_string($writer->write($reader->read('ClassName'))));
     }
 }
