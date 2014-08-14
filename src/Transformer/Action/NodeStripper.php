@@ -22,16 +22,16 @@ class NodeStripper extends NodeVisitorAbstract
     /**
      * @var string Name of node to strip
      */
-    private $nodeName;
+    private $nodeType;
 
     /**
      * Register what nodes to strip using a fully quilified PhpParser class name
      *
-     * @param string $nodeName Name of node to string
+     * @param string $nodeType Node type (see Node::getType())
      */
-    public function __construct($nodeName)
+    public function __construct($nodeType)
     {
-        $this->nodeName = $nodeName;
+        $this->nodeType = $nodeType;
     }
 
     /**
@@ -42,7 +42,7 @@ class NodeStripper extends NodeVisitorAbstract
      */
     public function leaveNode(Node $node)
     {
-        if ($node instanceof $this->nodeName) {
+        if ($node->getType() == $this->nodeType) {
             return false;
         }
     }

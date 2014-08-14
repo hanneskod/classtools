@@ -30,7 +30,7 @@ class TransformerExamples extends \hanneskod\exemplify\TestCase
     {
         $reader = new Reader("<?php require 'Foo.php'; echo 'bar';");
         $writer = new Writer;
-        $writer->apply(new Action\NodeStripper('PhpParser\Node\Expr\Include_'));
+        $writer->apply(new Action\NodeStripper('Expr_Include'));
 
         // Outputs the echo statement
         echo $writer->write($reader->readAll());

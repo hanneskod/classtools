@@ -12,7 +12,7 @@ namespace hanneskod\classtools\Transformer;
 use PhpParser\NodeTraverser;
 use hanneskod\classtools\Transformer\Action\CommentStripper;
 use hanneskod\classtools\Transformer\Action\NodeStripper;
-use PhpParser\NodeVisitor\NameResolver;
+use hanneskod\classtools\Transformer\Action\NameResolver;
 
 /**
  * Minimize parsed code snippets
@@ -31,6 +31,6 @@ class MinimizingWriter extends Writer
         parent::__construct($traverser);
         $this->apply(new CommentStripper);
         $this->apply(new NameResolver);
-        $this->apply(new NodeStripper('PhpParser\Node\Stmt\Use_'));
+        $this->apply(new NodeStripper('Stmt_Use'));
     }
 }

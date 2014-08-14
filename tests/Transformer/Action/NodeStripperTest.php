@@ -38,7 +38,7 @@ namespace {
 EOF;
 
         $writer = new Writer;
-        $writer->apply(new NodeStripper('PhpParser\Node\Expr\Include_'));
+        $writer->apply(new NodeStripper('Expr_Include'));
         $this->assertEquals(
             $expected,
             $writer->write($reader->read('ClassName'))

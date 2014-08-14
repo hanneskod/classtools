@@ -39,7 +39,7 @@ namespace {
 EOF;
 
         $writer = new Writer;
-        $writer->apply(new \PhpParser\NodeVisitor\NameResolver);
+        $writer->apply(new NameResolver);
         $writer->apply(new NamespaceCrawler(array('hanneskod\classtools\Transformer\Action')));
         $this->assertEquals(
             $expected,
@@ -63,7 +63,7 @@ EOF
         );
 
         $writer = new Writer;
-        $writer->apply(new \PhpParser\NodeVisitor\NameResolver);
+        $writer->apply(new NameResolver);
         $writer->apply(new NamespaceCrawler(['']));
 
         $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');

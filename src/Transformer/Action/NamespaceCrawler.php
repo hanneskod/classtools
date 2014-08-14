@@ -17,23 +17,22 @@ use hanneskod\classtools\Exception\RuntimeException;
 /**
  * Search multiple namespaces for definied classes
  *
- * Crawl namespaces for classes that were wrongly put in namespace by
- * PhpParser\NodeVisitor\NameResolver (if code is moved to the namespace before
- * parsing takes place).
+ * Crawl namespaces for classes that were wrongly put in namespace by NameResolver
+ * (if code is moved to the namespace before parsing takes place).
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
 class NamespaceCrawler extends NodeVisitorAbstract
 {
     /**
-     * @var array List of namesaces to crawl
+     * @var string[] List of namespaces to crawl
      */
     private $namespaces;
 
     /**
      * Search multiple namespaces for definied classes
      *
-     * @param array $namespaces
+     * @param string[] $namespaces
      */
     public function __construct(array $namespaces)
     {
