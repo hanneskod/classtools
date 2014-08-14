@@ -79,11 +79,11 @@ class Writer
     /**
      * Generate new code snippet
      *
-     * @param  array  $statements
+     * @param  array $statements
      * @return string
      * @throws RuntimeException If code generation failes
      */
-    public function write($statements)
+    public function write(array $statements)
     {
         try {
             return $this->getPrinter()->prettyPrint(
