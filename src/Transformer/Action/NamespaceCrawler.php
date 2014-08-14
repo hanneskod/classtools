@@ -58,10 +58,10 @@ class NamespaceCrawler extends NodeVisitorAbstract
         if ($node instanceof FullyQualified) {
             $className = $node->toString();
 
-            if (!class_exists($className)) {
+            if (!class_exists($className, false)) {
                 foreach ($this->namespaces as $namespace) {
                     $newName = new FullyQualified($namespace.'\\'.$node->getLast());
-                    if (class_exists($newName->toString())) {
+                    if (class_exists($newName->toString(), false)) {
                         return $newName;
                     }
                 }
