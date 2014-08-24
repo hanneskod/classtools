@@ -17,9 +17,9 @@ EOF
 
         $this->assertEquals(
             [
-                'foo\ClassName',
-                'foo\InterfaceName',
-                'foo\TraitName'
+                'foo\\ClassName',
+                'foo\\InterfaceName',
+                'foo\\TraitName'
             ],
             $reader->getDefinitionNames()
         );
@@ -29,12 +29,11 @@ EOF
     {
         $reader = new Reader("<?php class ClassName {}");
         $this->assertTrue($reader->hasDefinition('ClassName'));
-        $this->assertTrue($reader->hasDefinition('\ClassName'));
-        $this->assertTrue($reader->hasDefinition('\\\\ClassName'));
+        $this->assertTrue($reader->hasDefinition('\\ClassName'));
 
         $reader = new Reader("<?php namespace foo; class ClassName {}");
-        $this->assertTrue($reader->hasDefinition('foo\ClassName'));
-        $this->assertTrue($reader->hasDefinition('\foo\ClassName'));
+        $this->assertTrue($reader->hasDefinition('foo\\ClassName'));
+        $this->assertTrue($reader->hasDefinition('\\foo\\ClassName'));
     }
 
     public function testFindBracketedDefinitions()
@@ -57,9 +56,9 @@ EOF
 
         $this->assertEquals(
             [
-                'foo\ClassName',
-                'foo\AnotherClassName',
-                'bar\InterfaceName',
+                'foo\\ClassName',
+                'foo\\AnotherClassName',
+                'bar\\InterfaceName',
                 'TraitName'
             ],
             $reader->getDefinitionNames()

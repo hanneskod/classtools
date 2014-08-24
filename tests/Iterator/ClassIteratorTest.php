@@ -12,7 +12,7 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
     {
         MockFinder::setIterator(
             new \ArrayIterator([
-                new MockSplFileInfo('<?php use \some\name; class A {}'),
+                new MockSplFileInfo('<?php use \\some\\name; class A {}'),
                 new MockSplFileInfo('<?php interface TestInterface {}'),
                 new MockSplFileInfo('<?php class B implements TestInterface {}'),
                 new MockSplFileInfo('<?php class C extends A implements TestInterface {}')
@@ -217,17 +217,18 @@ namespace  {
     }
 }
 namespace  {
-    class B implements \\\\TestInterface
+    class B implements \\TestInterface
     {
     }
 }
 namespace  {
-    class C extends \\\\A implements \\\\TestInterface
+    class C extends \\A implements \\TestInterface
     {
     }
 }
 
 EOL;
+
         $this->assertEquals(
             $expected,
             $this->getSystemUnderTest()->minimize()

@@ -56,7 +56,7 @@ class Reader
 
         $this->findDefinitions(
             $this->global,
-            new Namespace_(new Name(''), [])
+            new Namespace_(new Name([]), [])
         );
     }
 
