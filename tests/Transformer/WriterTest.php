@@ -3,20 +3,6 @@ namespace hanneskod\classtools\Transformer;
 
 class WriterTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSetAndGetPrinter()
-    {
-        $writer = new Writer();
-
-        $this->assertInstanceOf(
-            'hanneskod\classtools\Transformer\BracketingPrinter',
-            $writer->getPrinter()
-        );
-
-        $printer = $this->getMock('PhpParser\PrettyPrinterAbstract');
-        $writer->setPrinter($printer);
-        $this->assertSame($printer, $writer->getPrinter());
-    }
-
     public function testApplyTranslation()
     {
         $translation = $this->getMock('PhpParser\NodeVisitor');

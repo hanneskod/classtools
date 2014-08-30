@@ -11,7 +11,6 @@ namespace hanneskod\classtools\Transformer;
 
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
-use PhpParser\PrettyPrinterAbstract;
 use PhpParser\Error as PhpParserException;
 use hanneskod\classtools\Exception\RuntimeException;
 
@@ -28,18 +27,24 @@ class Writer
     private $traverser;
 
     /**
-     * @var PrettyPrinterAbstract Printer used for printing traversed code
+     * @var BracketingPrinter Printer used for printing traversed code
      */
     private $printer;
 
     /**
-     * Optionally inject NodeTraverser
+     * Optionally inject dependencies
      *
-     * @param NodeTraverser $traverser
+     * Since Reader always makes definitions namespaced a PhpParser printer that
+     * wraps the code in brackeded namespace statements must be used. The current
+     * implementation of this is BracketingPrinter.
+     *
+     * @param NodeTraverser     $traverser
+     * @param BracketingPrinter $printer
      */
-    public function __construct(NodeTraverser $traverser = null)
+    public function __construct(NodeTraverser $traverser = null, BracketingPrinter $printer = null)
     {
         $this->traverser = $traverser ?: new NodeTraverser;
+        $this->printer = $printer ?: new BracketingPrinter;
     }
 
     /**
@@ -55,28 +60,6 @@ class Writer
     }
 
     /**
-     * Set statement printer
-     *
-     * @param  PrettyPrinterAbstract $printer
-     * @return Writer Instance for chaining
-     */
-    public function setPrinter(PrettyPrinterAbstract $printer)
-    {
-        $this->printer = $printer;
-        return $this;
-    }
-
-    /**
-     * Get registered printer
-     *
-     * @return PrettyPrinterAbstract
-     */
-    public function getPrinter()
-    {
-        return $this->printer ?: new BracketingPrinter;
-    }
-
-    /**
      * Generate new code snippet
      *
      * @param  array $statements
@@ -86,7 +69,7 @@ class Writer
     public function write(array $statements)
     {
         try {
-            return $this->getPrinter()->prettyPrint(
+            return $this->printer->prettyPrint(
                 $this->traverser->traverse(
                     $statements
                 )
