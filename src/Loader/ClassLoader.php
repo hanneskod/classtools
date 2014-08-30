@@ -7,7 +7,9 @@
  * http://www.wtfpl.net/ for more details.
  */
 
-namespace hanneskod\classtools\Iterator;
+namespace hanneskod\classtools\Loader;
+
+use hanneskod\classtools\Iterator\ClassIterator;
 
 /**
  * Autoload classes from a ClassIterator classmap
@@ -24,11 +26,15 @@ class ClassLoader
     /**
      * Load classmap at construct
      *
-     * @param SplFileInfo[] $classMap
+     * @param ClassIterator $classIterator
+     * @param boolean       $register      True if loader should be register at creation
      */
-    public function __construct(array $classMap)
+    public function __construct(ClassIterator $classIterator, $register = true)
     {
-        $this->classMap = $classMap;
+        $this->classMap = $classIterator->getClassMap();
+        if ($register) {
+            $this->register();
+        }
     }
 
     /**
@@ -54,13 +60,13 @@ class ClassLoader
     /**
      * Attempt to load class definition
      *
-     * @param  string $class
+     * @param  string $classname
      * @return null
      */
-    public function load($class)
+    public function load($classname)
     {
-        if (isset($this->classMap[$class])) {
-            require $this->classMap[$class]->getRealPath();
+        if (isset($this->classMap[$classname])) {
+            require $this->classMap[$classname]->getRealPath();
         }
     }
 }

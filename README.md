@@ -32,9 +32,16 @@ yields class names as keys and
 [ReflectionClass](http://php.net/manual/en/class.reflectionclass.php) objects as
 values.
 
+Note that to use reflection the classes found in filesystem must be
+included in the environment. Use a ClassLoader to dynamically load classes from
+a ClassIterator;
+
 ```php
 $finder = new Finder();
 $iter = new ClassIterator($finder->in('src'));
+
+// Enable reflection by autoloading found classes
+$loader = new ClassLoader($iter);
 
 // Prints all classes, interfaces and traits in 'src'
 foreach ($iter as $name => $reflectionClass) {
@@ -50,6 +57,7 @@ chainable.
 ```php
 $finder = new Finder();
 $iter = new ClassIterator($finder->in('src'));
+$loader = new ClassLoader($iter);
 
 // Prints all Filter types (including the interface itself)
 foreach ($iter->type('Iterator\Filter') as $name => $reflectionClass) {
@@ -75,6 +83,7 @@ Filters can also be negated by wrapping them in `not()` method calls.
 ```php
 $finder = new Finder();
 $iter = new ClassIterator($finder->in('src'));
+$loader = new ClassLoader($iter);
 
 // Prints all classes, interfaces and traits NOT instantiable
 foreach ($iter->not($iter->where('isInstantiable')) as $name => $reflectionClass) {
@@ -90,6 +99,7 @@ single file.
 ```php
 $finder = new Finder();
 $iter = new ClassIterator($finder->in('src'));
+$loader = new ClassLoader($iter);
 
 // Prints all found definitions in one snippet
 echo $iter->minimize();

@@ -19,6 +19,11 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
             ])
         );
 
+        // Load classes so that classloader is not needed
+        foreach (new MockFinder as $fileInfo) {
+            eval(str_replace("<?php", "", $fileInfo->getContents()));
+        }
+
         self::$sut = new ClassIterator(new MockFinder);
     }
 
@@ -39,6 +44,21 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
             $this->getSystemUnderTest()->getClassMap()['A'],
             'getClassMap should map classnames to SplFileInfo objects'
         );
+    }
+
+    public function testExceptionWhenIteratingOverUnloadedClasses()
+    {
+        $stub = $this->getMockBuilder('hanneskod\classtools\Iterator\ClassIterator')
+            ->disableOriginalConstructor()
+            ->setMethods(['getClassMap'])
+            ->getMock();
+
+        $stub->expects($this->once())
+            ->method('getClassMap')
+            ->will($this->returnValue(['ClassThatDoesNotExist' => null]));
+
+        $this->setExpectedException('hanneskod\classtools\Exception\LogicException');
+        iterator_to_array($stub);
     }
 
     public function testGetIterator()

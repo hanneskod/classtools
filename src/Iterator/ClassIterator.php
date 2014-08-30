@@ -11,6 +11,7 @@ namespace hanneskod\classtools\Iterator;
 
 use IteratorAggregate;
 use ReflectionClass;
+use ReflectionException;
 use Symfony\Component\Finder\Finder;
 use hanneskod\classtools\Transformer\Reader;
 use hanneskod\classtools\Transformer\Writer;
@@ -20,6 +21,7 @@ use hanneskod\classtools\Iterator\Filter\NameFilter;
 use hanneskod\classtools\Iterator\Filter\NotFilter;
 use hanneskod\classtools\Iterator\Filter\TypeFilter;
 use hanneskod\classtools\Iterator\Filter\WhereFilter;
+use hanneskod\classtools\Exception\LogicException;
 
 /**
  * Iterate over classes found in filesystem
@@ -32,11 +34,6 @@ class ClassIterator implements IteratorAggregate
      * @var SplFileInfo[] Maps names to SplFileInfo objects
      */
     private $classMap = [];
-
-    /**
-     * @var ClassLoader ClassMap autoloader
-     */
-    private $loader;
 
     /**
      * Scan filesystem for classes, interfaces and traits
@@ -52,10 +49,6 @@ class ClassIterator implements IteratorAggregate
                 $this->classMap[$name] = $fileInfo;
             }
         }
-
-        // Register classloader
-        $this->loader = new ClassLoader($this->getClassMap());
-        $this->loader->register();
     }
 
     /**
@@ -77,7 +70,12 @@ class ClassIterator implements IteratorAggregate
     {
         /** @var SplFileInfo $fileInfo */
         foreach ($this->getClassMap() as $name => $fileInfo) {
-            yield $name => new ReflectionClass($name);
+            try {
+                yield $name => new ReflectionClass($name);
+            } catch (ReflectionException $e) {
+                $msg = "Unable to iterate, {$e->getMessage()}, use a ClassLoader to load classes from filesystem";
+                throw new LogicException($msg, 0, $e);
+            }
         }
     }
 
