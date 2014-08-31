@@ -27,7 +27,7 @@ use hanneskod\classtools\Exception\RuntimeException;
 class Reader
 {
     /**
-     * @var array Collection of definitions in snippet
+     * @var Namespace_[] Collection of definitions in snippet
      */
     private $defs = [];
 
@@ -83,11 +83,11 @@ class Reader
 
             // Save classes, interfaces and traits
             } elseif ($stmt instanceof Class_ or $stmt instanceof Interface_ or $stmt instanceof Trait_) {
-                $namespace->stmts[] = $stmt;
                 $name = self::normalizeName($namespace->name . "\\" . $stmt->name);
-                $key = self::getKey($name);
-                $this->defs[$key] = [clone $namespace];
+                $key = self::createKey($name);
                 $this->names[$key] = $name;
+                $this->defs[$key] = clone $namespace;
+                $this->defs[$key]->stmts[] = $stmt;
             }
         }
     }
@@ -104,12 +104,12 @@ class Reader
     }
 
     /**
-     * Get key for definition name
+     * Create key for definition name
      *
      * @param  string $name
      * @return string
      */
-    private static function getKey($name)
+    private static function createKey($name)
     {
         return strtolower(self::normalizeName($name));
     }
@@ -132,11 +132,11 @@ class Reader
      */
     public function hasDefinition($name)
     {
-        return isset($this->defs[self::getKey($name)]);
+        return isset($this->defs[self::createKey($name)]);
     }
 
     /**
-     * Get pare tree for class/interface/trait
+     * Get pars tree for class/interface/trait
      *
      * @param  string $name Name of class/interface/trait
      * @return array
@@ -148,7 +148,7 @@ class Reader
             throw new RuntimeException("Unable to read <$name>, not found.");
         }
 
-        return $this->defs[self::getKey($name)];
+        return [$this->defs[self::createKey($name)]];
     }
 
     /**
