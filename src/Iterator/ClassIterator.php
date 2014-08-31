@@ -22,6 +22,7 @@ use hanneskod\classtools\Iterator\Filter\NotFilter;
 use hanneskod\classtools\Iterator\Filter\TypeFilter;
 use hanneskod\classtools\Iterator\Filter\WhereFilter;
 use hanneskod\classtools\Exception\LogicException;
+use hanneskod\classtools\Loader\ClassLoader;
 
 /**
  * Iterate over classes found in filesystem
@@ -34,6 +35,11 @@ class ClassIterator implements IteratorAggregate
      * @var SplFileInfo[] Maps names to SplFileInfo objects
      */
     private $classMap = [];
+
+    /**
+     * @var ClassLoader Autoloader for found classes
+     */
+    private $loader;
 
     /**
      * Scan filesystem for classes, interfaces and traits
@@ -52,6 +58,14 @@ class ClassIterator implements IteratorAggregate
     }
 
     /**
+     * Enable garbage collection of the autoloader at destruct
+     */
+    public function __destruct()
+    {
+        $this->disableAutoloading();
+    }
+
+    /**
      * Get map of classnames to SplFileInfo objects
      *
      * @return SplFileInfo[]
@@ -59,6 +73,31 @@ class ClassIterator implements IteratorAggregate
     public function getClassMap()
     {
         return $this->classMap;
+    }
+
+    /**
+     * Enable autoloading for classes found in filesystem
+     *
+     * @return ClassIterator instance for chaining
+     */
+    public function enableAutoloading()
+    {
+        $this->loader = new ClassLoader($this, true);
+        return $this;
+    }
+
+    /**
+     * Disable autoloading for classes found in filesystem
+     *
+     * @return ClassIterator instance for chaining
+     */
+    public function disableAutoloading()
+    {
+        if (isset($this->loader)) {
+            $this->loader->unregister();
+            unset($this->loader);
+        }
+        return $this;
     }
 
     /**
@@ -73,7 +112,7 @@ class ClassIterator implements IteratorAggregate
             try {
                 yield $name => new ReflectionClass($name);
             } catch (ReflectionException $e) {
-                $msg = "Unable to iterate, {$e->getMessage()}, use a ClassLoader to load classes from filesystem";
+                $msg = "Unable to iterate, {$e->getMessage()}, is autoloading enabled?";
                 throw new LogicException($msg, 0, $e);
             }
         }

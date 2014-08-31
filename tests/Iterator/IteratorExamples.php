@@ -4,7 +4,6 @@ namespace hanneskod\classtools\Iterator;
 use hanneskod\classtools\Tests\MockSplFileInfo;
 use hanneskod\classtools\Tests\MockFinder as Finder;
 use hanneskod\classtools\Transformer\MinimizingWriter;
-use hanneskod\classtools\Loader\ClassLoader;
 
 /**
  * Iterator
@@ -55,8 +54,8 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
      * objects as values.
      *
      * Note that to use reflection the classes found in filesystem must be included
-     * in the environment. Use a ClassLoader to dynamically load classes from a
-     * ClassIterator;
+     * in the environment. Enable autoloading to dynamically load classes from a
+     * ClassIterator.
      *
      * @expectOutputString Iterator\FilterIterator\NotFilterIterator\ClassIterator
      */
@@ -66,7 +65,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
         $iter = new ClassIterator($finder->in('src'));
 
         // Enable reflection by autoloading found classes
-        $loader = new ClassLoader($iter);
+        $iter->enableAutoloading();
 
         // Prints all classes, interfaces and traits in 'src'
         foreach ($iter as $name => $reflectionClass) {
@@ -86,7 +85,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
     {
         $finder = new Finder();
         $iter = new ClassIterator($finder->in('src'));
-        $loader = new ClassLoader($iter);
+        $iter->enableAutoloading();
 
         // Prints all Filter types (including the interface itself)
         foreach ($iter->type('Iterator\Filter') as $name => $reflectionClass) {
@@ -116,7 +115,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
     {
         $finder = new Finder();
         $iter = new ClassIterator($finder->in('src'));
-        $loader = new ClassLoader($iter);
+        $iter->enableAutoloading();
 
         // Prints all classes, interfaces and traits NOT instantiable
         foreach ($iter->not($iter->where('isInstantiable')) as $name => $reflectionClass) {
@@ -136,7 +135,7 @@ class IteratorExamples extends \hanneskod\exemplify\TestCase
     {
         $finder = new Finder();
         $iter = new ClassIterator($finder->in('src'));
-        $loader = new ClassLoader($iter);
+        $iter->enableAutoloading();
 
         // Prints all found definitions in one snippet
         echo $iter->minimize();

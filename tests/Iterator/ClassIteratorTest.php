@@ -19,12 +19,8 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
             ])
         );
 
-        // Load classes so that classloader is not needed
-        foreach (new MockFinder as $fileInfo) {
-            eval(str_replace("<?php", "", $fileInfo->getContents()));
-        }
-
         self::$sut = new ClassIterator(new MockFinder);
+        self::$sut->enableAutoloading();
     }
 
     public function getSystemUnderTest()
