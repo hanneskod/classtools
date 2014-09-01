@@ -12,11 +12,11 @@ namespace hanneskod\classtools\Transformer;
 use PhpParser\Parser;
 use PhpParser\Lexer\Emulative;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use hanneskod\classtools\Name;
 use hanneskod\classtools\Exception\RuntimeException;
 
 /**
@@ -50,68 +50,41 @@ class Reader
     public function __construct($snippet, Parser $parser = null)
     {
         $parser = $parser ?: new Parser(new Emulative);
-
-        // Save the global statments
         $this->global = $parser->parse($snippet);
-
-        $this->findDefinitions(
-            $this->global,
-            new Namespace_(new Name([]), [])
-        );
+        $this->findDefinitions($this->global, new Name(''));
     }
 
     /**
      * Find class, interface and trait definitions in statemnts
      *
-     * @param  array      $stmts
-     * @param  Namespace_ $namespace
+     * @param  array $stmts
+     * @param  Name  $namespace
      * @return void
      */
-    private function findDefinitions(array $stmts, Namespace_ $namespace)
+    private function findDefinitions(array $stmts, Name $namespace)
     {
-        foreach ($stmts as $stmt) {
-            // Restart if namespace declaration is found
-            if ($stmt instanceof Namespace_) {
-                $this->findDefinitions(
-                    $stmt->stmts,
-                    new Namespace_($stmt->name, [])
-                );
+        $useStmts = [];
 
-            // Save use declaration to namespace
+        foreach ($stmts as $stmt) {
+            // Restart if namespace statement is found
+            if ($stmt instanceof Namespace_) {
+                $this->findDefinitions($stmt->stmts, new Name((string)$stmt->name));
+
+            // Save use statement
             } elseif ($stmt instanceof Use_) {
-                $namespace->stmts[] = $stmt;
+                $useStmts[] = $stmt;
 
             // Save classes, interfaces and traits
             } elseif ($stmt instanceof Class_ or $stmt instanceof Interface_ or $stmt instanceof Trait_) {
-                $name = self::normalizeName($namespace->name . "\\" . $stmt->name);
-                $key = self::createKey($name);
-                $this->names[$key] = $name;
-                $this->defs[$key] = clone $namespace;
-                $this->defs[$key]->stmts[] = $stmt;
+                $defName = new Name("{$namespace}\\{$stmt->name}");
+                $this->names[$defName->keyize()] = $defName->normalize();
+                $this->defs[$defName->keyize()] = new Namespace_(
+                    $namespace->createNode(),
+                    $useStmts
+                );
+                $this->defs[$defName->keyize()]->stmts[] = $stmt;
             }
         }
-    }
-
-    /**
-     * Normalize definition name
-     *
-     * @param  string $name
-     * @return string
-     */
-    private static function normalizeName($name)
-    {
-        return preg_replace('/^\\\*/', '', $name);
-    }
-
-    /**
-     * Create key for definition name
-     *
-     * @param  string $name
-     * @return string
-     */
-    private static function createKey($name)
-    {
-        return strtolower(self::normalizeName($name));
     }
 
     /**
@@ -132,7 +105,7 @@ class Reader
      */
     public function hasDefinition($name)
     {
-        return isset($this->defs[self::createKey($name)]);
+        return isset($this->defs[(new Name($name))->keyize()]);
     }
 
     /**
@@ -148,7 +121,7 @@ class Reader
             throw new RuntimeException("Unable to read <$name>, not found.");
         }
 
-        return [$this->defs[self::createKey($name)]];
+        return [$this->defs[(new Name($name))->keyize()]];
     }
 
     /**

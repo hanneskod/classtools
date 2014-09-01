@@ -26,7 +26,7 @@ EOF
 
         $expected =
 <<<EOF
-namespace {
+namespace  {
     class ClassName
     {
         public function foobar()
@@ -40,7 +40,7 @@ EOF;
 
         $writer = new Writer;
         $writer->apply(new NameResolver);
-        $writer->apply(new NamespaceCrawler(array('hanneskod\classtools\Transformer\Action')));
+        $writer->apply(new NamespaceCrawler(['\hanneskod\classtools\Transformer\Action']));
         $this->assertEquals(
             $expected,
             $writer->write($reader->read('ClassName'))
@@ -56,7 +56,7 @@ class ClassName
 {
     public function foobar()
     {
-        new NamespaceCrawlerTest();
+        new NonExistingClass();
     }
 }
 EOF
@@ -66,7 +66,7 @@ EOF
         $writer->apply(new NameResolver);
         $writer->apply(new NamespaceCrawler(['']));
 
-        // NamespaceCrawlerTest does not resolve
+        // NonExistingClass does not resolve
         $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');
         $writer->write($reader->read('ClassName'));
     }
@@ -80,7 +80,7 @@ class ClassName
 {
     public function foobar()
     {
-        new NamespaceCrawlerTest();
+        new NonExistingClass();
     }
 }
 EOF
@@ -88,9 +88,32 @@ EOF
 
         $writer = new Writer;
         $writer->apply(new NameResolver);
-        $writer->apply(new NamespaceCrawler([''], false));
+        $writer->apply(new NamespaceCrawler([''], [], false));
 
-        // NamespaceCrawlerTest does not resolve, but no exception is thrown
+        // NonExistingClass does not resolve, but no exception is thrown
+        $this->assertTrue(is_string($writer->write($reader->read('ClassName'))));
+    }
+
+    public function testIgnoreNamespace()
+    {
+        $reader = new Reader(
+<<<EOF
+<?php
+class ClassName
+{
+    public function foobar()
+    {
+        new \ignore\NonExistingClass();
+    }
+}
+EOF
+        );
+
+        $writer = new Writer;
+        $writer->apply(new NameResolver);
+        $writer->apply(new NamespaceCrawler([''], ['ignore']));
+
+        // NonExistingClass does not resolve, but is ignored since it is in the 'ignore' namespace
         $this->assertTrue(is_string($writer->write($reader->read('ClassName'))));
     }
 }

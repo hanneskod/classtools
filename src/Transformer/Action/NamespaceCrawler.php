@@ -9,10 +9,11 @@
 
 namespace hanneskod\classtools\Transformer\Action;
 
+use hanneskod\classtools\Name;
+use hanneskod\classtools\Exception\RuntimeException;
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
-use hanneskod\classtools\Exception\RuntimeException;
 
 /**
  * Search namespaces for definied classes
@@ -25,9 +26,14 @@ use hanneskod\classtools\Exception\RuntimeException;
 class NamespaceCrawler extends NodeVisitorAbstract
 {
     /**
-     * @var string[] List of namespaces to crawl
+     * @var Name[] List of namespaces to test
      */
-    private $namespaces;
+    private $search = [];
+
+    /**
+     * @var Name[] List of namespaces to ignore when crawling
+     */
+    private $ignore = [];
 
     /**
      * @var boolean Whether exceptions should be thrown when a name can not be resolved
@@ -37,17 +43,25 @@ class NamespaceCrawler extends NodeVisitorAbstract
     /**
      * Search namespaces for definied classes
      *
-     * @param string[] $namespaces List of namespaces to crawl
-     * @param boolean  $throw      Flag if exceptions should be thrown when a name can not be resolved
+     * @param string[] $search List of namespaces to test
+     * @param string[] $ignore List of namespaces to ignore when crawling
+     * @param boolean  $throw  Flag if exceptions should be thrown when a name can not be resolved
      */
-    public function __construct(array $namespaces, $throw = true)
+    public function __construct(array $search, array $ignore = array(), $throw = true)
     {
-        $this->namespaces = $namespaces;
+        foreach ($search as $namespace) {
+            $this->search[] = new Name((string)$namespace);
+        }
+
+        foreach ($ignore as $namespace) {
+            $this->ignore[] = new Name((string)$namespace);
+        }
+
         $this->throw = $throw;
     }
 
     /**
-     * {inheritdoc}
+     * Resolve unexisting names by searching specified namespaces
      *
      * @param  Node $node
      * @return FullyQualified|null
@@ -56,19 +70,36 @@ class NamespaceCrawler extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         if ($node instanceof FullyQualified) {
-            $className = $node->toString();
-
-            if (!class_exists($className, false)) {
-                foreach ($this->namespaces as $namespace) {
-                    $newName = new FullyQualified($namespace.'\\'.$node->getLast());
-                    if (class_exists($newName->toString(), false)) {
-                        return $newName;
+            $name = new Name((string)$node);
+            if (!$this->isResolved($name)) {
+                /** @var Name $namespace */
+                foreach ($this->search as $namespace) {
+                    $newName = new Name("{$namespace}\\{$node->getLast()}");
+                    if ($this->isResolved($newName)) {
+                        return $newName->createNode();
                     }
                 }
                 if ($this->throw) {
-                    throw new RuntimeException("Unable to resolve class <$className>.");
+                    throw new RuntimeException("Unable to resolve class <$node>.");
                 }
             }
         }
+    }
+
+    /**
+     * Check if name is resolved
+     *
+     * @param  Name    $name
+     * @return boolean
+     */
+    public function isResolved(Name $name)
+    {
+        /** @var Name $ignore */
+        foreach ($this->ignore as $ignore) {
+            if ($name->inNamespace($ignore)) {
+                return true;
+            }
+        }
+        return $name->isDefined();
     }
 }

@@ -8,11 +8,22 @@ class NamespaceWrapperTest extends \PHPUnit_Framework_TestCase
 {
     public function testWrapCodeInNamespace()
     {
-        $reader = new Reader(
+        $readerOne = new Reader(
 <<<EOF
 <?php
 class ClassName
 {
+}
+EOF
+        );
+
+        $readerTwo = new Reader(
+<<<EOF
+<?php
+namespace {
+    class ClassName
+    {
+    }
 }
 EOF
         );
@@ -30,7 +41,11 @@ EOF;
         $writer->apply(new NamespaceWrapper('NamespaceName'));
         $this->assertEquals(
             $expected,
-            $writer->write($reader->read('ClassName'))
+            $writer->write($readerOne->read('ClassName'))
+        );
+        $this->assertEquals(
+            $expected,
+            $writer->write($readerTwo->read('ClassName'))
         );
     }
 
