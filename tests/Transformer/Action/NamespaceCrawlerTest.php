@@ -71,7 +71,7 @@ EOF
         $writer->write($reader->read('ClassName'));
     }
 
-    public function testCrawlUnableToResolveNamespace()
+    public function testWhitelistNamespace()
     {
         $reader = new Reader(
 <<<EOF
@@ -80,7 +80,7 @@ class ClassName
 {
     public function foobar()
     {
-        new NonExistingClass();
+        new \whitelist\NonExistingClass();
     }
 }
 EOF
@@ -88,32 +88,9 @@ EOF
 
         $writer = new Writer;
         $writer->apply(new NameResolver);
-        $writer->apply(new NamespaceCrawler([''], [], false));
+        $writer->apply(new NamespaceCrawler([''], ['whitelist']));
 
         // NonExistingClass does not resolve, but no exception is thrown
-        $this->assertTrue(is_string($writer->write($reader->read('ClassName'))));
-    }
-
-    public function testIgnoreNamespace()
-    {
-        $reader = new Reader(
-<<<EOF
-<?php
-class ClassName
-{
-    public function foobar()
-    {
-        new \ignore\NonExistingClass();
-    }
-}
-EOF
-        );
-
-        $writer = new Writer;
-        $writer->apply(new NameResolver);
-        $writer->apply(new NamespaceCrawler([''], ['ignore']));
-
-        // NonExistingClass does not resolve, but is ignored since it is in the 'ignore' namespace
         $this->assertTrue(is_string($writer->write($reader->read('ClassName'))));
     }
 }

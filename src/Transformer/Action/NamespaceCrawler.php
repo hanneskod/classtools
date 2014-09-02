@@ -26,38 +26,30 @@ use PhpParser\Node\Name\FullyQualified;
 class NamespaceCrawler extends NodeVisitorAbstract
 {
     /**
-     * @var Name[] List of namespaces to test
+     * @var Name[] List of namespaces to test for each undefined name
      */
     private $search = [];
 
     /**
-     * @var Name[] List of namespaces to ignore when crawling
+     * @var Name[] List of namespaces that will be allowed even if not defined
      */
-    private $ignore = [];
-
-    /**
-     * @var boolean Whether exceptions should be thrown when a name can not be resolved
-     */
-    private $throw;
+    private $whitelist = [];
 
     /**
      * Search namespaces for definied classes
      *
-     * @param string[] $search List of namespaces to test
-     * @param string[] $ignore List of namespaces to ignore when crawling
-     * @param boolean  $throw  Flag if exceptions should be thrown when a name can not be resolved
+     * @param string[] $search    List of namespaces to test for each undefined name
+     * @param string[] $whitelist namespaces that will be allowed even if not defined
      */
-    public function __construct(array $search, array $ignore = array(), $throw = true)
+    public function __construct(array $search, array $whitelist = array())
     {
         foreach ($search as $namespace) {
             $this->search[] = new Name((string)$namespace);
         }
 
-        foreach ($ignore as $namespace) {
-            $this->ignore[] = new Name((string)$namespace);
+        foreach ($whitelist as $namespace) {
+            $this->whitelist[] = new Name((string)$namespace);
         }
-
-        $this->throw = $throw;
     }
 
     /**
@@ -71,15 +63,16 @@ class NamespaceCrawler extends NodeVisitorAbstract
     {
         if ($node instanceof FullyQualified) {
             $name = new Name((string)$node);
-            if (!$this->isResolved($name)) {
+            $whitelisted = $this->isWhitelisted($name);
+            if (!$name->isDefined(!$whitelisted)) {
                 /** @var Name $namespace */
                 foreach ($this->search as $namespace) {
                     $newName = new Name("{$namespace}\\{$node->getLast()}");
-                    if ($this->isResolved($newName)) {
+                    if ($newName->isDefined()) {
                         return $newName->createNode();
                     }
                 }
-                if ($this->throw) {
+                if (!$whitelisted) {
                     throw new RuntimeException("Unable to resolve class <$node>.");
                 }
             }
@@ -87,19 +80,19 @@ class NamespaceCrawler extends NodeVisitorAbstract
     }
 
     /**
-     * Check if name is resolved
+     * Check if name is whitelisted
      *
-     * @param  Name    $name
-     * @return boolean
+     * @param  Name $name
+     * @return bool
      */
-    public function isResolved(Name $name)
+    public function isWhitelisted(Name $name)
     {
-        /** @var Name $ignore */
-        foreach ($this->ignore as $ignore) {
-            if ($name->inNamespace($ignore)) {
+        /** @var Name $namespace */
+        foreach ($this->whitelist as $namespace) {
+            if ($name->inNamespace($namespace)) {
                 return true;
             }
         }
-        return $name->isDefined();
+        return false;
     }
 }
