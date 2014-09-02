@@ -19,8 +19,8 @@ $finder = new Finder;
 $iter = new ClassIterator($finder->in('src'));
 
 // Print the file names of classes, interfaces and traits in 'src'
-foreach ($iter->getClassMap() as $name => $splFileInfo) {
-    echo $splFileInfo->getRealPath();
+foreach ($iter->getClassMap() as $classname => $splFileInfo) {
+    echo $classname.': '.$splFileInfo->getRealPath();
 }
 ```
 
@@ -43,9 +43,9 @@ $iter = new ClassIterator($finder->in('src'));
 // Enable reflection by autoloading found classes
 $iter->enableAutoloading();
 
-// Prints all classes, interfaces and traits in 'src'
-foreach ($iter as $name => $reflectionClass) {
-    echo $name;
+// Print all classes, interfaces and traits in 'src'
+foreach ($iter as $class) {
+    echo $class->getName();
 }
 ```
 
@@ -59,20 +59,19 @@ $finder = new Finder();
 $iter = new ClassIterator($finder->in('src'));
 $iter->enableAutoloading();
 
-// Prints all Filter types (including the interface itself)
-foreach ($iter->type('Iterator\Filter') as $name => $reflectionClass) {
-    echo $name;
+// Print all Filter types (including the interface itself)
+foreach ($iter->type('Iterator\Filter') as $class) {
+    echo $class->getName();
 }
 
-// Prints classes, interfaces and traits in the Iterator namespace
-foreach ($iter->name('/Iterator\\\/') as $name => $reflectionClass) {
-    echo $name;
+// Print definitions in the Iterator namespace whose name contains 'Class'
+foreach ($iter->inNamespace('Iterator')->name('/Class/') as $class) {
+    echo $class->getName();
 }
 
-// Prints implementations of the Filter interface
-$iter = $iter->type('Iterator\Filter')->where('isInstantiable');
-foreach ($iter as $name => $reflectionClass) {
-    echo $name;
+// Print implementations of the Filter interface
+foreach ($iter->type('Iterator\Filter')->where('isInstantiable') as $class) {
+    echo $class->getName();
 }
 ```
 
@@ -85,9 +84,9 @@ $finder = new Finder();
 $iter = new ClassIterator($finder->in('src'));
 $iter->enableAutoloading();
 
-// Prints all classes, interfaces and traits NOT instantiable
-foreach ($iter->not($iter->where('isInstantiable')) as $name => $reflectionClass) {
-    echo $name;
+// Print all classes, interfaces and traits NOT instantiable
+foreach ($iter->not($iter->where('isInstantiable')) as $class) {
+    echo $class->getName();
 }
 ```
 
@@ -101,7 +100,7 @@ $finder = new Finder();
 $iter = new ClassIterator($finder->in('src'));
 $iter->enableAutoloading();
 
-// Prints all found definitions in one snippet
+// Print all found definitions in one snippet
 echo $iter->minimize();
 
 // The same can be done using

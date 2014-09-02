@@ -18,6 +18,7 @@ use hanneskod\classtools\Transformer\Writer;
 use hanneskod\classtools\Transformer\MinimizingWriter;
 use hanneskod\classtools\Iterator\Filter\CacheFilter;
 use hanneskod\classtools\Iterator\Filter\NameFilter;
+use hanneskod\classtools\Iterator\Filter\NamespaceFilter;
 use hanneskod\classtools\Iterator\Filter\NotFilter;
 use hanneskod\classtools\Iterator\Filter\TypeFilter;
 use hanneskod\classtools\Iterator\Filter\WhereFilter;
@@ -150,6 +151,17 @@ class ClassIterator implements IteratorAggregate
     public function name($pattern)
     {
         return $this->filter(new NameFilter($pattern));
+    }
+
+    /**
+     * Create a new iterator where classes are filtered based on namespace
+     *
+     * @param  string $namespace Namespace used when filtering
+     * @return ClassIterator
+     */
+    public function inNamespace($namespace)
+    {
+        return $this->filter(new NamespaceFilter($namespace));
     }
 
     /**

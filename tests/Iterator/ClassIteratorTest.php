@@ -12,9 +12,9 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
     {
         MockFinder::setIterator(
             new \ArrayIterator([
-                new MockSplFileInfo('<?php use \\some\\name; class A {}'),
+                new MockSplFileInfo('<?php namespace foobar; use \\some\\name; class A {}'),
                 new MockSplFileInfo('<?php interface Int {}'),
-                new MockSplFileInfo('<?php class B implements Int {} class C extends A implements Int {}')
+                new MockSplFileInfo('<?php class B implements Int {} class C extends \foobar\A implements Int {}')
             ])
         );
 
@@ -30,13 +30,13 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
     public function testGetClassmap()
     {
         $this->assertArrayHasKey(
-            'A',
+            'B',
             $this->getSystemUnderTest()->getClassMap()
         );
 
         $this->assertInstanceOf(
             '\SplFileInfo',
-            $this->getSystemUnderTest()->getClassMap()['A'],
+            $this->getSystemUnderTest()->getClassMap()['B'],
             'getClassMap should map classnames to SplFileInfo objects'
         );
     }
@@ -59,13 +59,13 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
     public function testGetIterator()
     {
         $this->assertArrayHasKey(
-            'A',
+            'B',
             iterator_to_array($this->getSystemUnderTest())
         );
 
         $this->assertInstanceOf(
             '\ReflectionClass',
-            iterator_to_array($this->getSystemUnderTest())['A'],
+            iterator_to_array($this->getSystemUnderTest())['B'],
             'getIterator should map classnames to ReflectionClass objects'
         );
     }
@@ -75,15 +75,15 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
         $classIterator = $this->getSystemUnderTest();
 
         $this->assertArrayHasKey(
-            'A',
+            'B',
             $classIterator->getClassMap(),
-            'A is definied and should be present'
+            'B is definied and should be present'
         );
 
         $this->assertArrayNotHasKey(
-            'A',
+            'B',
             $classIterator->where('isInterface')->getClassMap(),
-            'A is not an interface and should be filtered'
+            'B is not an interface and should be filtered'
         );
     }
 
@@ -96,9 +96,9 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertArrayNotHasKey(
-            'A',
+            'foobar\\A',
             $result,
-            'A does not implement Int'
+            'foobar\\A does not implement Int'
         );
 
         $this->assertArrayHasKey(
@@ -110,13 +110,13 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
         $result = iterator_to_array(
             $classIterator
                 ->type('Int')
-                ->type('A')
+                ->type('foobar\\A')
         );
 
         $this->assertArrayNotHasKey(
             'B',
             $result,
-            'B does not extend A'
+            'B does not extend foobar\\A'
         );
 
         $this->assertArrayHasKey(
@@ -140,7 +140,7 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertArrayHasKey(
-            'A',
+            'foobar\\A',
             $result
         );
 
@@ -149,12 +149,31 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertArrayNotHasKey(
-            'A',
+            'foobar\\A',
             $result
         );
 
         $this->assertArrayHasKey(
             'Int',
+            $result
+        );
+    }
+
+    public function testNamespaceFilter()
+    {
+        $classIterator = $this->getSystemUnderTest();
+
+        $result = iterator_to_array(
+            $classIterator->inNamespace('foobar')
+        );
+
+        $this->assertArrayNotHasKey(
+            'Int',
+            $result
+        );
+
+        $this->assertArrayHasKey(
+            'foobar\\A',
             $result
         );
     }
@@ -168,9 +187,9 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertArrayNotHasKey(
-            'A',
+            'B',
             $result,
-            'A is not an interface'
+            'B is not an interface'
         );
 
         $this->assertArrayHasKey(
@@ -195,9 +214,9 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertArrayHasKey(
-            'A',
+            'B',
             $result,
-            'A is not an interface (and thus included using the not filter)'
+            'B is not an interface (and thus included using the not filter)'
         );
     }
 
@@ -222,7 +241,7 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
     {
 
         $expected = <<<EOL
-<?php namespace  {
+<?php namespace foobar {
     class A
     {
     }
@@ -238,7 +257,7 @@ namespace  {
     }
 }
 namespace  {
-    class C extends \\A implements \\Int
+    class C extends \\foobar\\A implements \\Int
     {
     }
 }
