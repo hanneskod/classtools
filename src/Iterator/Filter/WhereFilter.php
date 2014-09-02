@@ -21,14 +21,33 @@ class WhereFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
-    private $methodName, $returnValue;
+    /**
+     * @var string Name of ReflectionClass method to evaluate
+     */
+    private $methodName;
 
+    /**
+     * @var mixed Expected return value
+     */
+    private $returnValue;
+
+    /**
+     * Register method name and expected return value
+     *
+     * @param string $methodName  Name of ReflectionClass method to evaluate
+     * @param mixed  $returnValue Expected return value
+     */
     public function __construct($methodName, $returnValue = true)
     {
         $this->methodName = $methodName;
         $this->returnValue = $returnValue;
     }
 
+    /**
+     * Get iterator for ReflectionClass objects where registered method return expected value
+     *
+     * @return \Traversable
+     */
     public function getIterator()
     {
         $methodName = $this->methodName;

@@ -21,13 +21,26 @@ class NotFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
+    /**
+     * @var Filter Filter to negate
+     */
     private $filter;
 
+    /**
+     * Register filter to negate
+     *
+     * @param Filter $filter
+     */
     public function __construct(Filter $filter)
     {
         $this->filter = $filter;
     }
 
+    /**
+     * Get iterator for definitions not present in negated filter
+     *
+     * @return \Traversable
+     */
     public function getIterator()
     {
         $filtered = iterator_to_array($this->filter->getIterator());

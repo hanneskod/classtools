@@ -21,13 +21,26 @@ class NameFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
+    /**
+     * @var string Regular expression for matching definition names
+     */
     private $pattern;
 
+    /**
+     * Register matching regular expression
+     *
+     * @param string $pattern
+     */
     public function __construct($pattern)
     {
         $this->pattern = $pattern;
     }
 
+    /**
+     * Get iterator for matching classnames
+     *
+     * @return \Traversable
+     */
     public function getIterator()
     {
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {

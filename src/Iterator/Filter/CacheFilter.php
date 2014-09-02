@@ -22,12 +22,23 @@ class CacheFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
+    /**
+     * @var ArrayIterator Cached iterator
+     */
     private $cache;
 
+    /**
+     * Override ClassIterator::__construct
+     */
     public function __construct()
     {
     }
 
+    /**
+     * Get cached iterator
+     *
+     * @return ArrayIterator
+     */
     public function getIterator()
     {
         if (!isset($this->cache)) {

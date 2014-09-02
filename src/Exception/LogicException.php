@@ -10,6 +10,8 @@
 namespace hanneskod\classtools\Exception;
 
 /**
+ * Exception that represents an error in the program logic
+ *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
 class LogicException extends \LogicException implements \hanneskod\classtools\Exception

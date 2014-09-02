@@ -20,6 +20,9 @@ use hanneskod\classtools\Iterator\SplFileInfo;
  */
 trait FilterTrait
 {
+    /**
+     * @var ClassIterator Iterator filter is bound to
+     */
     private $boundIterator;
 
     /**

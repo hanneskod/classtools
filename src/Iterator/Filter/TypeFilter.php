@@ -22,13 +22,26 @@ class TypeFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
+    /**
+     * @var string Name of type
+     */
     private $typename;
 
+    /**
+     * Register name of type
+     *
+     * @param string $typename
+     */
     public function __construct($typename)
     {
         $this->typename = $typename;
     }
 
+    /**
+     * Get iterator for definitions of type
+     *
+     * @return \Traversable
+     */
     public function getIterator()
     {
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {

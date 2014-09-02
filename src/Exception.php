@@ -10,6 +10,8 @@
 namespace hanneskod\classtools;
 
 /**
+ * Base exception interface
+ *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
 interface Exception

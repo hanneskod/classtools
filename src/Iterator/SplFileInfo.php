@@ -22,7 +22,7 @@ class SplFileInfo extends FinderSplFileInfo
     /**
      * @var FinderSplFileInfo Decorated object
      */
-    private $decoratedFileInfo;
+    private $decorated;
 
     /**
      * @var Reader Cached reader
@@ -32,11 +32,11 @@ class SplFileInfo extends FinderSplFileInfo
     /**
      * Load decorated object
      *
-     * @param FinderSplFileInfo $decoratedFileInfo
+     * @param FinderSplFileInfo $decorated
      */
-    public function __construct(FinderSplFileInfo $decoratedFileInfo)
+    public function __construct(FinderSplFileInfo $decorated)
     {
-        $this->decoratedFileInfo = $decoratedFileInfo;
+        $this->decorated = $decorated;
     }
 
     /**
@@ -60,7 +60,7 @@ class SplFileInfo extends FinderSplFileInfo
      */
     public function getRelativePath()
     {
-        return $this->decoratedFileInfo->getRelativePath();
+        return $this->decorated->getRelativePath();
     }
 
     /**
@@ -70,7 +70,7 @@ class SplFileInfo extends FinderSplFileInfo
      */
     public function getRelativePathname()
     {
-        return $this->decoratedFileInfo->getRelativePathname();
+        return $this->decorated->getRelativePathname();
     }
 
     /**
@@ -81,146 +81,294 @@ class SplFileInfo extends FinderSplFileInfo
      */
     public function getContents()
     {
-        return $this->decoratedFileInfo->getContents();
+        return $this->decorated->getContents();
     }
 
+    /**
+     * Gets the last access time for the file
+     *
+     * @return int
+     */
     public function getATime()
     {
-        return $this->decoratedFileInfo->getATime();
+        return $this->decorated->getATime();
     }
 
+    /**
+     * Returns the base name of the file, directory, or link without path info
+     *
+     * @param  string $suffix
+     * @return string
+     */
     public function getBasename($suffix = '')
     {
-        return $this->decoratedFileInfo->getBasename($suffix);
+        return $this->decorated->getBasename($suffix);
     }
 
+    /**
+     * Returns the inode change time for the file
+     *
+     * @return int
+     */
     public function getCTime()
     {
-        return $this->decoratedFileInfo->getCTime();
+        return $this->decorated->getCTime();
     }
 
+    /**
+     * Retrieves the file extension
+     *
+     * @return string
+     */
     public function getExtension()
     {
-        return $this->decoratedFileInfo->getExtension();
+        return $this->decorated->getExtension();
     }
 
+    /**
+     * Gets an SplFileInfo object for the referenced file
+     *
+     * @param  string $class_name
+     * @return \SplFileInfo
+     */
     public function getFileInfo($class_name = '')
     {
-        return $this->decoratedFileInfo->getFileInfo($class_name);
+        return $this->decorated->getFileInfo($class_name);
     }
 
+    /**
+     * Gets the filename without any path information
+     *
+     * @return string
+     */
     public function getFilename()
     {
-        return $this->decoratedFileInfo->getFilename();
+        return $this->decorated->getFilename();
     }
 
+    /**
+     * Gets the file group
+     *
+     * @return int
+     */
     public function getGroup()
     {
-        return $this->decoratedFileInfo->getGroup();
+        return $this->decorated->getGroup();
     }
 
+    /**
+     * Gets the inode number for the filesystem object
+     *
+     * @return int
+     */
     public function getInode()
     {
-        return $this->decoratedFileInfo->getInode();
+        return $this->decorated->getInode();
     }
 
+    /**
+     * Gets the target of a filesystem link
+     *
+     * @return string
+     */
     public function getLinkTarget()
     {
-        return $this->decoratedFileInfo->getLinkTarget();
+        return $this->decorated->getLinkTarget();
     }
 
+    /**
+     * Returns the time when the contents of the file were changed
+     *
+     * @return int
+     */
     public function getMTime()
     {
-        return $this->decoratedFileInfo->getMTime();
+        return $this->decorated->getMTime();
     }
 
+    /**
+     * Gets the file owner
+     *
+     * @return int
+     */
     public function getOwner()
     {
-        return $this->decoratedFileInfo->getOwner();
+        return $this->decorated->getOwner();
     }
 
+    /**
+     * Returns the path to the file, omitting the filename and any trailing slash
+     *
+     * @return string
+     */
     public function getPath()
     {
-        return $this->decoratedFileInfo->getPath();
+        return $this->decorated->getPath();
     }
 
+    /**
+     * Gets an SplFileInfo object for the parent of the current file
+     *
+     * @param  string $class_name
+     * @return \SplFileInfo
+     */
     public function getPathInfo($class_name = '')
     {
-        return $this->decoratedFileInfo->getPathInfo($class_name);
+        return $this->decorated->getPathInfo($class_name);
     }
 
+    /**
+     * Returns the path to the file
+     *
+     * @return string
+     */
     public function getPathname()
     {
-        return $this->decoratedFileInfo->getPathname();
+        return $this->decorated->getPathname();
     }
 
+    /**
+     * Gets the file permissions for the file
+     *
+     * @return int
+     */
     public function getPerms()
     {
-        return $this->decoratedFileInfo->getPerms();
+        return $this->decorated->getPerms();
     }
 
+    /**
+     * Expands all symbolic links and resolves relative references
+     *
+     * @return string
+     */
     public function getRealPath()
     {
-        return $this->decoratedFileInfo->getRealPath();
+        return $this->decorated->getRealPath();
     }
 
+    /**
+     * Returns the filesize in bytes for the file referenced
+     *
+     * @return int
+     */
     public function getSize()
     {
-        return $this->decoratedFileInfo->getSize();
+        return $this->decorated->getSize();
     }
 
+    /**
+     * Returns the type of the file referenced
+     *
+     * @return string
+     */
     public function getType()
     {
-        return $this->decoratedFileInfo->getType();
+        return $this->decorated->getType();
     }
 
+    /**
+     * This method can be used to determine if the file is a directory
+     *
+     * @return boolean
+     */
     public function isDir()
     {
-        return $this->decoratedFileInfo->isDir();
+        return $this->decorated->isDir();
     }
 
+    /**
+     * Checks if the file is executable
+     *
+     * @return boolean
+     */
     public function isExecutable()
     {
-        return $this->decoratedFileInfo->isExecutable();
+        return $this->decorated->isExecutable();
     }
 
+    /**
+     * Checks if the file referenced exists and is a regular file
+     *
+     * @return boolean
+     */
     public function isFile()
     {
-        return $this->decoratedFileInfo->isFile();
+        return $this->decorated->isFile();
     }
 
+    /**
+     * Check if the file referenced is a link
+     *
+     * @return boolean
+     */
     public function isLink()
     {
-        return $this->decoratedFileInfo->isLink();
+        return $this->decorated->isLink();
     }
 
+    /**
+     * Check if the file is readable
+     *
+     * @return boolean
+     */
     public function isReadable()
     {
-        return $this->decoratedFileInfo->isReadable();
+        return $this->decorated->isReadable();
     }
 
+    /**
+     * Check if the file is writable
+     *
+     * @return boolean
+     */
     public function isWritable()
     {
-        return $this->decoratedFileInfo->isWritable();
+        return $this->decorated->isWritable();
     }
 
+    /**
+     * Creates an SplFileObject object of the file
+     *
+     * @param  string   $open_mode
+     * @param  boolean  $use_include_path
+     * @param  resource $context
+     * @return \SplFileObject
+     */
     public function openFile($open_mode = "r", $use_include_path = false, $context = null)
     {
-        return $this->decoratedFileInfo->openFile($open_mode, $use_include_path, $context);
+        return $this->decorated->openFile($open_mode, $use_include_path, $context);
     }
 
+    /**
+     * Set the class name which will be used to open files when openFile() is called
+     *
+     * @param  string $class_name
+     * @return void
+     */
     public function setFileClass($class_name = '')
     {
-        return $this->decoratedFileInfo->setFileClass($class_name);
+        return $this->decorated->setFileClass($class_name);
     }
 
+    /**
+     * Set the class name which will be used when getFileInfo and getPathInfo are called
+     *
+     * @param  string $class_name
+     * @return void
+     */
     public function setInfoClass($class_name = '')
     {
-        return $this->decoratedFileInfo->setInfoClass($class_name);
+        return $this->decorated->setInfoClass($class_name);
     }
 
-    public function __toString()
+    /**
+     * This method will return the file name of the referenced file
+     *
+     * @return string
+     */
+    public function __tostring()
     {
-        return (string)$this->decoratedFileInfo;
+        return (string)$this->decorated;
     }
 }
