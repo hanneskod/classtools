@@ -37,7 +37,7 @@ class Reader
     private $names = [];
 
     /**
-     * @var array The global statement object
+     * @var PhpParser\Node[] The global statement object
      */
     private $global;
 
@@ -112,7 +112,7 @@ class Reader
      * Get pars tree for class/interface/trait
      *
      * @param  string $name Name of class/interface/trait
-     * @return array
+     * @return Namespace_[]
      * @throws RuntimeException If $name does not exist
      */
     public function read($name)
@@ -127,7 +127,7 @@ class Reader
     /**
      * Get parse tree for the complete snippet
      *
-     * @return array
+     * @return PhpParser\Node[]
      */
     public function readAll()
     {
