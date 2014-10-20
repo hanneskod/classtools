@@ -1,6 +1,16 @@
-# classtools [![Build Status](https://travis-ci.org/hanneskod/classtools.svg)](https://travis-ci.org/hanneskod/classtools) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/hanneskod/classtools/badges/quality-score.png?s=d9484dda5b07eafdb183746efc126488583e0532)](https://scrutinizer-ci.com/g/hanneskod/classtools/) [![Dependency Status](https://gemnasium.com/hanneskod/classtools.svg)](https://gemnasium.com/hanneskod/classtools)
+# hanneskod/classtools
 
-Find, extract and process classes from file system
+[![Packagist Version](https://img.shields.io/packagist/v/hanneskod/classtools.svg?style=flat-square)](https://packagist.org/packages/hanneskod/classtools)
+[![Build Status](https://img.shields.io/travis/hanneskod/classtools/master.svg?style=flat-square)](https://travis-ci.org/hanneskod/classtools)
+[![Quality Score](https://img.shields.io/scrutinizer/g/hanneskod/classtools.svg?style=flat-square)](https://scrutinizer-ci.com/g/hanneskod/classtools)
+[![Dependency Status](https://img.shields.io/gemnasium/hanneskod/classtools.svg?style=flat-square)](https://gemnasium.com/hanneskod/classtools)
+
+Find, extract and process classes from file system.
+
+> Install using **[composer](http://getcomposer.org/)**. Exists as
+> **[hanneskod/classtools](https://packagist.org/packages/hanneskod/classtools)**
+> in the **[packagist](https://packagist.org/)** repository.
+
 
 ## Iterator
 
