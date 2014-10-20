@@ -19,7 +19,7 @@ use hanneskod\classtools\Iterator\ClassIterator;
 class ClassLoader
 {
     /**
-     * @var SplFileInfo[] Maps names to SplFileInfo objects
+     * @var \hanneskod\classtools\Iterator\SplFileInfo[] Maps names to SplFileInfo objects
      */
     private $classMap = [];
 

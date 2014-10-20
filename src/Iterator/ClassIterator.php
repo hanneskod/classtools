@@ -13,7 +13,6 @@ use IteratorAggregate;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\Finder\Finder;
-use hanneskod\classtools\Transformer\Reader;
 use hanneskod\classtools\Transformer\Writer;
 use hanneskod\classtools\Transformer\MinimizingWriter;
 use hanneskod\classtools\Iterator\Filter\CacheFilter;
@@ -135,7 +134,7 @@ class ClassIterator implements IteratorAggregate
      * Create a new iterator where classes are filtered based on type
      *
      * @param  string $typename
-     * @return ClassIterator
+     * @return Filter The created filter
      */
     public function type($typename)
     {
@@ -146,7 +145,7 @@ class ClassIterator implements IteratorAggregate
      * Create a new iterator where classes are filtered based on name
      *
      * @param  string $pattern Regular expression used when filtering
-     * @return ClassIterator
+     * @return Filter The created filter
      */
     public function name($pattern)
     {
@@ -157,7 +156,7 @@ class ClassIterator implements IteratorAggregate
      * Create a new iterator where classes are filtered based on namespace
      *
      * @param  string $namespace Namespace used when filtering
-     * @return ClassIterator
+     * @return Filter The created filter
      */
     public function inNamespace($namespace)
     {
@@ -167,9 +166,9 @@ class ClassIterator implements IteratorAggregate
     /**
      * Create iterator where classes are filtered based on method return value
      *
-     * @param  string  $methodName  Name of method
-     * @param  mixed   $returnValue Expected return value
-     * @return ClassIterator
+     * @param  string $methodName  Name of method
+     * @param  mixed  $returnValue Expected return value
+     * @return Filter The created filter
      */
     public function where($methodName, $returnValue = true)
     {
@@ -180,7 +179,7 @@ class ClassIterator implements IteratorAggregate
      * Negate a filter
      *
      * @param  Filter $filter
-     * @return Filter
+     * @return Filter The created filter
      */
     public function not(Filter $filter)
     {
@@ -190,7 +189,7 @@ class ClassIterator implements IteratorAggregate
     /**
      * Cache iterator
      *
-     * @return ClassIterator
+     * @return Filter The created filter
      */
     public function cache()
     {

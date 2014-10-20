@@ -37,7 +37,7 @@ class Reader
     private $names = [];
 
     /**
-     * @var PhpParser\Node[] The global statement object
+     * @var \PhpParser\Node[] The global statement object
      */
     private $global;
 
