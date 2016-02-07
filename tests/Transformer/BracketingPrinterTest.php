@@ -1,20 +1,18 @@
-<?php
-namespace hanneskod\classtools\Transformer;
+<?php namespace hanneskod\classtools\Transformer;
 
-use PhpParser\Parser;
-use PhpParser\Lexer;
+use PhpParser\ParserFactory;
 
 class BracketingPrinterTest extends \PHPUnit_Framework_TestCase
 {
     public function testPrintWithBrackets()
     {
-        $parser = new Parser(new Lexer);
+        $parserFactory = new ParserFactory();
+        $parser = $parserFactory->create(ParserFactory::PREFER_PHP5);
         $printer = new BracketingPrinter;
 
         $stmts = $parser->parse(
-<<<EOF
-<?php
-namespace foo;
+            <<<EOF
+<?php namespace foo;
 class Bar
 {
 }
@@ -22,7 +20,7 @@ EOF
         );
 
         $expected =
-<<<EOF
+            <<<EOF
 namespace foo {
     class Bar
     {
