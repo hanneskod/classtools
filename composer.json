@@ -22,6 +22,6 @@
         "symfony/finder": "~2.7"
     },
     "require-dev": {
-        "hanneskod/exemplify": "dev-master@dev"
+        "hanneskod/readme-tester": "dev-master"
     }
 }
