@@ -5,15 +5,19 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/hanneskod/classtools.svg?style=flat-square)](https://scrutinizer-ci.com/g/hanneskod/classtools)
 [![Dependency Status](https://img.shields.io/gemnasium/hanneskod/classtools.svg?style=flat-square)](https://gemnasium.com/hanneskod/classtools)
 
-Find, extract and process classes from file system.
+Find, extract and process classes from the file system.
 
-> Install using **[composer](http://getcomposer.org/)**. Exists as
-> **[hanneskod/classtools](https://packagist.org/packages/hanneskod/classtools)**
-> in the **[packagist](https://packagist.org/)** repository.
+Installation
+------------
+Install using **[composer](http://getcomposer.org/)**. Exists as
+**[hanneskod/classtools](https://packagist.org/packages/hanneskod/classtools)**
+in the **[packagist](https://packagist.org/)** repository. From the command line
+use:
 
+    composer require hanneskod/classtools:~1.0
 
-## Iterator
-
+Using the iterator
+------------------
 [ClassIterator](src/Iterator/ClassIterator.php) consumes a [symfony
 finder](http://symfony.com/doc/current/components/finder.html) and scans files
 for php classes, interfaces and traits.
@@ -117,7 +121,8 @@ echo $iter->minimize();
 echo $iter->transform(new hanneskod\classtools\Transformer\MinimizingWriter);
 ```
 
-## Transformer examples
+Using the transformer
+---------------------
 
 ### Wrap code in namespace
 
