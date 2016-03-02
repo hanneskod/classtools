@@ -25,8 +25,8 @@ for php classes, interfaces and traits.
 objects.
 
 ```php
-$finder = new Finder;
-$iter = new ClassIterator($finder->in('src'));
+$finder = new Symfony\Component\Finder\Finder;
+$iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
 
 // Print the file names of classes, interfaces and traits in 'src'
 foreach ($iter->getClassMap() as $classname => $splFileInfo) {
@@ -47,8 +47,8 @@ included in the environment. Enable autoloading to dynamically load classes from
 a ClassIterator.
 
 ```php
-$finder = new Finder();
-$iter = new ClassIterator($finder->in('src'));
+$finder = new Symfony\Component\Finder\Finder();
+$iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
 
 // Enable reflection by autoloading found classes
 $iter->enableAutoloading();
@@ -65,8 +65,8 @@ foreach ($iter as $class) {
 chainable.
 
 ```php
-$finder = new Finder();
-$iter = new ClassIterator($finder->in('src'));
+$finder = new Symfony\Component\Finder\Finder();
+$iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
 $iter->enableAutoloading();
 
 // Print all Filter types (including the interface itself)
@@ -90,8 +90,8 @@ foreach ($iter->type('Iterator\Filter')->where('isInstantiable') as $class) {
 Filters can also be negated by wrapping them in `not()` method calls.
 
 ```php
-$finder = new Finder();
-$iter = new ClassIterator($finder->in('src'));
+$finder = new Symfony\Component\Finder\Finder();
+$iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
 $iter->enableAutoloading();
 
 // Print all classes, interfaces and traits NOT instantiable
@@ -106,21 +106,22 @@ Found class, interface and trait definitions can be transformed and written to a
 single file.
 
 ```php
-$finder = new Finder();
-$iter = new ClassIterator($finder->in('src'));
+$finder = new Symfony\Component\Finder\Finder();
+$iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
 $iter->enableAutoloading();
 
 // Print all found definitions in one snippet
 echo $iter->minimize();
 
 // The same can be done using
-echo $iter->transform(new MinimizingWriter);
+echo $iter->transform(new hanneskod\classtools\Transformer\MinimizingWriter);
 ```
 
 ## Transformer examples
 
 ### Wrap code in namespace
 
+<!-- @ignore -->
 ```php
 $reader = new Reader("<?php class Bar {}");
 $writer = new Writer;
@@ -132,6 +133,7 @@ echo $writer->write($reader->read('Bar'));
 
 ### Strip statements
 
+<!-- @ignore -->
 ```php
 $reader = new Reader("<?php require 'Foo.php'; echo 'bar';");
 $writer = new Writer;

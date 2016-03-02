@@ -348,7 +348,7 @@ class SplFileInfo extends FinderSplFileInfo
      */
     public function setFileClass($class_name = '')
     {
-        return $this->decorated->setFileClass($class_name);
+        $this->decorated->setFileClass($class_name);
     }
 
     /**
@@ -359,7 +359,7 @@ class SplFileInfo extends FinderSplFileInfo
      */
     public function setInfoClass($class_name = '')
     {
-        return $this->decorated->setInfoClass($class_name);
+        $this->decorated->setInfoClass($class_name);
     }
 
     /**

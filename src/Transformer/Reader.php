@@ -9,15 +9,16 @@
 
 namespace hanneskod\classtools\Transformer;
 
-use PhpParser\Parser;
+use hanneskod\classtools\Exception\RuntimeException;
+use hanneskod\classtools\Name;
 use PhpParser\Lexer\Emulative;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Trait_;
-use hanneskod\classtools\Name;
-use hanneskod\classtools\Exception\RuntimeException;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Parser;
+use PhpParser\ParserFactory;
 
 /**
  * Read classes, interfaces and traits from php snippets
@@ -49,7 +50,11 @@ class Reader
      */
     public function __construct($snippet, Parser $parser = null)
     {
-        $parser = $parser ?: new Parser(new Emulative);
+        if (is_null($parser)) {
+            $parserFactory = new ParserFactory();
+            $parser = $parserFactory->create(ParserFactory::PREFER_PHP5);
+        }
+
         $this->global = $parser->parse($snippet);
         $this->findDefinitions($this->global, new Name(''));
     }
@@ -58,7 +63,7 @@ class Reader
      * Find class, interface and trait definitions in statemnts
      *
      * @param  array $stmts
-     * @param  Name  $namespace
+     * @param  Name $namespace
      * @return void
      */
     private function findDefinitions(array $stmts, Name $namespace)
@@ -70,11 +75,11 @@ class Reader
             if ($stmt instanceof Namespace_) {
                 $this->findDefinitions($stmt->stmts, new Name((string)$stmt->name));
 
-            // Save use statement
+                // Save use statement
             } elseif ($stmt instanceof Use_) {
                 $useStmts[] = $stmt;
 
-            // Save classes, interfaces and traits
+                // Save classes, interfaces and traits
             } elseif ($stmt instanceof Class_ or $stmt instanceof Interface_ or $stmt instanceof Trait_) {
                 $defName = new Name("{$namespace}\\{$stmt->name}");
                 $this->names[$defName->keyize()] = $defName->normalize();
@@ -100,7 +105,7 @@ class Reader
     /**
      * Check if snippet contains definition
      *
-     * @param  string  $name Fully qualified name
+     * @param  string $name Fully qualified name
      * @return boolean
      */
     public function hasDefinition($name)
