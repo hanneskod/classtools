@@ -11,6 +11,7 @@ namespace hanneskod\classtools\Iterator;
 
 use Symfony\Component\Finder\SplFileInfo as FinderSplFileInfo;
 use hanneskod\classtools\Transformer\Reader;
+use hanneskod\classtools\Exception\ReaderException;
 
 /**
  * Decorates \Symfony\Component\Finder\SplFileInfo to support the creation of Readers
@@ -43,11 +44,16 @@ class SplFileInfo extends FinderSplFileInfo
      * Get reader for the contents of this file
      *
      * @return Reader
+     * @throws ReaderException If file contains syntax errors
      */
     public function getReader()
     {
         if (!isset($this->reader)) {
-            $this->reader = new Reader($this->getContents());
+            try {
+                $this->reader = new Reader($this->getContents());
+            } catch (ReaderException $exception) {
+                throw new ReaderException($exception->getMessage() . ' in ' . $this->getPathname());
+            }
         }
 
         return $this->reader;

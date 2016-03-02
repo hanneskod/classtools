@@ -14,7 +14,8 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
             new \ArrayIterator([
                 new MockSplFileInfo('<?php namespace foobar; use \\some\\name; class A {}'),
                 new MockSplFileInfo('<?php interface Baz {}'),
-                new MockSplFileInfo('<?php class B implements Baz {} class C extends \foobar\A implements Baz {}')
+                new MockSplFileInfo('<?php class B implements Baz {} class C extends \foobar\A implements Baz {}'),
+                new MockSplFileInfo('<?php funct error(){}')
             ])
         );
 
@@ -25,6 +26,11 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
     public function getSystemUnderTest()
     {
         return self::$sut;
+    }
+
+    public function testGetErrors()
+    {
+        $this->assertCount(1, $this->getSystemUnderTest()->getErrors());
     }
 
     public function testGetClassmap()

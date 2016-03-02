@@ -110,4 +110,10 @@ EOF
             )
         );
     }
+
+    public function testSyntaxError()
+    {
+        $this->setExpectedException('\hanneskod\classtools\Exception\ReaderException');
+        new Reader('<?php functi hej(){}');
+    }
 }

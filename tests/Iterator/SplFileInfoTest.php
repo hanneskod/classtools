@@ -26,6 +26,20 @@ class SplFileInfoTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testReaderException()
+    {
+        $decorated = $this->getMockBuilder('hanneskod\classtools\Tests\MockSplFileInfo')
+            ->setConstructorArgs([''])
+            ->getMock();
+        $decorated->expects($this->once())
+            ->method('getContents')
+            ->will($this->returnValue('<?php func hej(){}'));
+
+        $this->setExpectedException('\hanneskod\classtools\Exception\ReaderException');
+        $fileInfo = new SplFileInfo($decorated);
+        $fileInfo->getReader();
+    }
+
     public function testDecoratedMethods()
     {
         $decorated = $this->getMockBuilder('hanneskod\classtools\Tests\MockSplFileInfo')

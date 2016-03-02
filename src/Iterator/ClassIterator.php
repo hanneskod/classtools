@@ -23,6 +23,7 @@ use hanneskod\classtools\Iterator\Filter\TypeFilter;
 use hanneskod\classtools\Iterator\Filter\WhereFilter;
 use hanneskod\classtools\Exception\LogicException;
 use hanneskod\classtools\Loader\ClassLoader;
+use hanneskod\classtools\Exception\ReaderException;
 
 /**
  * Iterate over classes found in filesystem
@@ -35,6 +36,11 @@ class ClassIterator implements IteratorAggregate
      * @var SplFileInfo[] Maps names to SplFileInfo objects
      */
     private $classMap = [];
+
+    /**
+     * @var string[] List of reader error messages
+     */
+    private $errors = [];
 
     /**
      * @var ClassLoader Autoloader for found classes
@@ -51,8 +57,12 @@ class ClassIterator implements IteratorAggregate
         /** @var \Symfony\Component\Finder\SplFileInfo $fileInfo */
         foreach ($finder as $fileInfo) {
             $fileInfo = new SplFileInfo($fileInfo);
-            foreach ($fileInfo->getReader()->getDefinitionNames() as $name) {
-                $this->classMap[$name] = $fileInfo;
+            try {
+                foreach ($fileInfo->getReader()->getDefinitionNames() as $name) {
+                    $this->classMap[$name] = $fileInfo;
+                }
+            } catch (ReaderException $exception) {
+                $this->errors[] = $exception->getMessage();
             }
         }
     }
@@ -63,6 +73,16 @@ class ClassIterator implements IteratorAggregate
     public function __destruct()
     {
         $this->disableAutoloading();
+    }
+
+    /**
+     * Get syntax errors encountered in source
+     *
+     * @return string[]
+     */
+    public function getErrors()
+    {
+        return $this->errors;
     }
 
     /**

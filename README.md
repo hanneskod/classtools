@@ -38,6 +38,19 @@ foreach ($iter->getClassMap() as $classname => $splFileInfo) {
 }
 ```
 
+### Find syntax errors
+
+Source files containing syntax errors can not be parsed and hence no information
+on contained classes can be retrieved. Use `getErrors()` to read the list of
+encountered errors.
+
+```php
+$finder = new Symfony\Component\Finder\Finder;
+$iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
+
+print_r($iter->getErrors());
+```
+
 ### Iterate over ReflectionClass objects
 
 ClassIterator is also a

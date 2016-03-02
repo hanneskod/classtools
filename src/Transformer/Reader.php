@@ -10,6 +10,7 @@
 namespace hanneskod\classtools\Transformer;
 
 use hanneskod\classtools\Exception\RuntimeException;
+use hanneskod\classtools\Exception\ReaderException;
 use hanneskod\classtools\Name;
 use PhpParser\Lexer\Emulative;
 use PhpParser\Node\Stmt\Class_;
@@ -45,8 +46,9 @@ class Reader
     /**
      * Optionally inject parser
      *
-     * @param string $snippet
-     * @param Parser $parser
+     * @param  string $snippet
+     * @param  Parser $parser
+     * @throws ReaderException If snippet contains a syntax error
      */
     public function __construct($snippet, Parser $parser = null)
     {
@@ -55,7 +57,12 @@ class Reader
             $parser = $parserFactory->create(ParserFactory::PREFER_PHP5);
         }
 
-        $this->global = $parser->parse($snippet);
+        try {
+            $this->global = $parser->parse($snippet);
+        } catch (\PhpParser\Error $exception) {
+            throw new ReaderException($exception->getRawMessage() . ' on line ' . $exception->getStartLine());
+        }
+
         $this->findDefinitions($this->global, new Name(''));
     }
 
