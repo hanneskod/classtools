@@ -50,6 +50,7 @@ namespace  {
         public function test()
         {
             return true;
+        
         }
     }
 }

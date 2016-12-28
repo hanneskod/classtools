@@ -5,9 +5,9 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 {
     public function testApplyTranslation()
     {
-        $translation = $this->getMock('PhpParser\NodeVisitor');
+        $translation = $this->createMock('PhpParser\NodeVisitor');
 
-        $traverser = $this->getMock('PhpParser\NodeTraverser');
+        $traverser = $this->createMock('PhpParser\NodeTraverser');
         $traverser->expects($this->once())
             ->method('addVisitor')
             ->with($translation);
@@ -24,7 +24,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpParserException()
     {
-        $traverser = $this->getMock('PhpParser\NodeTraverser');
+        $traverser = $this->createMock('PhpParser\NodeTraverser');
         $traverser->expects($this->once())
             ->method('traverse')
             ->will($this->throwException(new \PhpParser\Error('error')));

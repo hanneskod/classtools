@@ -47,9 +47,9 @@ class NamespaceWrapper extends NodeVisitorAbstract
         if (isset($nodes[0]) && $nodes[0] instanceof Namespace_) {
             if ($this->namespaceName) {
                 if ((string)$nodes[0]->name == '') {
-                    $nodes[0]->name->set($this->namespaceName);
+                    $nodes[0]->name = new Name($this->namespaceName);
                 } else {
-                    $nodes[0]->name->prepend($this->namespaceName);
+                    $nodes[0]->name = Name::concat($this->namespaceName, $nodes[0]->name);
                 }
             }
             return $nodes;
