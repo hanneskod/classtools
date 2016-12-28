@@ -5,14 +5,12 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 {
     public function testApplyTranslation()
     {
-        $translation = $this->createMock('PhpParser\NodeVisitor');
+        $translation = $this->prophesize('PhpParser\NodeVisitor')->reveal();
 
-        $traverser = $this->createMock('PhpParser\NodeTraverser');
-        $traverser->expects($this->once())
-            ->method('addVisitor')
-            ->with($translation);
+        $traverser = $this->prophesize('PhpParser\NodeTraverser');
+        $traverser->addVisitor($translation)->shouldBeCalled();
 
-        $writer = new Writer($traverser);
+        $writer = new Writer($traverser->reveal());
         $writer->apply($translation);
     }
 
@@ -24,12 +22,10 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpParserException()
     {
-        $traverser = $this->createMock('PhpParser\NodeTraverser');
-        $traverser->expects($this->once())
-            ->method('traverse')
-            ->will($this->throwException(new \PhpParser\Error('error')));
+        $traverser = $this->prophesize('PhpParser\NodeTraverser');
+        $traverser->traverse([])->willThrow(new \PhpParser\Error('error'));
 
-        $writer = new Writer($traverser);
+        $writer = new Writer($traverser->reveal());
 
         $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');
         $writer->write([]);
