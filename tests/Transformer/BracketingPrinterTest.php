@@ -2,7 +2,7 @@
 
 use PhpParser\ParserFactory;
 
-class BracketingPrinterTest extends \PHPUnit_Framework_TestCase
+class BracketingPrinterTest extends \PHPUnit\Framework\TestCase
 {
     public function testPrintWithBrackets()
     {

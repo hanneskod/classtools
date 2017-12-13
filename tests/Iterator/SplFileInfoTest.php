@@ -1,7 +1,7 @@
 <?php
 namespace hanneskod\classtools\Iterator;
 
-class SplFileInfoTest extends \PHPUnit_Framework_TestCase
+class SplFileInfoTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetReader()
     {
@@ -35,7 +35,7 @@ class SplFileInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getContents')
             ->will($this->returnValue('<?php func hej(){}'));
 
-        $this->setExpectedException('\hanneskod\classtools\Exception\ReaderException');
+        $this->expectException('\hanneskod\classtools\Exception\ReaderException');
         $fileInfo = new SplFileInfo($decorated);
         $fileInfo->getReader();
     }

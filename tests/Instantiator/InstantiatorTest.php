@@ -1,12 +1,12 @@
 <?php
 namespace hanneskod\classtools\Instantiator;
 
-class InstantiatorTest extends \PHPUnit_Framework_TestCase
+class InstantiatorTest extends \PHPUnit\Framework\TestCase
 {
     public function testExceptionWhenReflectionClassNotSet()
     {
         $in = new Instantiator;
-        $this->setExpectedException('hanneskod\classtools\Exception\LogicException');
+        $this->expectException('hanneskod\classtools\Exception\LogicException');
         $in->getReflectionClass();
     }
 
@@ -38,7 +38,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($in->isInstantiable());
         $this->assertFalse($in->isInstantiableWithoutArgs());
 
-        $this->setExpectedException('hanneskod\classtools\Exception\LogicException');
+        $this->expectException('hanneskod\classtools\Exception\LogicException');
         $in->instantiate();
     }
 
@@ -56,7 +56,7 @@ class InstantiatorTest extends \PHPUnit_Framework_TestCase
         $in->setReflectionClass($class);
 
         $this->assertFalse($in->isInstantiable());
-        $this->setExpectedException('hanneskod\classtools\Exception\LogicException');
+        $this->expectException('hanneskod\classtools\Exception\LogicException');
         $in->instantiate();
     }
 

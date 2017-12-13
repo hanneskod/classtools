@@ -1,7 +1,7 @@
 <?php
 namespace hanneskod\classtools;
 
-class NameTest extends \PHPUnit_Framework_TestCase
+class NameTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateNode()
     {

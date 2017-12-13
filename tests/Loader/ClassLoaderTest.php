@@ -3,7 +3,7 @@ namespace hanneskod\classtools\Loader;
 
 use hanneskod\classtools\Tests\MockSplFileInfo;
 
-class ClassLoaderTest extends \PHPUnit_Framework_TestCase
+class ClassLoaderTest extends \PHPUnit\Framework\TestCase
 {
     public function testClassLoader()
     {

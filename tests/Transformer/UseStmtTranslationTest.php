@@ -1,7 +1,7 @@
 <?php
 namespace hanneskod\classtools\Transformer;
 
-class UseStmtTranslationTest extends \PHPUnit_Framework_TestCase
+class UseStmtTranslationTest extends \PHPUnit\Framework\TestCase
 {
     public function testSaveNamespacedUseStatements()
     {

@@ -4,7 +4,7 @@ namespace hanneskod\classtools\Transformer\Action;
 use hanneskod\classtools\Transformer\Reader;
 use hanneskod\classtools\Transformer\Writer;
 
-class CommentStripperTest extends \PHPUnit_Framework_TestCase
+class CommentStripperTest extends \PHPUnit\Framework\TestCase
 {
     public function testStripComments()
     {

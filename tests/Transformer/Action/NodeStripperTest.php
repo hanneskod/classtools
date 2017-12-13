@@ -4,7 +4,7 @@ namespace hanneskod\classtools\Transformer\Action;
 use hanneskod\classtools\Transformer\Reader;
 use hanneskod\classtools\Transformer\Writer;
 
-class NodeStripperTest extends \PHPUnit_Framework_TestCase
+class NodeStripperTest extends \PHPUnit\Framework\TestCase
 {
     public function testStripNodes()
     {

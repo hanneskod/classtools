@@ -4,7 +4,7 @@ namespace hanneskod\classtools\Transformer\Action;
 use hanneskod\classtools\Transformer\Reader;
 use hanneskod\classtools\Transformer\Writer;
 
-class NamespaceCrawlerTest extends \PHPUnit_Framework_TestCase
+class NamespaceCrawlerTest extends \PHPUnit\Framework\TestCase
 {
     public function testCrawlNamespaces()
     {
@@ -67,7 +67,7 @@ EOF
         $writer->apply(new NamespaceCrawler(['']));
 
         // NonExistingClass does not resolve
-        $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');
+        $this->expectException('hanneskod\classtools\Exception\RuntimeException');
         $writer->write($reader->read('ClassName'));
     }
 

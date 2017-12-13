@@ -1,7 +1,7 @@
 <?php
 namespace hanneskod\classtools\Transformer;
 
-class WriterTest extends \PHPUnit_Framework_TestCase
+class WriterTest extends \PHPUnit\Framework\TestCase
 {
     public function testApplyTranslation()
     {
@@ -27,7 +27,7 @@ class WriterTest extends \PHPUnit_Framework_TestCase
 
         $writer = new Writer($traverser->reveal());
 
-        $this->setExpectedException('hanneskod\classtools\Exception\RuntimeException');
+        $this->expectException('hanneskod\classtools\Exception\RuntimeException');
         $writer->write([]);
     }
 }

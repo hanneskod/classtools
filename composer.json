@@ -17,9 +17,9 @@
         }
     },
     "require": {
-        "php": ">=5.5.0",
-        "nikic/php-parser": "^3.0",
-        "symfony/finder": "^2.7|^3.0"
+        "php": ">=7",
+        "nikic/php-parser": "^3",
+        "symfony/finder": "^4"
     },
     "require-dev": {
         "hanneskod/readme-tester": "dev-master"

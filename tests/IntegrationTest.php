@@ -1,4 +1,5 @@
 <?php
+
 namespace hanneskod\classtools;
 
 class IntegrationTest extends \hanneskod\readmetester\PHPUnit\ReadmeTestCase
@@ -8,6 +9,8 @@ class IntegrationTest extends \hanneskod\readmetester\PHPUnit\ReadmeTestCase
      */
     public function testNullableTypes()
     {
-        new Transformer\Reader('<?php function someMethod( string $some_param ) : ?string {return null;}');
+        $this->assertTrue(
+            !!new Transformer\Reader('<?php function someMethod(string $some_param) : ?string {return null;}')
+        );
     }
 }

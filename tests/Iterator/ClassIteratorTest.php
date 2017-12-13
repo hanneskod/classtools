@@ -4,7 +4,7 @@ namespace hanneskod\classtools\Iterator;
 use hanneskod\classtools\Tests\MockSplFileInfo;
 use hanneskod\classtools\Tests\MockFinder;
 
-class ClassIteratorTest extends \PHPUnit_Framework_TestCase
+class ClassIteratorTest extends \PHPUnit\Framework\TestCase
 {
     private static $sut;
 
@@ -58,7 +58,7 @@ class ClassIteratorTest extends \PHPUnit_Framework_TestCase
             ->method('getClassMap')
             ->will($this->returnValue(['ClassThatDoesNotExist' => null]));
 
-        $this->setExpectedException('hanneskod\classtools\Exception\LogicException');
+        $this->expectException('hanneskod\classtools\Exception\LogicException');
         iterator_to_array($stub);
     }
 
