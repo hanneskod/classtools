@@ -30,6 +30,7 @@ final class NotFilter extends ClassIterator implements Filter
 
     public function __construct(Filter $filter)
     {
+        parent::__construct();
         $this->filter = $filter;
     }
 

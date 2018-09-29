@@ -34,6 +34,7 @@ final class NamespaceFilter extends ClassIterator implements Filter
      */
     public function __construct(string $namespace)
     {
+        parent::__construct();
         $this->namespace = new Name((string)$namespace);
     }
 

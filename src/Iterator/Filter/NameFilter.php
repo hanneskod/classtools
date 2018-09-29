@@ -33,6 +33,7 @@ final class NameFilter extends ClassIterator implements Filter
      */
     public function __construct(string $pattern)
     {
+        parent::__construct();
         $this->pattern = $pattern;
     }
 

@@ -41,6 +41,7 @@ final class WhereFilter extends ClassIterator implements Filter
      */
     public function __construct($methodName, $returnValue = true)
     {
+        parent::__construct();
         $this->methodName = $methodName;
         $this->returnValue = $returnValue;
     }

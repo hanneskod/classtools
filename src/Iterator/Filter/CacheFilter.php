@@ -33,6 +33,7 @@ final class CacheFilter extends ClassIterator implements Filter
      */
     public function __construct()
     {
+        parent::__construct();
     }
 
     public function getIterator(): iterable

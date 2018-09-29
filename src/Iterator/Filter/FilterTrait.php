@@ -11,7 +11,7 @@ declare(strict_types = 1);
 
 namespace hanneskod\classtools\Iterator\Filter;
 
-use hanneskod\classtools\Iterator\ClassIterator;
+use hanneskod\classtools\Iterator\ClassIteratorInterface;
 use hanneskod\classtools\Exception\LogicException;
 use hanneskod\classtools\Iterator\SplFileInfo;
 
@@ -23,16 +23,16 @@ use hanneskod\classtools\Iterator\SplFileInfo;
 trait FilterTrait
 {
     /**
-     * @var ClassIterator Iterator filter is bound to
+     * @var ClassIteratorInterface Iterator filter is bound to
      */
     private $boundIterator;
 
-    public function bindTo(ClassIterator $iterator): void
+    public function bindTo(ClassIteratorInterface $iterator): void
     {
         $this->boundIterator = $iterator;
     }
 
-    public function getBoundIterator(): ClassIterator
+    public function getBoundIterator(): ClassIteratorInterface
     {
         if (!isset($this->boundIterator)) {
             throw new LogicException("Filter not bound to iterator.");

@@ -31,6 +31,7 @@ final class TypeFilter extends ClassIterator implements Filter
 
     public function __construct(string $typename)
     {
+        parent::__construct();
         $this->typename = $typename;
     }
 

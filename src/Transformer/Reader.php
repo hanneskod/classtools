@@ -131,7 +131,7 @@ class Reader
     /**
      * Get parse tree for the complete snippet
      *
-     * @return PhpParser\Node[]
+     * @return \PhpParser\Node[]
      */
     public function readAll(): array
     {

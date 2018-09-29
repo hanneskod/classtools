@@ -16,17 +16,17 @@ use hanneskod\classtools\Exception\LogicException;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-interface Filter extends \IteratorAggregate
+interface Filter extends ClassIteratorInterface
 {
     /**
      * Bind filter to iterator
      */
-    public function bindTo(ClassIterator $iterator): void;
+    public function bindTo(ClassIteratorInterface $iterator): void;
 
     /**
      * Get iterator bound to filter
      *
      * @throws LogicException If no bound iterator exists
      */
-    public function getBoundIterator(): ClassIterator;
+    public function getBoundIterator(): ClassIteratorInterface;
 }
