@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Instantiator;
 
 class InstantiatorTest extends \PHPUnit\Framework\TestCase

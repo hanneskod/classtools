@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Transformer\Action;
 
 use PhpParser\NodeVisitorAbstract;
@@ -27,10 +29,8 @@ class NamespaceWrapper extends NodeVisitorAbstract
 
     /**
      * Wrap code in namespace
-     *
-     * @param string $namespaceName Name of namespace
      */
-    public function __construct($namespaceName)
+    public function __construct(string $namespaceName)
     {
         $this->namespaceName = $namespaceName;
     }
@@ -41,7 +41,7 @@ class NamespaceWrapper extends NodeVisitorAbstract
      * @param  array $nodes
      * @return Namespace_[]
      */
-    public function beforeTraverse(array $nodes)
+    public function beforeTraverse(array $nodes): array
     {
         // Merge if code is namespaced
         if (isset($nodes[0]) && $nodes[0] instanceof Namespace_) {

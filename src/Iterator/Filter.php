@@ -9,7 +9,6 @@
 
 namespace hanneskod\classtools\Iterator;
 
-use IteratorAggregate;
 use hanneskod\classtools\Exception\LogicException;
 
 /**
@@ -17,21 +16,17 @@ use hanneskod\classtools\Exception\LogicException;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-interface Filter extends IteratorAggregate
+interface Filter extends \IteratorAggregate
 {
     /**
      * Bind filter to iterator
-     *
-     * @param  ClassIterator $iterator
-     * @return void
      */
-    public function bindTo(ClassIterator $iterator);
+    public function bindTo(ClassIterator $iterator): void;
 
     /**
      * Get iterator bound to filter
      *
-     * @return ClassIterator
      * @throws LogicException If no bound iterator exists
      */
-    public function getBoundIterator();
+    public function getBoundIterator(): ClassIterator;
 }

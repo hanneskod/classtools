@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Transformer;
 
 use PhpParser\NodeTraverser;
@@ -21,11 +23,6 @@ use hanneskod\classtools\Transformer\Action\NameResolver;
  */
 class MinimizingWriter extends Writer
 {
-    /**
-     * Load minimizing translations at construct
-     *
-     * @param NodeTraverser $traverser
-     */
     public function __construct(NodeTraverser $traverser = null)
     {
         parent::__construct($traverser);

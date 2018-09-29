@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
@@ -18,38 +20,28 @@ use ReflectionException;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class TypeFilter extends ClassIterator implements Filter
+final class TypeFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
     /**
-     * @var string Name of type
+     * @var string
      */
     private $typename;
 
-    /**
-     * Register name of type
-     *
-     * @param string $typename
-     */
-    public function __construct($typename)
+    public function __construct(string $typename)
     {
         $this->typename = $typename;
     }
 
-    /**
-     * Get iterator for definitions of type
-     *
-     * @return \Traversable
-     */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {
             try {
                 if ($reflectedClass->implementsInterface($this->typename)) {
                     yield $className => $reflectedClass;
                 }
-            } catch (ReflectionException $e) {
+            } catch (\ReflectionException $e) {
                 try {
                     if (
                         $reflectedClass->isSubclassOf($this->typename)
@@ -57,7 +49,7 @@ class TypeFilter extends ClassIterator implements Filter
                     ) {
                         yield $className => $reflectedClass;
                     }
-                } catch (ReflectionException $e) {
+                } catch (\ReflectionException $e) {
                     // Nope
                 }
             }

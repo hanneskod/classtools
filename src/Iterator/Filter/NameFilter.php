@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
@@ -17,7 +19,7 @@ use hanneskod\classtools\Iterator\Filter;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class NameFilter extends ClassIterator implements Filter
+final class NameFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
@@ -28,20 +30,13 @@ class NameFilter extends ClassIterator implements Filter
 
     /**
      * Register matching regular expression
-     *
-     * @param string $pattern
      */
-    public function __construct($pattern)
+    public function __construct(string $pattern)
     {
         $this->pattern = $pattern;
     }
 
-    /**
-     * Get iterator for matching classnames
-     *
-     * @return \Traversable
-     */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {
             if (preg_match($this->pattern, $className)) {

@@ -7,23 +7,24 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
 use hanneskod\classtools\Iterator\Filter;
-use ArrayIterator;
 
 /**
  * Cache bound iterator
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class CacheFilter extends ClassIterator implements Filter
+final class CacheFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
     /**
-     * @var ArrayIterator Cached iterator
+     * @var \ArrayIterator
      */
     private $cache;
 
@@ -34,15 +35,10 @@ class CacheFilter extends ClassIterator implements Filter
     {
     }
 
-    /**
-     * Get cached iterator
-     *
-     * @return ArrayIterator
-     */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         if (!isset($this->cache)) {
-            $this->cache = new ArrayIterator(iterator_to_array($this->getBoundIterator()));
+            $this->cache = new \ArrayIterator(iterator_to_array($this->getBoundIterator()));
         }
 
         return $this->cache;

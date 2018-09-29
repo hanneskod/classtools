@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Transformer;
 
 use PhpParser\NodeTraverser;
@@ -37,9 +39,6 @@ class Writer
      * Since Reader always makes definitions namespaced a PhpParser printer that
      * wraps the code in brackeded namespace statements must be used. The current
      * implementation of this is BracketingPrinter.
-     *
-     * @param NodeTraverser     $traverser
-     * @param BracketingPrinter $printer
      */
     public function __construct(NodeTraverser $traverser = null, BracketingPrinter $printer = null)
     {
@@ -49,11 +48,8 @@ class Writer
 
     /**
      * Apply translation to alter code
-     *
-     * @param  NodeVisitor $translation
-     * @return Writer      Instance for chaining
      */
-    public function apply(NodeVisitor $translation)
+    public function apply(NodeVisitor $translation): self
     {
         $this->traverser->addVisitor($translation);
         return $this;
@@ -62,11 +58,9 @@ class Writer
     /**
      * Generate new code snippet
      *
-     * @param  array $statements
-     * @return string
      * @throws RuntimeException If code generation failes
      */
-    public function write(array $statements)
+    public function write(array $statements): string
     {
         try {
             return $this->printer->prettyPrint(

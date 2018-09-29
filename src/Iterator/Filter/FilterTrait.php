@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
@@ -25,24 +27,12 @@ trait FilterTrait
      */
     private $boundIterator;
 
-    /**
-     * Bind filter to iterator
-     *
-     * @param  ClassIterator $iterator
-     * @return void
-     */
-    public function bindTo(ClassIterator $iterator)
+    public function bindTo(ClassIterator $iterator): void
     {
         $this->boundIterator = $iterator;
     }
 
-    /**
-     * Get iterator bound to filter
-     *
-     * @return ClassIterator
-     * @throws LogicException If no bound iterator exists
-     */
-    public function getBoundIterator()
+    public function getBoundIterator(): ClassIterator
     {
         if (!isset($this->boundIterator)) {
             throw new LogicException("Filter not bound to iterator.");
@@ -55,7 +45,7 @@ trait FilterTrait
      *
      * @return SplFileInfo[]
      */
-    public function getClassMap()
+    public function getClassMap(): array
     {
         $parentMap = $this->getBoundIterator()->getClassMap();
         $map = iterator_to_array($this->getIterator());
@@ -69,8 +59,6 @@ trait FilterTrait
 
     /**
      * Get current iterator
-     *
-     * @return \Traversable
      */
-    abstract public function getIterator();
+    abstract public function getIterator(): iterable;
 }

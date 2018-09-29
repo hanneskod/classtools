@@ -7,9 +7,10 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Instantiator;
 
-use ReflectionClass;
 use hanneskod\classtools\Exception\LogicException;
 
 /**
@@ -20,17 +21,14 @@ use hanneskod\classtools\Exception\LogicException;
 class Instantiator
 {
     /**
-     * @var ReflectionClass Reflected class to instantiate
+     * @var \ReflectionClass
      */
     private $class;
 
     /**
      * Set class to instantiate
-     *
-     * @param  ReflectionClass $class
-     * @return void
      */
-    public function setReflectionClass(ReflectionClass $class)
+    public function setReflectionClass(\ReflectionClass $class): void
     {
         $this->class = $class;
     }
@@ -38,10 +36,9 @@ class Instantiator
     /**
      * Get loaded reflection class
      *
-     * @return ReflectionClass
      * @throws LogicException  If reflected class is not loaded
      */
-    public function getReflectionClass()
+    public function getReflectionClass(): \ReflectionClass
     {
         if (!isset($this->class)) {
             throw new LogicException("Reflected class not loaded");
@@ -51,10 +48,8 @@ class Instantiator
 
     /**
      * Get number of required constructor parameters
-     *
-     * @return int
      */
-    public function countConstructorArgs()
+    public function countConstructorArgs(): int
     {
         if ($constructor = $this->class->getConstructor()) {
             return $constructor->getNumberOfRequiredParameters();
@@ -64,20 +59,16 @@ class Instantiator
 
     /**
      * Check if class is instantiable
-     *
-     * @return boolean
      */
-    public function isInstantiable()
+    public function isInstantiable(): bool
     {
         return $this->getReflectionClass()->isInstantiable();
     }
 
     /**
      * Check if class is instantiable without constructor parameters
-     *
-     * @return boolean
      */
-    public function isInstantiableWithoutArgs()
+    public function isInstantiableWithoutArgs(): bool
     {
         return $this->isInstantiable() && !$this->countConstructorArgs();
     }

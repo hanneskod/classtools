@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools;
 
 class IntegrationTest extends \hanneskod\readmetester\PHPUnit\ReadmeTestCase

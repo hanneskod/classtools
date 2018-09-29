@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Transformer;
 
 use PhpParser\PrettyPrinter\Standard;
@@ -20,11 +22,8 @@ class BracketingPrinter extends Standard
 {
     /**
      * Force canUseSemicolonNamespaces to false
-     *
-     * @param  array  $nodes
-     * @return void
      */
-    protected function preprocessNodes(array $nodes)
+    protected function preprocessNodes(array $nodes): void
     {
         parent::preprocessNodes($nodes);
         $this->canUseSemicolonNamespaces = false;

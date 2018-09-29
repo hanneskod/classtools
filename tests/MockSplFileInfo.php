@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Tests;
 
 class MockSplFileInfo extends \hanneskod\classtools\Iterator\SplFileInfo

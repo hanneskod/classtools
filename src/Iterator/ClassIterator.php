@@ -7,11 +7,10 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator;
 
-use IteratorAggregate;
-use ReflectionClass;
-use ReflectionException;
 use Symfony\Component\Finder\Finder;
 use hanneskod\classtools\Transformer\Writer;
 use hanneskod\classtools\Transformer\MinimizingWriter;
@@ -30,7 +29,7 @@ use hanneskod\classtools\Exception\ReaderException;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class ClassIterator implements IteratorAggregate
+class ClassIterator implements \IteratorAggregate
 {
     /**
      * @var SplFileInfo[] Maps names to SplFileInfo objects
@@ -90,7 +89,7 @@ class ClassIterator implements IteratorAggregate
      *
      * @return SplFileInfo[]
      */
-    public function getClassMap()
+    public function getClassMap(): array
     {
         return $this->classMap;
     }
@@ -100,7 +99,7 @@ class ClassIterator implements IteratorAggregate
      *
      * @return ClassIterator instance for chaining
      */
-    public function enableAutoloading()
+    public function enableAutoloading(): self
     {
         $this->loader = new ClassLoader($this, true);
         return $this;
@@ -111,7 +110,7 @@ class ClassIterator implements IteratorAggregate
      *
      * @return ClassIterator instance for chaining
      */
-    public function disableAutoloading()
+    public function disableAutoloading(): self
     {
         if (isset($this->loader)) {
             $this->loader->unregister();
@@ -122,16 +121,14 @@ class ClassIterator implements IteratorAggregate
 
     /**
      * Iterator yields classnames as keys and ReflectionClass objects as values
-     *
-     * @return \Traversable
      */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         /** @var SplFileInfo $fileInfo */
         foreach ($this->getClassMap() as $name => $fileInfo) {
             try {
-                yield $name => new ReflectionClass($name);
-            } catch (ReflectionException $e) {
+                yield $name => new \ReflectionClass($name);
+            } catch (\ReflectionException $e) {
                 $msg = "Unable to iterate, {$e->getMessage()}, is autoloading enabled?";
                 throw new LogicException($msg, 0, $e);
             }
@@ -140,11 +137,8 @@ class ClassIterator implements IteratorAggregate
 
     /**
      * Bind filter to iterator
-     *
-     * @param  Filter $filter
-     * @return Filter The bound filter
      */
-    public function filter(Filter $filter)
+    public function filter(Filter $filter): Filter
     {
         $filter->bindTo($this);
         return $filter;
@@ -152,77 +146,56 @@ class ClassIterator implements IteratorAggregate
 
     /**
      * Create a new iterator where classes are filtered based on type
-     *
-     * @param  string $typename
-     * @return Filter The created filter
      */
-    public function type($typename)
+    public function type(string $typename): Filter
     {
         return $this->filter(new TypeFilter($typename));
     }
 
     /**
      * Create a new iterator where classes are filtered based on name
-     *
-     * @param  string $pattern Regular expression used when filtering
-     * @return Filter The created filter
      */
-    public function name($pattern)
+    public function name(string $pattern): Filter
     {
         return $this->filter(new NameFilter($pattern));
     }
 
     /**
      * Create a new iterator where classes are filtered based on namespace
-     *
-     * @param  string $namespace Namespace used when filtering
-     * @return Filter The created filter
      */
-    public function inNamespace($namespace)
+    public function inNamespace(string $namespace): Filter
     {
         return $this->filter(new NamespaceFilter($namespace));
     }
 
     /**
      * Create iterator where classes are filtered based on method return value
-     *
-     * @param  string $methodName  Name of method
-     * @param  mixed  $returnValue Expected return value
-     * @return Filter The created filter
      */
-    public function where($methodName, $returnValue = true)
+    public function where(string $methodName, $expectedReturn = true): Filter
     {
-        return $this->filter(new WhereFilter($methodName, $returnValue));
+        return $this->filter(new WhereFilter($methodName, $expectedReturn));
     }
 
     /**
      * Negate a filter
-     *
-     * @param  Filter $filter
-     * @return Filter The created filter
      */
-    public function not(Filter $filter)
+    public function not(Filter $filter): Filter
     {
         return $this->filter(new NotFilter($filter));
     }
 
     /**
      * Cache iterator
-     *
-     * @return Filter The created filter
      */
-    public function cache()
+    public function cache(): Filter
     {
         return $this->filter(new CacheFilter);
     }
 
     /**
      * Transform found classes
-     *
-     * @param  Writer $writer
-     * @return string
      */
-    public function transform(Writer $writer)
+    public function transform(Writer $writer): string
     {
         $code = '';
 
@@ -236,10 +209,8 @@ class ClassIterator implements IteratorAggregate
 
     /**
      * Minimize found classes
-     *
-     * @return string
      */
-    public function minimize()
+    public function minimize(): string
     {
         return $this->transform(new MinimizingWriter);
     }

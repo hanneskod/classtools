@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
@@ -18,31 +20,24 @@ use hanneskod\classtools\Name;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class NamespaceFilter extends ClassIterator implements Filter
+final class NamespaceFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
     /**
-     * @var Name Namespace to filter on
+     * @var string
      */
     private $namespace;
 
     /**
      * Register namespace to filter on
-     *
-     * @param string $namespace
      */
-    public function __construct($namespace)
+    public function __construct(string $namespace)
     {
         $this->namespace = new Name((string)$namespace);
     }
 
-    /**
-     * Get iterator for definitions in namespace
-     *
-     * @return \Traversable
-     */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {
             if ((new Name($className))->inNamespace($this->namespace)) {

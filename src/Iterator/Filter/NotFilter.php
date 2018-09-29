@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
@@ -17,31 +19,21 @@ use hanneskod\classtools\Iterator\Filter;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class NotFilter extends ClassIterator implements Filter
+final class NotFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
     /**
-     * @var Filter Filter to negate
+     * @var Filter
      */
     private $filter;
 
-    /**
-     * Register filter to negate
-     *
-     * @param Filter $filter
-     */
     public function __construct(Filter $filter)
     {
         $this->filter = $filter;
     }
 
-    /**
-     * Get iterator for definitions not present in negated filter
-     *
-     * @return \Traversable
-     */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         $filtered = iterator_to_array($this->filter->getIterator());
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {

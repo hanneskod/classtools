@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Transformer\Action;
 
 use hanneskod\classtools\Name;
@@ -85,7 +87,7 @@ class NamespaceCrawler extends NodeVisitorAbstract
      * @param  Name $name
      * @return bool
      */
-    public function isWhitelisted(Name $name)
+    public function isWhitelisted(Name $name): bool
     {
         /** @var Name $namespace */
         foreach ($this->whitelist as $namespace) {

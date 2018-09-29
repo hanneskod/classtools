@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Transformer\Action;
 
 use PhpParser\NodeVisitorAbstract;
@@ -29,7 +31,7 @@ class NodeStripper extends NodeVisitorAbstract
      *
      * @param string $nodeType Node type (see Node::getType())
      */
-    public function __construct($nodeType)
+    public function __construct(string $nodeType)
     {
         $this->nodeType = $nodeType;
     }

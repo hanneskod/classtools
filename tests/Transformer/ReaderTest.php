@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Transformer;
 
 class ReaderTest extends \PHPUnit\Framework\TestCase

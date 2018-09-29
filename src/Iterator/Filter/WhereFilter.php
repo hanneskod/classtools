@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator\Filter;
 
 use hanneskod\classtools\Iterator\ClassIterator;
@@ -17,7 +19,7 @@ use hanneskod\classtools\Iterator\Filter;
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
-class WhereFilter extends ClassIterator implements Filter
+final class WhereFilter extends ClassIterator implements Filter
 {
     use FilterTrait;
 
@@ -43,12 +45,7 @@ class WhereFilter extends ClassIterator implements Filter
         $this->returnValue = $returnValue;
     }
 
-    /**
-     * Get iterator for ReflectionClass objects where registered method return expected value
-     *
-     * @return \Traversable
-     */
-    public function getIterator()
+    public function getIterator(): iterable
     {
         $methodName = $this->methodName;
         foreach ($this->getBoundIterator() as $className => $reflectedClass) {

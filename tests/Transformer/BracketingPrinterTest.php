@@ -1,4 +1,8 @@
-<?php namespace hanneskod\classtools\Transformer;
+<?php
+
+declare(strict_types = 1);
+
+namespace hanneskod\classtools\Transformer;
 
 use PhpParser\ParserFactory;
 

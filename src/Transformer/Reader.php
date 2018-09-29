@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Transformer;
 
 use hanneskod\classtools\Exception\RuntimeException;
@@ -46,11 +48,9 @@ class Reader
     /**
      * Optionally inject parser
      *
-     * @param  string $snippet
-     * @param  Parser $parser
      * @throws ReaderException If snippet contains a syntax error
      */
-    public function __construct($snippet, Parser $parser = null)
+    public function __construct(string $snippet, Parser $parser = null)
     {
         if (is_null($parser)) {
             $parserFactory = new ParserFactory();
@@ -68,12 +68,8 @@ class Reader
 
     /**
      * Find class, interface and trait definitions in statemnts
-     *
-     * @param  array $stmts
-     * @param  Name $namespace
-     * @return void
      */
-    private function findDefinitions(array $stmts, Name $namespace)
+    private function findDefinitions(array $stmts, Name $namespace): void
     {
         $useStmts = [];
 
@@ -104,18 +100,15 @@ class Reader
      *
      * @return string[]
      */
-    public function getDefinitionNames()
+    public function getDefinitionNames(): array
     {
         return array_values($this->names);
     }
 
     /**
      * Check if snippet contains definition
-     *
-     * @param  string $name Fully qualified name
-     * @return boolean
      */
-    public function hasDefinition($name)
+    public function hasDefinition(string $name): bool
     {
         return isset($this->defs[(new Name($name))->keyize()]);
     }
@@ -123,11 +116,10 @@ class Reader
     /**
      * Get pars tree for class/interface/trait
      *
-     * @param  string $name Name of class/interface/trait
      * @return Namespace_[]
      * @throws RuntimeException If $name does not exist
      */
-    public function read($name)
+    public function read(string $name): array
     {
         if (!$this->hasDefinition($name)) {
             throw new RuntimeException("Unable to read <$name>, not found.");
@@ -141,7 +133,7 @@ class Reader
      *
      * @return PhpParser\Node[]
      */
-    public function readAll()
+    public function readAll(): array
     {
         return $this->global;
     }

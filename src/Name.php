@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools;
 
 use PhpParser\Node\Name as PhpParserName;
@@ -25,30 +27,24 @@ class Name
 
     /**
      * Set name at construct
-     *
-     * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->parts = explode('\\', $name);
     }
 
     /**
      * Get as string
-     *
-     * @return string
      */
-    public function __tostring()
+    public function __tostring(): string
     {
         return implode('\\', $this->parts);
     }
 
     /**
      * Get PhpParser node for this name
-     *
-     * @return PhpParserName
      */
-    public function createNode()
+    public function createNode(): PhpParserName
     {
         if (count($this->parts) == 1 && !$this->parts[0]) {
             return new PhpParserName([]);
@@ -59,11 +55,8 @@ class Name
 
     /**
      * Checks if a class, interface, trait or function has been defined
-     *
-     * @param  boolean $autoload Whether to call __autoload or not by default
-     * @return boolean
      */
-    public function isDefined($autoload = true)
+    public function isDefined(bool $autoload = true): bool
     {
         return class_exists((string)$this, $autoload)
             || interface_exists((string)$this, $autoload)
@@ -73,40 +66,32 @@ class Name
 
     /**
      * Remove leading backslashes
-     *
-     * @return string
      */
-    public function normalize()
+    public function normalize(): string
     {
         return preg_replace('/^\\\*/', '', (string)$this);
     }
 
     /**
      * Remove leading backslashes and convert case
-     *
-     * @return string
      */
-    public function keyize()
+    public function keyize(): string
     {
         return strtolower($this->normalize());
     }
 
     /**
      * Get trailing name component
-     *
-     * @return Name
      */
-    public function getBasename()
+    public function getBasename(): Name
     {
         return new Name((string)end($this->parts));
     }
 
     /**
      * Get parent namespace name component
-     *
-     * @return Name
      */
-    public function getNamespace()
+    public function getNamespace(): Name
     {
         $parts = $this->parts;
         array_pop($parts);
@@ -115,11 +100,8 @@ class Name
 
     /**
      * Check if name is in namespace
-     *
-     * @param  Name $namespace
-     * @return bool
      */
-    public function inNamespace(Name $namespace)
+    public function inNamespace(Name $namespace): bool
     {
         return !!preg_match(
             '/^'.preg_quote($namespace->keyize()).'/',

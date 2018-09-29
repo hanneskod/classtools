@@ -7,6 +7,8 @@
  * http://www.wtfpl.net/ for more details.
  */
 
+declare(strict_types = 1);
+
 namespace hanneskod\classtools\Iterator;
 
 use Symfony\Component\Finder\SplFileInfo as FinderSplFileInfo;
@@ -50,7 +52,7 @@ class SplFileInfo extends FinderSplFileInfo
     {
         if (!isset($this->reader)) {
             try {
-                $this->reader = new Reader($this->getContents());
+                $this->reader = new Reader((string)$this->getContents());
             } catch (ReaderException $exception) {
                 throw new ReaderException($exception->getMessage() . ' in ' . $this->getPathname());
             }
