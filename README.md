@@ -3,7 +3,6 @@
 [![Packagist Version](https://img.shields.io/packagist/v/hanneskod/classtools.svg?style=flat-square)](https://packagist.org/packages/hanneskod/classtools)
 [![Build Status](https://img.shields.io/travis/hanneskod/classtools/master.svg?style=flat-square)](https://travis-ci.org/hanneskod/classtools)
 [![Quality Score](https://img.shields.io/scrutinizer/g/hanneskod/classtools.svg?style=flat-square)](https://scrutinizer-ci.com/g/hanneskod/classtools)
-[![Dependency Status](https://img.shields.io/gemnasium/hanneskod/classtools.svg?style=flat-square)](https://gemnasium.com/hanneskod/classtools)
 
 Find, extract and process classes from the file system.
 
@@ -28,6 +27,10 @@ for php classes, interfaces and traits.
 [SplFileInfo](http://api.symfony.com/2.5/Symfony/Component/Finder/SplFileInfo.html)
 objects.
 
+<!--
+    @example getClassMap()
+    @expectOutput "/hanneskod/"
+-->
 ```php
 $finder = new Symfony\Component\Finder\Finder;
 $iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
@@ -44,6 +47,10 @@ Source files containing syntax errors can not be parsed and hence no information
 on contained classes can be retrieved. Use `getErrors()` to read the list of
 encountered errors.
 
+<!--
+    @example getErrors()
+    @expectOutput "/Array/"
+-->
 ```php
 $finder = new Symfony\Component\Finder\Finder;
 $iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
@@ -63,6 +70,10 @@ Note that to use reflection the classes found in filesystem must be
 included in the environment. Enable autoloading to dynamically load classes from
 a ClassIterator.
 
+<!--
+    @example enableAutoloading()
+    @expectOutput "/hanneskod/"
+-->
 ```php
 $finder = new Symfony\Component\Finder\Finder();
 $iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
@@ -81,23 +92,27 @@ foreach ($iter as $class) {
 [ClassIterator](src/Iterator/ClassIterator.php) is filterable and filters are
 chainable.
 
+<!--
+    @example filter
+    @expectOutput "/hanneskod/"
+-->
 ```php
 $finder = new Symfony\Component\Finder\Finder();
 $iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
 $iter->enableAutoloading();
 
 // Print all Filter types (including the interface itself)
-foreach ($iter->type('Iterator\Filter') as $class) {
+foreach ($iter->type('hanneskod\classtools\Iterator\Filter') as $class) {
     echo $class->getName();
 }
 
 // Print definitions in the Iterator namespace whose name contains 'Class'
-foreach ($iter->inNamespace('Iterator')->name('/Class/') as $class) {
+foreach ($iter->inNamespace('hanneskod\classtools\Iterator\Filter')->name('/type/i') as $class) {
     echo $class->getName();
 }
 
 // Print implementations of the Filter interface
-foreach ($iter->type('Iterator\Filter')->where('isInstantiable') as $class) {
+foreach ($iter->type('hanneskod\classtools\Iterator\Filter')->where('isInstantiable') as $class) {
     echo $class->getName();
 }
 ```
@@ -106,6 +121,10 @@ foreach ($iter->type('Iterator\Filter')->where('isInstantiable') as $class) {
 
 Filters can also be negated by wrapping them in `not()` method calls.
 
+<!--
+    @example negation
+    @expectOutput "/hanneskod/"
+-->
 ```php
 $finder = new Symfony\Component\Finder\Finder();
 $iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
@@ -122,6 +141,10 @@ foreach ($iter->not($iter->where('isInstantiable')) as $class) {
 Found class, interface and trait definitions can be transformed and written to a
 single file.
 
+<!--
+    @example transformation
+    @expectOutput "/\<\?php/"
+-->
 ```php
 $finder = new Symfony\Component\Finder\Finder();
 $iter = new hanneskod\classtools\Iterator\ClassIterator($finder->in('src'));
