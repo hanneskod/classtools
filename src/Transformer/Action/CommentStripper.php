@@ -21,12 +21,6 @@ use PhpParser\Node;
  */
 class CommentStripper extends NodeVisitorAbstract
 {
-    /**
-     * Perform action
-     *
-     * @param  Node      $node
-     * @return void|bool Void if node should remain, false if not
-     */
     public function leaveNode(Node $node)
     {
         $node->setAttribute('comments', []);

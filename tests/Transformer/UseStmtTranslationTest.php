@@ -52,7 +52,7 @@ EOF
 
         $expected =
 <<<EOF
-namespace  {
+namespace {
     use random\Exception;
     class ClassName
     {

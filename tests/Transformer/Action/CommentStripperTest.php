@@ -46,14 +46,14 @@ EOF
 
         $expected =
 <<<EOF
-namespace  {
+namespace {
     class ClassName
     {
         private \$var;
         public function test()
         {
             return true;
-        
+            
         }
     }
 }
