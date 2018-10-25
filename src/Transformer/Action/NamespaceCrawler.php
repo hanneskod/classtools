@@ -55,8 +55,6 @@ class NamespaceCrawler extends NodeVisitorAbstract
     /**
      * Resolve unexisting names by searching specified namespaces
      *
-     * @param  Node $node
-     * @return \PhpParser\Node\Name|null
      * @throws RuntimeException If name can not be resolved
      */
     public function leaveNode(Node $node)

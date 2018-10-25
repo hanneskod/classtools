@@ -252,17 +252,17 @@ class ClassIteratorTest extends \PHPUnit\Framework\TestCase
     {
     }
 }
-namespace  {
+namespace {
     interface Baz
     {
     }
 }
-namespace  {
+namespace {
     class B implements \\Baz
     {
     }
 }
-namespace  {
+namespace {
     class C extends \\foobar\\A implements \\Baz
     {
     }

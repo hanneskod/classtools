@@ -6,7 +6,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
     public function testCreateNode()
     {
         $this->assertEquals(
-            new \PhpParser\Node\Name([]),
+            new \PhpParser\Node\Name(['']),
             (new Name(''))->createNode()
         );
 
@@ -74,5 +74,13 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
         $this->assertFalse($name->inNamespace(new Name('space')));
         $this->assertFalse($name->inNamespace(new Name('NAME\space\class')));
+    }
+
+    public function testNormalize()
+    {
+        $this->assertEquals(
+            '',
+            (new Name('\\'))->normalize()
+        );
     }
 }

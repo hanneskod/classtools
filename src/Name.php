@@ -50,10 +50,6 @@ class Name
      */
     public function createNode()
     {
-        if (count($this->parts) == 1 && !$this->parts[0]) {
-            return new PhpParserName([]);
-        }
-
         return new PhpParserName($this->parts);
     }
 

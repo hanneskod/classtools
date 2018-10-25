@@ -11,6 +11,7 @@ namespace hanneskod\classtools\Transformer\Action;
 
 use PhpParser\NodeVisitorAbstract;
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
 
 /**
  * Strip nodes of registered type
@@ -34,16 +35,12 @@ class NodeStripper extends NodeVisitorAbstract
         $this->nodeType = $nodeType;
     }
 
-    /**
-     * Perform action
-     *
-     * @param  Node       $node
-     * @return false|null Null if node should remain, false if not
-     */
     public function leaveNode(Node $node)
     {
         if ($node->getType() == $this->nodeType) {
-            return false;
+            return NodeTraverser::REMOVE_NODE;
         }
+
+        return null;
     }
 }

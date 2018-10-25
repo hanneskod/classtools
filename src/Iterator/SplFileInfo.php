@@ -87,7 +87,7 @@ class SplFileInfo extends FinderSplFileInfo
      */
     public function getContents()
     {
-        return $this->decorated->getContents();
+        return (string)$this->decorated->getContents();
     }
 
     /**
