@@ -26,7 +26,7 @@ EOF
 
         $expected =
 <<<EOF
-namespace  {
+namespace {
     class ClassName
     {
         public function foobar()
@@ -38,7 +38,7 @@ namespace  {
 EOF;
 
         $writer = new Writer;
-        $writer->apply(new NodeStripper('Expr_Include'));
+        $writer->apply(new NodeStripper('Stmt_Expression'));
         $this->assertEquals(
             $expected,
             $writer->write($reader->read('ClassName'))

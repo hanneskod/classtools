@@ -171,15 +171,3 @@ $writer->apply(new Action\NamespaceWrapper('Foo'));
 // Outputs class Bar wrapped in namespace Foo
 echo $writer->write($reader->read('Bar'));
 ```
-
-### Strip statements
-
-<!-- @ignore -->
-```php
-$reader = new Reader("<?php require 'Foo.php'; echo 'bar';");
-$writer = new Writer;
-$writer->apply(new Action\NodeStripper('Expr_Include'));
-
-// Outputs the echo statement
-echo $writer->write($reader->readAll());
-```

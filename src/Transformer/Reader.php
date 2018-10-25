@@ -91,7 +91,7 @@ class Reader
                 $defName = new Name("{$namespace}\\{$stmt->name}");
                 $this->names[$defName->keyize()] = $defName->normalize();
                 $this->defs[$defName->keyize()] = new Namespace_(
-                    $namespace->createNode(),
+                    $namespace->normalize() ? $namespace->createNode() : null,
                     $useStmts
                 );
                 $this->defs[$defName->keyize()]->stmts[] = $stmt;

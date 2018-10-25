@@ -26,7 +26,7 @@ EOF
 
         $expected =
 <<<EOF
-namespace  {
+namespace {
     class ClassName
     {
         public function foobar()
