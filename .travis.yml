@@ -3,6 +3,7 @@ sudo: false
 language: php
 
 php:
+    - 7.4
     - 7.3
     - 7.2
     - 7.1
@@ -11,4 +12,4 @@ install:
     - composer install
 
 script:
-    - phpunit
+    - vendor/bin/phpunit
