@@ -13,7 +13,7 @@ Install using **[composer](http://getcomposer.org/)**. Exists as
 in the **[packagist](https://packagist.org/)** repository. From the command line
 use:
 
-    composer require hanneskod/classtools:~1.0
+    composer require hanneskod/classtools
 
 Using the iterator
 ------------------
