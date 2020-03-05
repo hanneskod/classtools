@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace hanneskod\classtools;
 
-class IntegrationTest extends \hanneskod\readmetester\PHPUnit\ReadmeTestCase
+class IntegrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Should not trigger an error, se issue #10

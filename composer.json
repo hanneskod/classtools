@@ -19,10 +19,6 @@
     "require": {
         "php": ">=7.1",
         "nikic/php-parser": "^4",
-        "symfony/finder": "^4"
-    },
-    "require-dev": {
-        "hanneskod/readme-tester": "dev-master",
-        "phpunit/phpunit": "^7"
+        "symfony/finder": "^4|^5"
     }
 }
