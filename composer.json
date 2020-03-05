@@ -17,7 +17,7 @@
         }
     },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "nikic/php-parser": "^4",
         "symfony/finder": "^4|^5"
     }
