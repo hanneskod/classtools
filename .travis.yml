@@ -6,10 +6,16 @@ php:
     - 7.4
     - 7.3
     - 7.2
-    - 7.1
+
+
+matrix:
+    include:
+        - php: 7.2
+          env: PREFER_LOWEST=1
 
 install:
     - make vendor/installed
+    - if [[ $PREFER_LOWEST == 1 ]]; then composer update --prefer-lowest --prefer-dist --prefer-stable --no-interaction; fi
     - wget -O phive.phar https://phar.io/releases/phive.phar
     - make tools/phpunit tools/readme-tester PHIVE_CMD="php phive.phar"
 
