@@ -61,7 +61,7 @@ EOF;
 
         $writer = new Writer;
         $writer->apply(new CommentStripper);
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $writer->write($reader->read('ClassName'))
         );

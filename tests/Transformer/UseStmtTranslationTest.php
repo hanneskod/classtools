@@ -32,7 +32,7 @@ EOF;
 
         $writer = new Writer;
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $writer->write($reader->read('foo\ClassName'))
         );
@@ -62,7 +62,7 @@ EOF;
 
         $writer = new Writer;
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $writer->write($reader->read('ClassName'))
         );

@@ -16,6 +16,11 @@
             "hanneskod\\classtools\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "hanneskod\\classtools\\": "tests/"
+        }
+    },
     "require": {
         "php": ">=7.2",
         "nikic/php-parser": "^4",

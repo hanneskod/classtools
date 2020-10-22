@@ -81,7 +81,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
     public function testNormalize()
     {
-        $this->assertEquals(
+        $this->assertSame(
             '',
             (new Name('\\'))->normalize()
         );

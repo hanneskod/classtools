@@ -97,20 +97,16 @@ EOF
     public function testRead()
     {
         $reader = new Reader('<?php class FooBar {}');
-        $this->assertTrue(
-            is_array(
-                $reader->read('FooBar')
-            )
+        $this->assertIsArray(
+            $reader->read('FooBar')
         );
     }
 
     public function testReadAll()
     {
         $reader = new Reader('');
-        $this->assertTrue(
-            is_array(
-                $reader->readAll()
-            )
+        $this->assertIsArray(
+            $reader->readAll()
         );
     }
 
