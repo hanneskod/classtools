@@ -42,11 +42,11 @@ EOF;
 
         $writer = new Writer;
         $writer->apply(new NamespaceWrapper('NamespaceName'));
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $writer->write($readerOne->read('ClassName'))
         );
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $writer->write($readerTwo->read('ClassName'))
         );
@@ -76,7 +76,7 @@ EOF;
 
         $writer = new Writer;
         $writer->apply(new NamespaceWrapper('extended'));
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $writer->write($reader->read('NamespaceName\ClassName'))
         );
@@ -107,7 +107,7 @@ EOF;
         $writer = new Writer;
         // Assert that a empty second wrapper makes no difference
         $writer->apply(new NamespaceWrapper(''));
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $writer->write($reader->read('foobar\ClassName'))
         );

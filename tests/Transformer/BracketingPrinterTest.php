@@ -32,6 +32,6 @@ namespace foo {
 }
 EOF;
 
-        $this->assertEquals($expected, $printer->prettyPrint($stmts));
+        $this->assertSame($expected, $printer->prettyPrint($stmts));
     }
 }

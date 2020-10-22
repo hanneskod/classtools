@@ -273,7 +273,7 @@ namespace {
 
 EOL;
 
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $this->getSystemUnderTest()->minimize()
         );

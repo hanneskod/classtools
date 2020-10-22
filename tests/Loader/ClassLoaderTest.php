@@ -25,7 +25,7 @@ class ClassLoaderTest extends \PHPUnit\Framework\TestCase
         $loader = new ClassLoader($iterator, true);
 
         $unloadedClass = new \UnloadedClass;
-        $this->assertEquals('bar', $unloadedClass->foo());
+        $this->assertSame('bar', $unloadedClass->foo());
 
         $loader->unregister();
     }

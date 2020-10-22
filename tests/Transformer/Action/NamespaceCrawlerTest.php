@@ -44,7 +44,7 @@ EOF;
         $writer = new Writer;
         $writer->apply(new NameResolver);
         $writer->apply(new NamespaceCrawler(['\hanneskod\classtools\Transformer\Action']));
-        $this->assertEquals(
+        $this->assertSame(
             $expected,
             $writer->write($reader->read('ClassName'))
         );
@@ -94,6 +94,6 @@ EOF
         $writer->apply(new NamespaceCrawler([''], ['whitelist']));
 
         // NonExistingClass does not resolve, but no exception is thrown
-        $this->assertTrue(is_string($writer->write($reader->read('ClassName'))));
+        $this->assertIsString($writer->write($reader->read('ClassName')));
     }
 }

@@ -20,7 +20,7 @@ class WriterTest extends \PHPUnit\Framework\TestCase
     public function testWrite()
     {
         $writer = new Writer();
-        $this->assertEquals('', $writer->write([]));
+        $this->assertSame('', $writer->write([]));
     }
 
     public function testPhpParserException()
