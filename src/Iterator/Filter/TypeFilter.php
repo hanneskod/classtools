@@ -16,7 +16,7 @@ use hanneskod\classtools\Iterator\Filter;
 use ReflectionException;
 
 /**
- * Filter classes of a spefcified type
+ * Filter classes of a specified type
  *
  * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
