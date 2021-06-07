@@ -20,6 +20,7 @@ use hanneskod\classtools\Iterator\Filter\NamespaceFilter;
 use hanneskod\classtools\Iterator\Filter\NotFilter;
 use hanneskod\classtools\Iterator\Filter\TypeFilter;
 use hanneskod\classtools\Iterator\Filter\WhereFilter;
+use hanneskod\classtools\Iterator\Filter\AttributeFilter;
 use hanneskod\classtools\Exception\LogicException;
 use hanneskod\classtools\Loader\ClassLoader;
 use hanneskod\classtools\Exception\ReaderException;
@@ -142,6 +143,11 @@ class ClassIterator implements ClassIteratorInterface
     public function cache(): Filter
     {
         return $this->filter(new CacheFilter);
+    }
+
+    public function attribute(string $attribute_class_name): Filter
+    {
+        return $this->filter(new AttributeFilter($attribute_class_name));
     }
 
     public function transform(Writer $writer): string

@@ -84,6 +84,11 @@ interface ClassIteratorInterface extends \IteratorAggregate
      */
     public function cache(): Filter;
 
+	/**
+	 * Attribute iterator
+	 */
+	public function attribute(string $attribute_class_name): Filter;
+
     /**
      * Transform found classes
      */

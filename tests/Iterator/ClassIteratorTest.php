@@ -246,6 +246,79 @@ class ClassIteratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testAttributeFilter()
+    {
+		if ( version_compare(PHP_VERSION, '8.0.1') >= 0) {
+			
+			# define our own system under test, adding attributes etc to standard test will break 
+			# tests for minimize etc
+			MockFinder::setIterator(
+								new \ArrayIterator([
+									new MockSplFileInfo(''),
+									new MockSplFileInfo('<?php #[Attribute] class NotUsed {  }'),
+									new MockSplFileInfo('<?php #[Attribute] class CoolStuff {  }'),
+									new MockSplFileInfo('<?php #[Attribute] class EvenCoolerStuff {  }'),
+									new MockSplFileInfo('<?php #[Attribute] class WayCool extends CoolStuff {  }'),
+									new MockSplFileInfo('<?php #[CoolStuff] class BeCool { }'),
+									new MockSplFileInfo("<?php #[EvenCoolerStuff]\n#[CoolStuff]\nclass TheCoolest { }"),
+									new MockSplFileInfo('<?php #[WayCool] class InheritedCoolness {}'),
+									new MockSplFileInfo('<?php class NotCool {}')
+								])
+							);
+
+			$classIterator = new ClassIterator(new MockFinder);
+			$classIterator->enableAutoloading();
+
+			// look for class tagged with 'CoolStuff'
+			// we should find both BeCool, TheCoolest  and WayCool because filter uses instance inheritance
+			// by default, thus WayCool extends CoolStuff and is detect by this filter
+			$result = iterator_to_array(
+				$classIterator->attribute('CoolStuff')
+			);
+			$this->assertArrayHasKey(
+				'BeCool',
+				$result
+			);
+			$this->assertArrayHasKey(
+				'TheCoolest',
+				$result
+			);
+			$this->assertArrayHasKey(
+				'InheritedCoolness',
+				$result
+			);
+			$this->assertCount(
+				3,
+				$result
+			);
+			
+			// look for class tagged with 'EvenCoolerStuff'
+			// we should find only TheCoolest
+			$result = iterator_to_array(
+				$classIterator->attribute('EvenCoolerStuff')
+			);
+			$this->assertArrayHasKey(
+				'TheCoolest',
+				$result
+			);
+			$this->assertCount(
+				1,
+				$result
+			);
+			
+			// look for an attribute not tagged onto anything, should return empty
+			$result = iterator_to_array(
+				$classIterator->attribute('NotUsed')
+			);
+			$this->assertEmpty(
+				$result
+			);
+		
+		} else {
+			$this->markTestSkipped('This test requires PHP 8.0.1 or higher');
+		}
+    }
+
     public function testMinimize()
     {
 
