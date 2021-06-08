@@ -11,7 +11,7 @@ class ClassIteratorTest extends \PHPUnit\Framework\TestCase
 {
     private static $sut;
 
-    public static function setupBeforeClass()
+    public static function setupBeforeClass(): void
     {
         MockFinder::setIterator(
             new \ArrayIterator([
