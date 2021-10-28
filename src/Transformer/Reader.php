@@ -16,10 +16,11 @@ use hanneskod\classtools\Exception\ReaderException;
 use hanneskod\classtools\Name;
 use PhpParser\Lexer\Emulative;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\Use_; 
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 
@@ -83,7 +84,7 @@ class Reader
                 $useStmts[] = $stmt;
 
                 // Save classes, interfaces and traits
-            } elseif ($stmt instanceof Class_ or $stmt instanceof Interface_ or $stmt instanceof Trait_) {
+            } elseif ($stmt instanceof Class_ or $stmt instanceof Interface_ or $stmt instanceof Trait_ or $stmt instanceof Enum_) {
                 $defName = new Name("{$namespace}\\{$stmt->name}");
                 $this->names[$defName->keyize()] = $defName->normalize();
                 $this->defs[$defName->keyize()] = new Namespace_(

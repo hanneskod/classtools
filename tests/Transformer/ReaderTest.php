@@ -15,6 +15,7 @@ namespace foo;
 class ClassName {}
 interface InterfaceName {}
 trait TraitName {}
+enum EnumName {}
 EOF
         );
 
@@ -22,7 +23,8 @@ EOF
             [
                 'foo\\ClassName',
                 'foo\\InterfaceName',
-                'foo\\TraitName'
+                'foo\\TraitName',
+                'foo\\EnumName',
             ],
             $reader->getDefinitionNames()
         );
@@ -54,6 +56,9 @@ namespace bar {
 namespace {
     trait TraitName {}
 }
+namespace baz {
+    enum EnumName {}
+}
 EOF
         );
 
@@ -62,7 +67,8 @@ EOF
                 'foo\\ClassName',
                 'foo\\AnotherClassName',
                 'bar\\InterfaceName',
-                'TraitName'
+                'TraitName',
+                'baz\\EnumName',
             ],
             $reader->getDefinitionNames()
         );
