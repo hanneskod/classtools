@@ -95,7 +95,8 @@ class ClassIterator implements ClassIteratorInterface
         }
     }
 
-    public function getIterator(): iterable
+    #[\ReturnTypeWillChange]
+    public function getIterator()
     {
         /** @var SplFileInfo $fileInfo */
         foreach ($this->getClassMap() as $name => $fileInfo) {
