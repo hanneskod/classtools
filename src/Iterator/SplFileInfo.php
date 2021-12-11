@@ -153,6 +153,7 @@ class SplFileInfo extends FinderSplFileInfo
     /**
      * Gets the target of a filesystem link
      */
+    #[\ReturnTypeWillChange]
     public function getLinkTarget(): sring
     {
         return $this->decorated->getLinkTarget();
@@ -197,6 +198,7 @@ class SplFileInfo extends FinderSplFileInfo
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function getPathname()
     {
         return $this->decorated->getPathname();
@@ -215,6 +217,7 @@ class SplFileInfo extends FinderSplFileInfo
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function getRealPath()
     {
         return $this->decorated->getRealPath();
@@ -292,6 +295,7 @@ class SplFileInfo extends FinderSplFileInfo
      * @param  resource $context
      * @return \SplFileObject
      */
+    #[\ReturnTypeWillChange]
     public function openFile($open_mode = "r", $use_include_path = false, $context = null)
     {
         return $this->decorated->openFile($open_mode, $use_include_path, $context);
@@ -303,6 +307,7 @@ class SplFileInfo extends FinderSplFileInfo
      * @param  string $class_name
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function setFileClass($class_name = '')
     {
         $this->decorated->setFileClass($class_name);
@@ -314,6 +319,7 @@ class SplFileInfo extends FinderSplFileInfo
      * @param  string $class_name
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function setInfoClass($class_name = '')
     {
         $this->decorated->setInfoClass($class_name);
