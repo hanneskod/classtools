@@ -24,6 +24,6 @@
     "require": {
         "php": ">=7.2",
         "nikic/php-parser": "^4",
-        "symfony/finder": "^4|^5"
+        "symfony/finder": "^4|^5|^6"
     }
 }
